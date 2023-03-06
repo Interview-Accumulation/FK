@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ES6</title>
+</head>
+<body>
+    
+</body>
+<script>
+const obj = {
+    a:1,
+    b:2,
+    c:3,
+    d:4,
+    e:5,
+}
+const {a, b: b1} = obj || {};
+console.log(a, b1); // 1 2
+const objValue = Object.values(obj);
+
+console.log(objValue); // [1, 2, 3, 4, 5]
+
+const arr = [[1,2],3, [2, [4, 6]]]
+console.log(arr.flat(Infinity)); // [1, 2, 3, 2, 4, 6]
+
+console.log(obj?.a, obj?.f);// 1 undefined
+
+const foo = null ?? 'default string';
+console.log(foo);// default string
+
+const baz = 0 ?? 42;
+console.log(baz);// 0
+</script>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // "use strict"
+    function fn1() {
+      console.log("fn1", this);
+    }
+    let obj = {
+      fn2: function () {
+        console.log("fn2", this);
+      },
+      fn3: () => {
+        console.log("fn3", this);
+      },
+      fn5: function () {
+        console.log("fn5", this);
+        const test = () => {
+          console.log("test", this);
+        };
+        test();
+      },
+    };
+    let fn4 = () => {
+      console.log("fn4", this);
+    };
+    const fn6 = fn4.bind(obj);
+
+    fn1(); // Window, 严格模式下为undefined
+    obj.fn2(); // obj
+    obj.fn3(); // Window
+    fn4(); // Window
+
+    obj.fn5(); // fn5 obj, test obj
+
+    fn6(); // fn4 Window
+
+    function fn7(name, age) {
+      this.name = name;
+      this.age = age;
+      console.log(this);
+    }
+    new fn7("K", 18); // fn7 {name: 'K', age: 18}
+
+
+    var name = "FK";
+    function Person(name) {
+      this.name = name;
+      (this.foo1 = function () {
+        console.log(this.name);
+      }),
+        (this.foo2 = () => console.log(this.name)),
+        (this.foo3 = function () {
+          return function () {
+            console.log(this.name);
+          };
+        }),
+        (this.foo4 = function () {
+          return () => {
+            console.log(this.name);
+          };
+        });
+    }
+    var person1 = new Person("F");
+    var person2 = new Person("K");
+
+    person1.foo1(); //
+    person1.foo1.call(person2); //
+
+    person1.foo2(); // 
+    person1.foo2.call(person2); //
+
+    person1.foo3()(); //
+    person1.foo3.call(person2)(); //
+    person1.foo3().call(person2); // 
+
+    person1.foo4()(); // 
+    person1.foo4.call(person2)(); // 
+    person1.foo4().call(person2); // 
+  </script>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .read {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <article>
+      <p>1</p>
+      <p>2</p>
+      <p>3</p>
+      <p>4</p>
+      <p>5</p>
+    </article>
+  </body>
+  <script>
+    // for...of循环
+
+    // 数组
+    const arr = [1, 2, 3, "5"];
+    for (const val of arr) {
+      console.log(val);
+    }
+    // 字符串
+    const str = "213213casd";
+    for (const v of str) {
+      console.log(v);
+    }
+    // TypeArray
+    let typeArr = new Uint8Array([0x00, 0xff]);
+    for (const v of typeArr) {
+      console.log(v);
+    }
+    // Map
+    let map = new Map([
+      ["a", 1],
+      ["b", 2],
+      ["c", 3],
+    ]);
+    for (const v of map) {
+      console.log(v);
+    }
+    for (let [key, value] of map) {
+      console.log(key, value);
+    }
+    // Set
+    let set = new Set([1, 1, 2, 2, 3, 3]);
+
+    for (let value of set) {
+      console.log(value);
+    }
+    // arguments
+    (function () {
+      for (let argument of arguments) {
+        console.log(argument);
+      }
+    })(1, 2, 3);
+    // DOM集合
+    //注意：这只能在实现了 NodeList.prototype[Symbol.iterator] 的平台上运行
+    let articleParagraphs = document.querySelectorAll("article > p");
+
+    for (let paragraph of articleParagraphs) {
+      paragraph.classList.add("read");
+    }
+    // 对象
+    let obj = {
+      a: "1",
+      b: "3",
+      d: "aaaa",
+    };
+    // for (const v of obj) {
+    //     console.log(v);
+    // } // 报错: obj is not iterable,obj不是可迭代的
+
+    // 关闭迭代，可用throw，break，return终止。
+    function* foo() {
+      yield 1;
+      yield 2;
+      yield 3;
+    }
+
+    for (let o of foo()) {
+      console.log(o);
+      break; // closes iterator, triggers return
+    }
+  </script>
+</html>

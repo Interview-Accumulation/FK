@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>两栏布局</title>
+    <style>
+        .outer {
+            width: 100%;
+            display: flex;
+            height: 300px;
+        }
+        .left {
+            width: 200px;
+            background-color: aqua;
+            flex-shrink: 0;
+            flex-grow: 0;
+        }
+        .right {
+            background-color: antiquewhite;
+            /* flex-shrink: 1;
+            flex-grow: 1; */
+            flex: 1;
+
+        }
+        .outer1 {
+            height: 300px;
+            margin-top: 20px;
+        }
+        .left1 {
+            width: 200px;
+            height: 100%;
+            float: left;
+            background-color: aqua;
+        }
+        .right1 {
+            background-color: antiquewhite;
+            margin-left: 200px;
+            height: 100%;
+        }
+        .outer2 {
+            height: 300px;
+            margin-top: 20px;
+        }
+        .left2 {
+            width: 200px;
+            height: 100%;
+            float: left;
+            background-color: aqua;
+        }
+        .right2 {
+            background-color: antiquewhite;
+            height: 100%;
+            overflow: hidden;
+        }
+        .outer3 {
+            height: 300px;
+            margin-top: 20px;
+            position: relative;
+        }
+        .left3 {
+            width: 200px;
+            height: 100%;
+            background-color: aqua;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .right3 {
+            background-color: antiquewhite;
+            height: 100%;
+            margin-left: 200px;
+        }
+        .outer4 {
+            height: 300px;
+            margin-top: 20px;
+            position: relative;
+        }
+        .left4 {
+            width: 200px;
+            height: 100%;
+            background-color: aqua;
+        }
+        .right4 {
+            background-color: antiquewhite;
+            height: 100%;
+            position: absolute;
+            left: 200px;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="outer">
+        <div class="left"></div>
+        <div class="right"></div>
+    </div>
+    <div class="outer1">
+        <div class="left1"></div>
+        <div class="right1"></div>
+    </div>
+    <div class="outer2">
+        <div class="left2"></div>
+        <div class="right2"></div>
+    </div>
+    <div class="outer3">
+        <div class="left3"></div>
+        <div class="right3"></div>
+    </div>
+    <div class="outer4">
+        <div class="left4"></div>
+        <div class="right4"></div>
+    </div>
+
+</body>
+</html>

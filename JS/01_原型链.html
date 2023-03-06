@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    //下面分别输出啥？
+function Person(name) {
+  this.name = name
+}
+var p2 = new Person('king');
+console.log('p2.constructor === Person', p2.constructor === Person)
+console.log('p2.__proto__ === Person.prototype', p2.__proto__ === Person.prototype)
+console.log('p2.__proto__.__proto__=== Object.prototype', p2.__proto__.__proto__ === Object.prototype)
+console.log('p2.__proto__.__proto__.constructor === Object', p2.__proto__.__proto__.constructor === Object)
+console.log('p2.__proto__.__proto__.__proto__ === Object.prototype.__proto__ === null', p2.__proto__.__proto__.__proto__ === null) //null
+// console.log(p2.__proto__.__proto__.__proto__.__proto__)//报错 Cannot read property '__proto__' of null
+// console.log(p2.__proto__.__proto__.__proto__.__proto__.__proto__)
+console.log('p2.prototype === undefined', p2.prototype === undefined)
+console.log('Person.constructor === Function', Person.constructor === Function)
+console.log('Person.prototype', Person.prototype) //{constructor: ƒ}
+console.log('Person.prototype.constructor === Person', Person.prototype.constructor === Person)
+// ƒ Person(name) {
+//   this.name = name
+// }
+console.log('Person.prototype.__proto__ === Object.prototype', Person.prototype.__proto__ === Object.prototype)
+console.log('Person.__proto__ === Function.prototype', Person.__proto__ === Function.prototype)
+console.log('Function.prototype.__proto__ === Object.prototype', Function.prototype.__proto__ === Object.prototype)
+console.log('Function.__proto__ === Object.__proto__', Function.__proto__ === Object.__proto__)
+console.log(Object.__proto__) //ƒ () { [native code] }
+console.log(Object.prototype.__proto__) //null
+console.log('Function.prototype === Object.__proto__', Function.prototype === Object.__proto__)
+console.log('Function.__proto__ === Object.__proto__', Function.__proto__ === Object.__proto__)
+console.log('Function.prototype === Function.__proto__', Function.prototype === Function.__proto__)
+console.log('Number.__proto__ === Function.prototype',Number.__proto__ === Function.prototype)
+
+
+
+</script>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // setTimeout和promise
+    // 1
+    setTimeout(() => {
+      console.log("timer1");
+      setTimeout(() => {
+        console.log("timer3");
+      }, 0);
+    }, 0);
+    setTimeout(() => {
+      console.log("timer2");
+    }, 0);
+    console.log("start");
+
+    // 2
+    setTimeout(() => {
+      console.log("timer1");
+      Promise.resolve().then(() => {
+        console.log("promise");
+      });
+    }, 0);
+    setTimeout(() => {
+      console.log("timer2");
+    }, 0);
+    console.log("start");
+
+    // 3
+    Promise.resolve().then(() => {
+      console.log("promise1");
+      const timer2 = setTimeout(() => {
+        console.log("timer2");
+      }, 0);
+    });
+    const timer1 = setTimeout(() => {
+      console.log("timer1");
+      Promise.resolve().then(() => {
+        console.log("promise2");
+      });
+    }, 0);
+    console.log("start");
+
+    // 4
+    const promise1 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve("success");
+      }, 1000);
+    });
+    const promise2 = promise1.then(() => {
+      throw new Error("error!!!");
+    });
+    console.log("promise1", promise1);
+    console.log("promise2", promise2);
+    setTimeout(() => {
+      console.log("promise1", promise1);
+      console.log("promise2", promise2);
+    }, 2000);
+
+    // 5  "then: " "Error: error!!!"
+    Promise.resolve().then(() => {
+    return new Error('error!!!')
+    }).then(res => {
+    console.log("then: ", res)
+    }).catch(err => {
+    console.log("catch: ", err)
+    })
+    // 
+    // 6
+    // .then 或者 .catch 的参数期望是函数，传入非函数则会发生值透传。
+    // 第一个then和第二个then中传入的都不是函数，一个是数字类型，一个是对象类型，因此发生了透传，将resolve(1) 的值直接传到最后一个then里。
+    Promise.resolve(1)
+  .then(2)
+  .then(Promise.resolve(3))
+  .then(console.log)
+
+  // 7
+  Promise.resolve()
+  .then(function success (res) {
+    throw new Error('error!!!')
+  }, function fail1 (err) {
+    console.log('fail1', err)
+  }).catch(function fail2 (err) {
+    console.log('fail2', err)
+  }) // fail2 Error: error!!!
+
+
+
+
+
+
+
+  </script>
+</html>

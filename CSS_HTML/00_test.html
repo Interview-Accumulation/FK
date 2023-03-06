@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            width: 100px;
+            height: 50px;
+        }
+        .chamfer{
+
+            background: #3b3;
+            background: 
+                    /* linear-gradient(135deg, transparent 15px, #3b3 0) top left, */
+                    linear-gradient(-135deg, red 0px, #3b3 0) top right,
+                    linear-gradient(-45deg, transparent 15px, #3b3 15px) bottom right; 
+            background-size: 50% 50%;
+            background-repeat: no-repeat;
+        }
+        .chamfer1{
+            background: #009EEB;
+            clip-path: polygon( 20px 0, calc(100% - 20px) 0, 100% 20px,
+                    100% calc(100% - 20px), calc(100% - 20px) 100%,
+                    20px 100%,
+                    0 calc(100% - 20px),
+                    0 20px
+                );
+        }
+        .chamfer2{
+    background: #e72;
+        background: 
+                radial-gradient(circle at top left, transparent 15px, #e72 0) top left,
+                radial-gradient(circle at top right, transparent 15px, #e72 0) top right,
+                radial-gradient(circle at bottom right, transparent 15px,#e72 0) bottom right,
+                radial-gradient(circle at bottom left, transparent 15px, #e72 0) bottom left;
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+}
+    </style>
+</head>
+<body>
+    <div class="chamfer" ></div>
+    <div class="chamfer1" ></div>
+    <div class="chamfer2" ></div>
+    <div class="chamfer3" ></div>
+
+</body>
+</html>
