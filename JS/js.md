@@ -3,6 +3,8 @@
 
 参考：
 * https://juejin.cn/post/7194400984490049573
+* https://juejin.cn/post/6940945178899251230
+* https://juejin.cn/post/6941194115392634888
 
 
 
@@ -29,6 +31,15 @@ console.log(typeof null); // object
 ```
 2. instanceof: 能判断对象类型，不能判断基本数据类型，其内部运行机制是判断在其原型链中能否找到该类型的原型
 
+```js
+console.log(2 instanceof Number);               // false
+console.log(true instanceof Boolean);           // false 
+console.log('str' instanceof String);           // false 
+console.log([] instanceof Array);               // true
+console.log(function(){} instanceof Function);  // true
+console.log({} instanceof Object);              // true
+```
+
 3. Object.prototype.toString.call(): 所有原始数据类型都是能判断的，还有 Error 对象，Date 对象等。
 
 ```js
@@ -43,15 +54,40 @@ Object.prototype.toString.call([]); // "[object Array]"
 Object.prototype.toString.call(function () {}); // "[object Function]"
 ```
 
-4. 判断是否为数组的方法
+!!! info 同样是检测对象obj调用toString方法，obj.toString()的结果和Object.prototype.toString.call(obj)的结果不一样，这是为什么？
+    因为toString是Object的原型方法，而Array、function等类型作为Object的实例，都重写了toString方法。不同的对象类型调用toString方法时，根据原型链的知识，调用的是对应的重写之后的toString方法（function类型返回内容为函数体的字符串，Array类型返回元素组成的字符串…），而不会去调用Object上原型toString方法（返回对象的具体类型），所以采用obj.toString()不能得到其对象类型，只能将obj转换为字符串类型；因此，在想要得到对象的具体类型时，应该调用Object原型上的toString方法。
+1. constructor: constructor有两个作用，一是判断数据的类型，二是对象实例通过 constrcutor 对象访问它的构造函数
+
+```js
+console.log((2).constructor === Number); // true
+console.log((true).constructor === Boolean); // true
+console.log(('str').constructor === String); // true
+console.log(([]).constructor === Array); // true
+console.log((function() {}).constructor === Function); // true
+console.log(({}).constructor === Object); // true
+```
+**需要注意**，如果创建一个对象来改变它的原型，constructor就不能用来判断数据类型了：
+```js
+function Fn(){};
+Fn.prototype = new Array();
+var f = new Fn();
+console.log(f.constructor===Fn);    // false
+console.log(f.constructor===Array); // true
+```
+
+
+5. 判断是否为数组的方法
 
 ```js
 Array.isArray(arr); // true
 arr.__proto__ === Array.prototype; // true
 arr instanceof Array; // true
 Object.prototype.toString.call(arr); // "[object Array]"
+Array.prototype.isPrototypeOf(arr); // true
 ```
 
+
+#### null 和undefined 区别
 
 ### ES6
 [阮一峰ES6文档](https://es6.ruanyifeng.com/#docs/intro)
@@ -191,6 +227,8 @@ element.addEventListener(type, listener, useCapture)
 
 
 ### JS运行机制
+[参考1](https://juejin.cn/post/6844904050543034376#heading-0)
+
 #### 进程与线程
 - `CPU` 是计算机的核心，承担计算任务
 - `进程`是`CPU`资源分配的最小单位,可以看做一个可以独立运行且拥有自己的资源空间的任务程序

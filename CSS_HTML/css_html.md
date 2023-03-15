@@ -1,26 +1,3 @@
-## CSS
-
-### 水平垂直居中
-参考：https://juejin.cn/post/6844903982960214029
-#### 文本垂直居中
-
-```html
-<!-- css 样式 -->
-<style rel="stylesheet" type="text/css">
-.text{
-    width: 200px;
-    height: 200px;
-    text-align: center;
-    line-height: 200px;
-    background: skyblue;
-}
-</style>
-<!-- html 结构 -->
-<div class="text">文本垂直居中</div>
-```
-
-#### 元素
-* 绝对定位
 
 ## HTML
 
@@ -74,6 +51,26 @@
 - 本地存储：只有本地浏览器端可访问数据，服务器不能访问本地存储直到故意通过POST或者GET的通道发送到服务器；每个域5MB；没有过期数据，它将保留直到用户从浏览器清除或者使用Javascript代码移除
 ## CSS
 
+[参考](https://juejin.cn/post/6905539198107942919#heading-0)
+
+### 水平垂直居中
+参考：https://juejin.cn/post/6844903982960214029
+#### 文本垂直居中
+
+```html
+<!-- css 样式 -->
+<style rel="stylesheet" type="text/css">
+.text{
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    line-height: 200px;
+    background: skyblue;
+}
+</style>
+<!-- html 结构 -->
+<div class="text">文本垂直居中</div>
+```
 ### 盒模型
 分类： 标准盒模型和IE盒模型
 相同点：
@@ -221,7 +218,7 @@ sticky 属性值有以下几个特点：
 8. 多列布局 （multi-column layout）
 
 
-### CSS3 中 transition 和 animation 的属性分别有哪些
+#### CSS3 中 transition 和 animation 的属性分别有哪些
 transition 过渡动画：
 - transition-property：指定过渡的 CSS 属性
 - transition-duration：指定过渡所需的完成时间
@@ -237,6 +234,12 @@ animation 关键帧动画：
 - animation-direction：指定是否应该轮流反向播放动画
 - animation-fill-mode：规定当动画不播放时（当动画完成时，或当动画有一个延迟未开始播放时），要应用到元素的样式
 - animation-play-state：指定动画是否正在运行或已暂停
+
+#### 为什么有时候⽤translate来改变位置⽽不是定位？
+- translate 是 transform 属性的⼀个值。改变transform或opacity不会触发浏览器重新布局（reflow）或重绘（repaint），只会触发复合（compositions）。
+- 改变绝对定位会触发重新布局，进⽽触发重绘和复合。
+- transform使浏览器为元素创建⼀个 GPU 图层，但改变绝对定位会使⽤到 CPU。 因此translate()更⾼效，可以缩短平滑动画的绘制时间。 
+- translate改变位置时，元素依然会占据其原始空间，绝对定位就不会发⽣这种情况
 
 ### 隐藏元素的方法
 - `display:none`
@@ -284,3 +287,4 @@ animation 关键帧动画：
 **PNG图片的压缩，分两个阶段：**
 - 预解析（Prediction）：这个阶段就是对png图片进行一个预处理，处理后让它更方便后续的压缩。
 - 压缩（Compression）：执行Deflate压缩，该算法结合了 LZ77 算法和 Huffman 算法对图片进行编码。
+
