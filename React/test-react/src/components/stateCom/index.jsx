@@ -5,25 +5,25 @@ state= {
     count: 0
 }
 
-handleClick = () => {
-    const fans = Math.floor(Math.random() * 10); // 8
-    setTimeout(() => {
-        console.log('宏任务')
-    },0)
-    new Promise((resolve, reject) => {
-      resolve('微任务')
-    }).then((res) => {
-      console.log('res',res);
-    }
+// handleClick = () => {
+//     const fans = Math.floor(Math.random() * 10); // 8
+//     setTimeout(() => {
+//         console.log('宏任务')
+//     },0)
+//     new Promise((resolve, reject) => {
+//       resolve('微任务')
+//     }).then((res) => {
+//       console.log('res',res);
+//     }
 
-)
-    // Promise.resolve().then(() => console.log('promise then') /* callback */)
-    this.setState((state, props)=>({
-        count: state.count + fans // 0 + 8
-    }), () => {
-        console.log('state:', this.state.count)
-    })
-}
+// )
+//     // Promise.resolve().then(() => console.log('promise then') /* callback */)
+//     this.setState((state, props)=>({
+//         count: state.count + fans // 0 + 8
+//     }), () => {
+//         console.log('state:', this.state.count)
+//     })
+// }
 // constructor() {
 //     super()
 //     this.state = {

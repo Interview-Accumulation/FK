@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import StateComponent from './components/stateCom'
 import MemoFunc from './components/useMemoCom';
+import ReducerComponent from './components/useReducerCom'
 import {useState, useMemo} from 'react'
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <button onClick={addMemoList}>addMemo</button>
         {/* <MemoCom /> */}
         {useMemo(()=> (<MemoFunc list={list}/>),[list])}
+        <ReducerComponent />
       </header>
       
     </div>

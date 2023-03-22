@@ -97,7 +97,93 @@
         平行四边形
     </div> -->
 
-    <div class="class1"></div>
+    <!-- <div class="class1"></div> -->
     
 </body>
+<script>
+
+
+// 定义画布
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+// 定义蛇的初始位置和大小
+let snake = [{x: 10, y: 10}];
+let snakeSize = 10;
+
+// 定义食物的初始位置和大小
+let food = {x: 0, y: 0};
+let foodSize = 10;
+
+// 定义蛇的移动方向
+let direction = 'right';
+
+// 定义游戏是否结束
+let gameOver = false;
+
+// 定义游戏的分数
+let score = 0;
+
+// 定义游戏的速度
+let speed = 100;
+
+// 生成食物的函数
+function generateFood() {
+  food.x = Math.floor(Math.random() * canvas.width / snakeSize) * snakeSize;
+  food.y = Math.floor(Math.random() * canvas.height / snakeSize) * snakeSize;
+}
+
+// 绘制蛇的函数
+function drawSnake() {
+  ctx.fillStyle = 'green';
+  snake.forEach(function (part) {
+    ctx.fillRect(part.x, part.y, snakeSize, snakeSize);
+  });
+}
+
+// 绘制食物的函数
+function drawFood() {
+  ctx.fillStyle = 'red';
+  ctx.fillRect(food.x, food.y, foodSize, foodSize);
+}
+
+// 移动蛇的函数
+function moveSnake() {
+  let head = {x: snake[0].x, y: snake[0].y};
+  switch (direction) {
+    case 'right':
+      head.x += snakeSize;
+      break;
+    case 'left':
+      head.x -= snakeSize;
+      break;
+    case 'up':
+      head.y -= snakeSize;
+      break;
+    case 'down':
+      head.y += snakeSize;
+      break;
+  }
+  snake.unshift(head);
+  if (head.x === food.x && head.y === food.y) {
+    score++;
+    generateFood();
+  } else {
+    snake.pop();
+  }
+}
+
+// 检查游戏是否结束的函数
+function checkGameOver() {
+  if (snake[0].x < 0 || snake[0].x >= canvas.width || snake[0].y < 0 || snake[0].y >canvas.height) {
+    gameOver = true;
+  }
+  for (let i = 1; i < snake.length; i++) {
+    if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+      gameOver = true;
+    }
+  }
+}
+
+</script>
 </html>
