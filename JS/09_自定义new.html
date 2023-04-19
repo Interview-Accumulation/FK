@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // 自定义new
+    function myNew(fn, ...args) {
+        // 创建一个空对象
+        let obj = {};
+        // 将空对象的原型指向构造函数的原型
+        obj.__proto__ = fn.prototype;
+        // 将构造函数的this指向空对象
+        let result = fn.apply(obj, args);
+        // 如果构造函数返回的是一个对象，则返回该对象，否则返回空对象
+        return result instanceof Object && result !== null ? result : obj;
+    }
+    // 另一种实现
+    function myNew2(fn, ...args) {
+        let obj = Object.create(fn.prototype);
+        let result = fn.apply(obj, args);
+        return result instanceof Object && result !== null ? result : obj;
+    }
+
+    // 测试
+    function Person(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    Person.prototype.sayName = function () {
+        console.log(this.name);
+    };
+    let p1 = myNew(Person, "张三", 18); 
+    let p2 = myNew2(Person, "李四", 20);
+    console.log(p1); // Person { name: '张三', age: 18 }
+    console.log(p2); // Person { name: '李四', age: 20 }
+    p1.sayName(); // 张三
+    p2.sayName(); // 李四
+
+
+</script>
+</html>

@@ -37,7 +37,7 @@ React.createElement("app",null,"app content")
 
 <App>app content</App>
 // 转义后
-React.createElement(App,null,lyllovelemon)
+React.createElement(App,null,'app content')
 ```
 
 #### React组件为什么不能返回多个元素 或者 React组件为什么只能有一个根元素
@@ -46,11 +46,12 @@ React.createElement(App,null,lyllovelemon)
 class App extends React.Component{
   render(){ 
     return(
-    <div>
-     <h1 className="title">内容1</h1>
-      <span>内容2</span>	
-    </div>	
-  )
+      <div>
+        <h1 className="title">内容1</h1>
+        <span>内容2</span>	
+      </div>	
+    )
+  }
 }
 
 //编译后
@@ -96,6 +97,100 @@ renderList(){
   })
 }
 ```
+
+#### Babel 插件是如何实现 JSX 到 JS 的编译 ？
+1. 依赖：
+  - @babel/cli
+  - @babel/core
+  - @babel/preset-react
+
+2. babel.rc文件添加配置：
+```json
+{
+  "presets": ["@babel/preset-react"]
+}
+```
+3. Babel 读取代码并解析，生成 AST，再将 AST 传入插件层进行转换，在转换时就可以将 JSX 的结构转换为 React.createElement 的函数。
+   - `React.createElement(type, props, children)` 源码
+```js
+export function createElement(type, config, children) {
+    // propName 变量用于储存后面需要用到的元素属性
+    let propName;
+    // props 变量用于储存元素属性的键值对集合
+    const props = {};
+    // key、ref、self、source 均为 React 元素的属性，此处不必深究
+    let key = null;
+    let ref = null;
+    let self = null;
+    let source = null;
+
+    // config 对象中存储的是元素的属性
+    if (config != null) {
+        // 进来之后做的第一件事，是依次对 ref、key、self 和 source 属性赋值
+        if (hasValidRef(config)) {
+            ref = config.ref;
+        }
+        // 此处将 key 值字符串化
+        if (hasValidKey(config)) {
+            key = '' + config.key;
+        }
+
+        self = config.__self === undefined ? null : config.__self;
+        source = config.__source === undefined ? null : config.__source;
+
+        // 接着就是要把 config 里面的属性都一个一个挪到 props 这个之前声明好的对象里面
+        for (propName in config) {
+            if (
+                // 筛选出可以提进 props 对象里的属性
+                hasOwnProperty.call(config, propName) &&
+                !RESERVED_PROPS.hasOwnProperty(propName)
+            ) {
+                props[propName] = config[propName];
+            }
+        }
+    }
+    // childrenLength 指的是当前元素的子元素的个数，减去的 2 是 type 和 config 两个参数占用的长度
+    const childrenLength = arguments.length - 2;
+    // 如果抛去type和config，就只剩下一个参数，一般意味着文本节点出现了
+    if (childrenLength === 1) {
+        // 直接把这个参数的值赋给props.children
+        props.children = children;
+        // 处理嵌套多个子元素的情况
+    } else if (childrenLength > 1) {
+        // 声明一个子元素数组
+        const childArray = Array(childrenLength);
+        // 把子元素推进数组里
+        for (let i = 0; i < childrenLength; i++) {
+            childArray[i] = arguments[i + 2];
+        }
+        // 最后把这个数组赋值给props.children
+        props.children = childArray;
+    }
+
+    // 处理 defaultProps
+    if (type && type.defaultProps) {
+        const defaultProps = type.defaultProps;
+        for (propName in defaultProps) {
+            if (props[propName] === undefined) {
+                props[propName] = defaultProps[propName];
+            }
+        }
+    }
+
+    // 最后返回一个调用ReactElement执行方法，并传入刚才处理过的参数
+    return ReactElement(
+        type,
+        key,
+        ref,
+        self,
+        source,
+        ReactCurrentOwner.current,
+        props,
+    );
+}
+```
+   - ReactElement 其实只做了一件事情，那就是“创建”，说得更精确一点，是“组装”：ReactElement 把传入的参数按照一定的规范，“组装”进了 element 对象里，并把它返回给了 React.createElement，最终 React.createElement 又把它交回到了开发者手中。
+   - ReactElement返回的element 其实就是虚拟DOM中的一个节点：一个JS对象，这个对象包含了对真实节点的描述。
 
 
 ### setState
@@ -186,6 +281,44 @@ handleClick = () => {
 
 
 ### 虚拟dom
+> 参考：https://zh-hans.reactjs.org/docs/faq-internals.html
+#### 理解
+- JS对象，保存在内存中
+- 是对真实dom的映射
+#### 工作流程
+- 挂载阶段：React 将结合 JSX 的描述，构建出虚拟 DOM 树，然后通过 ReactDOM.render 实现虚拟 DOM 到真实 DOM 的映射（触发渲染流水线）；
+- 更新阶段：页面的变化先作用于虚拟 DOM，虚拟 DOM 将在 JS 层借助算法先对比出具体有哪些真实 DOM 需要被改变，然后再将这些改变作用于真实 DOM。
+
+#### 虚拟dom解决的关键问题
+- 减少 DOM 操作：虚拟 DOM 可以将多次 DOM 操作合并为一次操作
+- 研发体验/研发效率的问题：虚拟 DOM 的出现，为数据驱动视图这一思想提供了高度可用的载体，使得前端开发能够基于函数式 UI 的编程方式实现高效的声明式编程。
+- 跨平台的问题：虚拟 DOM 是对真实渲染内容的一层抽象。同一套虚拟 DOM，可以对接不同平台的渲染逻辑，从而实现“一次编码，多端运行”
+- 性能优化的问题：虚拟 DOM 的出现，为前端性能优化提供了一种思路，即通过对比新旧虚拟 DOM 的差异，来减少真实 DOM 的操作，从而提升性能。
+
+#### VDOM 和 DOM 的区别
+- 真实DOM存在重排和重绘，虚拟DOM不存在；
+- 虚拟 DOM 的总损耗是“虚拟 DOM 增删改+真实 DOM **差异**增删改+排版与重绘（可能比直接操作真实DOM要少）”，真实 DOM 的总损耗是“真实 DOM 完全增删改+排版与重绘”
+
+!!! note 注意：  
+  - 传统的原生 api 或 jQuery 去操作 DOM 时，浏览器会从构建 DOM 树开始从头到尾执行一遍流程。
+  - 当你在一次操作时，需要更新 10 个 DOM 节点，浏览器没这么智能，收到第一个更新 DOM 请求后，并不知道后续还有 9 次更新操作，因此会马上执行流程，最终执行 10 次流程。
+  - 而通过 VNode，同样更新 10 个 DOM 节点，虚拟 DOM 不会立即操作 DOM，而是将这 10 次更新的 diff 内容保存到本地的一个 js 对象中，最终将这个 js 对象一次性 attach 到 DOM 树上，避免大量的无谓计算。
+
+#### VDOM 和 DOM 优缺点
+- 真实 DOM 的优势：
+  - 易用
+
+- 真实 DOM 的缺点：
+  - 效率低，解析速度慢，内存占用量过高
+  - 性能差：频繁操作真实 DOM，易于导致重绘与回流
+
+- 虚拟 DOM 的优势：
+  - 简单方便：如果使用手动操作真实 DOM 来完成页面，繁琐又容易出错，在大规模应用下维护起来也很困难
+  - 性能方面：使用 Virtual DOM，能够有效避免真实 DOM 数频繁更新，减少多次引起重绘与回流，提高性能
+  - 跨平台：React 借助虚拟 DOM，带来了跨平台的能力，一套代码多端运行
+
+- 虚拟 DOM 的缺点：
+  - 在一些性能要求极高的应用中虚拟 DOM 无法进行针对性的极致优化，首次渲染大量 DOM 时，由于多了一层虚拟 DOM 的计算，速度比正常稍慢
 
 ### react事件机制
 #### 合成事件
@@ -490,5 +623,38 @@ const DemoUseReducer = ()=>{
 }
 ```
 
+### React Fiber
+* 在15及以前的版本，React更新DOM都是使用递归的方式进行遍历，每次更新都会从应用根部递归执行，且一旦开始，无法中断，这样层级越来越深，结构复杂度高的项目就会出现明显的卡顿。
+* React Fiber 是 React 16 版本中的新架构，它的目的是解决 React 在大量数据变更时的性能问题。
+* fiber是在React中最小粒度的执行单元，可以将fiber理解为是React的虚拟DOM。
+* 在React中，更新fiber的过程叫做调和，每一个fiber都可以作为一个执行单元进行处理，同时每个fiber都有一个优先级lane（16版本是expirationTime）来判断是否还有空间或时间来执行更新，如果没有时间更新，就会把主动权交给浏览器去做一些渲染（如动画、重排、重绘等），用户就不会感觉到卡顿。
+* 当浏览器空闲了（requestIdleCallback），就通过scheduler（调度器）将执行恢复到执行单元上，这样本质上是中断了渲染，不过题改了用户的体验。React实现的fiber模式是一个具有链表和指针的异步模型。
+
+ 
+
+
+
 ### 虚拟DOM
 虚拟DOM；简单理解，即用JS按照DOM结构实现的树形结构对象。
+
+### SPA优缺点
+优点：
+* 交互体验好，页面切换快: 单页应用的内容的改变不需要重新加载整个页面，获取数据也是通过Ajax异步获取，没有页面之间的切换，就不会出现“白屏现象”,也不会出现假死并有“闪烁”现象，页面显示流畅，用户体验好。
+* 良好的前后端工作分离模式: 后端不再负责模板渲染、输出页面工作，后端API通用化，即同一套后端程序代码，不用修改就可以用于Web界面、手机、平板等多种客户端
+* 减轻服务器压力：单页应用相对服务器压力小，服务器只用出数据就可以，不用管展示逻辑和页面合成, 提高了服务器的吞吐能力。
+
+缺点：
+* 首屏加载时间长: 因为单页应用的所有内容资源一次性获取，所以首屏加载时间会比较长，用户体验不好。
+  * 解决方案: 
+  1. 懒加载，预加载
+  2. CDN加速
+  3. 异步加载
+  4. 服务端渲染
+* 不利于SEO: 
+  * 原因：
+    * seo 本质是一个服务器向另一个服务器发起请求，解析请求内容。
+    * 搜索引擎爬虫不会执行JavaScript，所以单页应用的内容不会被搜索引擎抓取，这样就会导致搜索引擎无法抓取到单页应用的内容，从而影响搜索引擎的收录。
+    * 搜索引擎的基础爬虫的原理就是抓取url，然后获取html源代码并解析。 如果一个单页应用，html在服务器端还没有渲染部分数据数据，在浏览器才渲染出数据，即搜索引擎请求到的html是模型页面而不是最终数据的渲染页面。 这样就很不利于内容被搜索引擎搜索到
+  * 解决方案：
+    * 服务端渲染: 服务器合成完整的 html 文件再输出到浏览器
+    * 页面预渲染

@@ -291,3 +291,6 @@ element.addEventListener(type, listener, useCapture)
      -  `new Promise(() => {}).then()`中, `new Promise()` 这一部分是一个构造函数，这是一个同步任务, `.then()` 才是一个异步微任务
      -  使用`await`关键字与`Promise.then`效果类似
 [简单示例代码](./08_%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF.html)
+
+
+### 数组

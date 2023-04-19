@@ -6,90 +6,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        .pseudo-container{
-            color: #FFF;
-            line-height: 22px;
-            height: 22px;
-            border-radius: 2px;
-            min-width: 63px;
-            position: relative;
-            width: max-content;
-            padding: 0 8px;
-            margin: 0 auto;
-            font-size: 14px;
-            text-align: center;
-            background: transparent;
-            z-index: 0;
-        }
-        .pseudo-container::after{
-            content: "";
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            z-index: -1;
-            opacity: .9;
-            background: #595C73A5;
-            border-radius: 2px;
-            transform: skew(-15deg);
-        }
-        .pseudo-container::before {
-            content:"";
-            position: absolute;
-            left: -3px;
-            top: 0;
-            width: 0px;
-            height: 0px;
-            /* background-color: red; */
-            border-top: 11px solid #595C73A5;
-            border-left: 3px solid #595C73A5;
-            border-right: 3px solid transparent;
-            border-bottom: 11px solid transparent;
-            border-radius: 2px;
-        }
+      @media (min-width: 768px) {
+  /* show 3 items */
+  .carousel-inner .active,
+  .carousel-inner .active + .carousel-item,
+  .carousel-inner .active + .carousel-item + .carousel-item {
+    display: block;
+  }
 
+  .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left),
+  .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item,
+  .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item {
+    transition: none;
+  }
 
-        .pseudo-container1{
-            position:relative;
-            /* 内容的文字大小、颜色、内边距等样式在这里*/
-            width:max-content;
-            padding: 5px;
-            height:19px;
-            margin:0 auto;
-            color:#fff;
-            font-size: 14px;
-            line-height: 19px;
-            text-align: center;
-            background: #5C5F66;
-        }
-        .pseudo-container1::before{
-            content:"";
-            position:absolute;
-            top:0;right:0;bottom:0;left:20px;
-            z-index:-1;
-            opacity: 0.9;
-            background: #5C5F66;
-            border-radius: 2px;
-            transform: skew(-20deg);
-        }
-        #tag {
-            width: 0;
-            height: 0;
-            border-top: 100px solid red;
-            border-left: 100px solid transparent;
-            /* border-radius: 0px 10px 0px 0px; */
-            border-top-left-radius: 10px;
-        }
-        .class1 {
-            width: 53px;
-            clip-path: polygon(0% 0%,100% 0%,90% 100%,0% 100%);
-            box-sizing: border-box;
-            padding-left: 8px;
-            border-radius: 2px;
-            background: #5C5F66D0;
-            height: 30px;
-        }
+  .carousel-inner .carousel-item-next,
+  .carousel-inner .carousel-item-prev {
+    position: relative;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .carousel-inner .active.carousel-item + .carousel-item + .carousel-item + .carousel-item {
+    position: absolute;
+    top: 0;
+    right: -33.3333%;
+    z-index: -1;
+    display: block;
+    visibility: visible;
+  }
+
+  /* left or forward direction */
+  .active.carousel-item-left + .carousel-item-next.carousel-item-left,
+  .carousel-item-next.carousel-item-left + .carousel-item,
+  .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item,
+  .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item {
+    position: relative;
+    transform: translate3d(-100%, 0, 0);
+    visibility: visible;
+  }
+
+  /* farthest right hidden item must be abso position for animations */
+  .carousel-inner .carousel-item-prev.carousel-item-right {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    display: block;
+    visibility: visible;
+  }
+
+  /* right or prev direction */
+  .active.carousel-item-right + .carousel-item-prev.carousel-item-right,
+  .carousel-item-prev.carousel-item-right + .carousel-item,
+  .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item,
+  .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item {
+    position: relative;
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+    display: block;
+    visibility: visible;
+  }
+}
+img {
+  background-color: transparent;
+}
+
     </style>
 </head>
 <body>
@@ -99,91 +80,127 @@
 
     <!-- <div class="class1"></div> -->
     
+    <!-- <h2 class="title">
+      <span>Migrating From MySQL to YugabyteDB Using YugabyteDB Voyager</span>
+    </h2>
+    <input type="text" pattern="[A-Z]+" required/>
+    <button type="submit">submit</button> -->
+    <!-- <div class="container-fluid">
+      <h1 class="text-center mb-3">Bootstrap Multi-Card Carousel</h1>
+      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner row w-100 mx-auto">
+          <div class="carousel-item col-md-4 active">
+            <div class="card">
+              <img class="card-img-top img-fluid" src="https://picsum.photos/seed/1/800/600" alt="Card image cap">
+              <div class="card-body">
+                <h4 class="card-title">Card 1</h4>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item col-md-4">
+            <div class="card">
+              <img class="card-img-top img-fluid" src="https://picsum.photos/seed/2/800/600" alt="Card image cap">
+              <div class="card-body">
+                <h4 class="card-title">Card 2</h4>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item col-md-4">
+            <div class="card">
+              <img class="card-img-top img-fluid" src="https://picsum.photos/seed/3/800/600" alt="Card image cap">
+              <div class="card-body">
+                <h4 class="card-title">Card 3</h4>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item col-md-4">
+            <div class="card">
+              <img class="card-img-top img-fluid" src="https://picsum.photos/seed/4/800/600" alt="Card image cap">
+              <div class="card-body">
+                <h4 class="card-title">Card 4</h4>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item col-md-4">
+            <div class="card">
+              <img class="card-img-top img-fluid" src="https://picsum.photos/seed/5/800/600" alt="Card image cap">
+              <div class="card-body">
+                <h4 class="card-title">Card 5</h4>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item col-md-4">
+            <div class="card">
+              <img class="card-img-top img-fluid" src="https://picsum.photos/seed/6/800/600" alt="Card image cap">
+              <div class="card-body">
+                <h4 class="card-title">Card 6</h4>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item col-md-4">
+            <div class="card">
+              <img class="card-img-top img-fluid" src="https://picsum.photos/seed/7/800/600" alt="Card image cap">
+              <div class="card-body">
+                <h4 class="card-title">Card 7</h4>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div> -->
+    <img src="../00_images/test.gif" alt="">
 </body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js">
+    $(document).ready(function() {
+  $("#myCarousel").on("slide.bs.carousel", function(e) {
+    var $e = $(e.relatedTarget);
+    var idx = $e.index();
+    var itemsPerSlide = 3;
+    var totalItems = $(".carousel-item").length;
+
+    if (idx >= totalItems - (itemsPerSlide - 1)) {
+      var it = itemsPerSlide - (totalItems - idx);
+      for (var i = 0; i < it; i++) {
+        // append slides to end
+        if (e.direction == "left") {
+          $(".carousel-item")
+            .eq(i)
+            .appendTo(".carousel-inner");
+        } else {
+          $(".carousel-item")
+            .eq(0)
+            .appendTo($(this).find(".carousel-inner"));
+        }
+      }
+    }
+  });
+});
+</script>
 <script>
 
 
-// 定义画布
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
-// 定义蛇的初始位置和大小
-let snake = [{x: 10, y: 10}];
-let snakeSize = 10;
-
-// 定义食物的初始位置和大小
-let food = {x: 0, y: 0};
-let foodSize = 10;
-
-// 定义蛇的移动方向
-let direction = 'right';
-
-// 定义游戏是否结束
-let gameOver = false;
-
-// 定义游戏的分数
-let score = 0;
-
-// 定义游戏的速度
-let speed = 100;
-
-// 生成食物的函数
-function generateFood() {
-  food.x = Math.floor(Math.random() * canvas.width / snakeSize) * snakeSize;
-  food.y = Math.floor(Math.random() * canvas.height / snakeSize) * snakeSize;
-}
-
-// 绘制蛇的函数
-function drawSnake() {
-  ctx.fillStyle = 'green';
-  snake.forEach(function (part) {
-    ctx.fillRect(part.x, part.y, snakeSize, snakeSize);
-  });
-}
-
-// 绘制食物的函数
-function drawFood() {
-  ctx.fillStyle = 'red';
-  ctx.fillRect(food.x, food.y, foodSize, foodSize);
-}
-
-// 移动蛇的函数
-function moveSnake() {
-  let head = {x: snake[0].x, y: snake[0].y};
-  switch (direction) {
-    case 'right':
-      head.x += snakeSize;
-      break;
-    case 'left':
-      head.x -= snakeSize;
-      break;
-    case 'up':
-      head.y -= snakeSize;
-      break;
-    case 'down':
-      head.y += snakeSize;
-      break;
-  }
-  snake.unshift(head);
-  if (head.x === food.x && head.y === food.y) {
-    score++;
-    generateFood();
-  } else {
-    snake.pop();
-  }
-}
-
-// 检查游戏是否结束的函数
-function checkGameOver() {
-  if (snake[0].x < 0 || snake[0].x >= canvas.width || snake[0].y < 0 || snake[0].y >canvas.height) {
-    gameOver = true;
-  }
-  for (let i = 1; i < snake.length; i++) {
-    if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
-      gameOver = true;
-    }
-  }
-}
-
 </script>
+
 </html>

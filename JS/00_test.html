@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // const [a, b, c, d] = "hello"
+    // console.log(a, b, c, d);// h e l l
+    // const { toString: s } = 123
+    // console.log(s);
+
+    // const { x, y: z } = { x: 1, y: 2 }
+    // console.log(x, z);
+    // console.log(y)
+    // const [x, ...y] = [1, 2, 3]
+    // console.log(x, y);
+
+    // console.log('\u{01F680}'); // 🚀
+
+    // let str = '123'
+    // for (const e of str) {
+    //     console.log(e);
+    // }
+
+    // let str = `1
+    // 2
+    // 3
+    // `
+    // console.log(str);
+    // let name = 'king'
+    // let str = `hello ${name}`
+    // console.log(str);
+
+    // console.log(0b11111); // 31
+    // console.log(0o767); // 503
+// const regexp = /test(\d?)/g;
+// const str = 'test1test23test';
+
+// const array = [...str.matchAll(regexp)];
+
+// console.log(array); // Array [Array ["test1", "1"], Array ["test2", "2"], Array ["test", ""]]
+// let props = 'kkk'
+// let obj = {
+//     props,
+//     method() {
+//         console.log(1);
+//     }
+// }
+// console.log(obj.props);// kkk
+// obj.method();// 1
+// console.log(obj.method.super);// undefined
+
+// let obj2 = obj
+// obj2.props = 'lll'
+// console.log(Object.is(obj, obj2));// true
+
+// const target = { a: 1, b: 2 };
+// const returnedTarget = Object.assign(target, { b: 4, c: 5 });
+
+// console.log(target); // Object { a: 1, b: 4, c: 5 }
+// console.log(returnedTarget === target); // true
+// let obj = {}
+// console.log(Object.prototype === Object.getPrototypeOf( obj )); // true
+
+// let e = Symbol('e')
+// let obj = {
+//     1: 'a',
+//     a: 1,
+//     2: 'b',
+//     b: '2',
+//     c: true,
+//     [e]: 5,
+//     d: 6
+// }
+
+// for (const key in obj) {
+//     if (Object.hasOwnProperty.call(obj, key)) {
+//         const element = obj[key];
+//         console.log(element);
+//     }
+// }
+
+// console.log(Object.keys(obj));// ['1', '2', 'a', 'b', 'c', 'd']
+// console.log(Object.getOwnPropertyNames(obj));// ['1', '2', 'a', 'b', 'c', 'd']
+// console.log(Object.getOwnPropertySymbols(obj)); // [Symbol(e)]
+// console.log(Reflect.ownKeys(obj)); // ['1', '2', 'a', 'b', 'c', 'd', Symbol(e)]
+
+// let arr = [1, 2, 3, 4]
+// console.log(arr === [...arr]);// false
+
+// console.log(Array.from('foo')); // ['f', 'o', 'o']
+// console.log(Array.from([1, 2, 3], x => x + x)); // [2, 4, 6]
+// function fn() {
+//     console.log(Array.from(arguments));
+// }
+// fn(1,2, {}, true); // [1, 2, {}, true]
+
+
+// const array1 = ['a', 'b', 'c', ''];
+// const iterator = array1.keys();
+// console.log([...iterator]); // [0, 1, 2, 3]
+// console.log(Object.keys(array1)); // ['0', '1', '2', '3']
+// console.log([...array1.values()]); // ['a', 'b', 'c', '']
+
+// const iterator1 = array1.entries();
+// console.log([...iterator1]); // [Array [0, 'a'], Array [1, 'b'], Array [2, 'c'], Array [3, '']]
+
+// throwMissing = () => { throw new Error('Missing parameter') }
+// function name(params) {
+//     console.log(222);
+// }
+// function name1(params = throwMissing()) {
+//     console.log('111');
+// }
+// name();
+// name1()
+
+// function name(params = 1, x) {
+//     console.log('1');
+//     console.log(name.length);
+// }
+// name(1, 2, 3, 4, 5)
+
+// console.log(name(1, 2, 3, 4, 5).length);
+
+// const symbol1 = Symbol();
+// const symbol2 = Symbol(42);
+// const symbol3 = Symbol('foo');
+
+// console.log(typeof symbol1);//  "symbol"
+
+// console.log(symbol2 === 42);//  false
+
+// console.log(symbol3.toString());// "Symbol(foo)"
+
+// console.log(Symbol('foo') === Symbol('foo')) // false
+
+// // 从 symbol 注册表中读取键为"foo"的 symbol);
+// console.log(Symbol.for("foo")); // Symbol(foo) 
+
+// console.log(Symbol.for("foo") === Symbol.for("foo")); // true
+
+// // 创建一个 symbol 并放入 symbol 注册表中，键为 "bar"
+// console.log(Symbol.for("bar")); // Symbol(bar)
+
+
+// const globalSym = Symbol.for("kkk");
+// console.log(Symbol.keyFor(symbol3)); // undefined
+// console.log(Symbol.keyFor(globalSym)); // "kkk"
+
+// let sym = new Symbol(); // TypeError: Symbol is not a constructor
+
+// class Polygon {
+//   constructor(height, width) {
+//     this.name = 'Polygon';
+//     this.height = height;
+//     this.width = width;
+//   }
+// }
+
+// class Square extends Polygon {
+//   constructor(length) {
+//     super(length, length);
+//     this.name = 'Square';
+//   }
+// }
+// let polygon = new Polygon(1, 1)
+// console.log(polygon.name, polygon.height); // Polygon 1
+// let square = new Square(2, 2);
+// console.log(square.name, square.width); // Square 2
+
+// console.log(Math.pow(2, 3));
+
+// let obj = {a:1}
+// let obj1 = {...obj, __proto__: Object.getPrototypeOf(obj)}
+// console.log(obj === obj1); // false
+// console.log(obj.__proto__ === obj1.__proto__); // true
+
+
+// console.log({...'hello'}); // {0: 'h', 1: 'e', 2: 'l', 3: 'l', 4: 'o'}
+
+// console.log({...[1, 2]}); // {0: 1, 1: 2}
+
+// const { x, ...rest } = { x: 1, y: 2, z: 3  }
+// console.log(rest); // {y: 2, z: 3}
+
+// const obj2 = {x:1, ...{x:2}}
+// console.log(obj2); // {x:2}
+
+// console.log('\tU+2028');
+
+// let obj = {
+//     a: 1,
+//     b: 2,
+//     c: 3
+// }
+// let arr = Object.entries(obj);
+// console.log(arr); // [ [ 'a', 1 ], [ 'b', 2 ], [ 'c', 3 ] ]
+// console.log(Object.fromEntries(arr)); // { a: 1, b: 2, c: 3 }
+
+// console.log(globalThis); // Window {window: Window, self: Window, document: document, name: "", location: Location, …}
+
+// 这是将要被劫持的对象
+// const data = {
+//   name: '',
+// };
+
+// function say(name) {
+//   if (name === '古天乐') {
+//     console.log('给大家推荐一款超好玩的游戏');
+//   } else if (name === '渣渣辉') {
+//     console.log('戏我演过很多,可游戏我只玩贪玩懒月');
+//   } else {
+//     console.log('来做我的兄弟');
+//   }
+// }
+
+// // 遍历对象,对其属性值进行劫持
+// Object.keys(data).forEach(function(key) {
+//   Object.defineProperty(data, key, {
+//     enumerable: true,
+//     configurable: true,
+//     get: function() {
+//       console.log('get');
+//     },
+//     set: function(newVal) {
+//       // 当属性值发生变化时我们可以进行额外操作
+//       console.log(`大家好,我系${newVal}`);
+//       say(newVal);
+      
+//     },
+//   });
+// });
+
+// data.name = '渣渣辉';
+// //大家好,我系渣渣辉
+// //戏我演过很多,可游戏我只玩贪玩懒月
+// console.log(data.name);
+
+// const arr = [1, 2, 3, 4]
+// for (let i = 0; i < arr.length; i++) {
+//   // console.log(arr[i]);
+//   console.log(i);
+// }
+
+this.id = "global";
+
+console.log("this.id :>> ", this.id); // this.id :>>  global
+
+function normalFun() {
+  return this.id;
+}
+
+const arrowFun = () => {
+  return this.id;
+};
+
+const newNormal = new normalFun();
+console.log("newNormal :>> ", newNormal); // newNormal :>>  normalFun {}
+try {
+  const newArrow = new arrowFun();
+} catch (error) {
+  console.log("error :>> ", error); // error :>>  TypeError: arrowFun is not a constructor
+}
+
+console.log("normalFun :>> ", normalFun()); // normalFun :>>  global
+console.log("arrowFun() :>> ", arrowFun()); // arrowFun() :>>  global
+
+const obj = {
+  id: "obj",
+  normalFun,
+  arrowFun,
+};
+
+const normalFunBindObj = normalFun.bind(obj);
+const arrowFunBindObj = arrowFun.bind(obj);
+console.log("normalFun.call(obj) :>> ", normalFun.call(obj)); // normalFun.call(obj) :>>  obj
+console.log("normalFunBindObj() :>> ", normalFunBindObj()); // normalFunBindObj() :>>  obj
+console.log("arrowFun.call(obj) :>> :>> ", arrowFun.call(obj)); // arrowFun.call(obj) :>> :>>  global
+console.log("arrowFunBindObj() :>> ", arrowFunBindObj()); // arrowFunBindObj() :>>  global
+console.log("obj.normalFun() :>> ", obj.normalFun()); // obj.normalFun() :>>  obj
+console.log("obj.arrowFun() :>> ", obj.arrowFun()); // obj.arrowFun() :>>  global
+</script>
+</html>
