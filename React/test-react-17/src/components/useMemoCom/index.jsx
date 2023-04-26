@@ -1,7 +1,7 @@
 // import react from "react";
 
 const MemoFunc = (props) => {
-    const {list = []} = props
+    const {list} = props
     // 防抖
     // const debounceFunc = (func, wait) => {
     //     let timer = null

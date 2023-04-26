@@ -18,11 +18,34 @@
             margin-left: 50%;
             margin-top: 50%;
         }
+        .container {
+            display: flex;
+        }
+        .left {
+            height: 100px;
+            flex: 0 0 200px;
+            background-color: red;
+        }
+        .right {
+            height: 100px;
+            flex: 0 0 200px;
+            background-color: blue;
+        }
+        .center {
+            flex: 1;
+            background-color: green;
+        }
     </style>
 </head>
 <body>
-    <div class="outer">
+    <!-- <div class="outer">
         <div class="innner"></div>
+    </div> -->
+    <div class="container">
+        <div class="left"></div>
+        <div class="center"></div>
+        <div class="right"></div>
+
     </div>
     
 </body>

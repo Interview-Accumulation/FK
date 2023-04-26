@@ -11,7 +11,7 @@ function App() {
   const Element = () => useRoutes(routers);
   return (
     <ConfigProvider locale={zhCN}>
-      <Suspense>
+      <Suspense fallback={'...'}>
         <Router>
             <Element />
             {/* <Layout /> */}

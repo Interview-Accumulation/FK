@@ -235,8 +235,6 @@ handleClick = () => {
         })
         console.log('结束')
     },0)
-
-
 }
 // 打印结果：
 // 开始 state:8  结束
@@ -349,7 +347,7 @@ handleClick = () => {
 - React自身实现了一套冒泡机制，不能通过return false阻止冒泡
 - React通过SytheticEvent实现了事件合成
 
-[react event](../00_images/react-event.png)
+![react event](../00_images/react-event.png)
 
 
 
@@ -385,7 +383,7 @@ handleClick = () => {
 handerClick = (e) => {
     console.log(e.target) // button 
     setTimeout(()=>{
-        console.log(e.target) // null
+        console.log(e.target) // null, 17之后取消了事件池，解决了找不到e.target的问题
     },0)
 }
 ```
@@ -399,7 +397,7 @@ react17相较于16，事件系统有部分改动
 1. 事件统一绑定container上，ReactDOM.render(app， container);而不是document上，这样好处是有利于微前端的，微前端一个前端系统中可能有多个应用，如果继续采取全部绑定在document上，那么可能多应用下会出现问题。
 ![事件系统对比](../00_images/react6-17-event.png)
 2. 对齐原生浏览器事件,React 17 中终于支持了原生捕获事件的支持， 对齐了浏览器原生标准。同时 onScroll 事件不再进行事件冒泡。onFocus 和 onBlur 使用原生 focusin， focusout 合成。
-3. 取消事件池 React 17 取消事件池复用，也就解决了上述在setTimeout打印，找不到e.target的问题。
+3. 取消事件池: React 17 取消事件池复用，也就解决了上述在setTimeout打印，找不到e.target的问题。
 
 
 
@@ -553,6 +551,62 @@ export default App;
 * 对于class组件，我们只需要实例化一次，实例中保存了组件的state等状态。对于每一次更新只需要调用render方法就可以。但是在function组件中，每一次更新都是一次新的函数执行,为了保存一些状态,执行一些副作用钩子,react-hooks应运而生，去帮助记录组件的状态，处理一些额外的副作用
 
 #### useState
+- 作用：定义状态，解决了函数组件没有状态的问题。
+- 对象不可局部更新：state是一个对象时，不能局部更新对象属性，useState不会合并，会把整个对象覆盖。要用展开运算符自己进行属性值的覆盖。
+```jsx
+    const [state, setState] = useState({ name: 'jerry', age: 18 })
+
+    const changeState = () => {
+        setState({name:"tom"}) //覆盖整个state
+    }
+```
+- 地址要变更：对于引用类型，数据地址不变的时候，认为数据没有变化，不会更新视图。所以要保证数据地址变更，才能更新视图。
+```jsx
+    const [state, setState] = useState({ name: 'jerry', age: 18 })
+
+    const changeState1 = () => {
+        const obj = state //obj和state指向同一个地址
+        obj.name = 'tom'
+        setState(obj) // 地址没有变更，不会更新
+    }
+
+    const changeState2 = () => {
+        setState({...state,name:"tom"}) //保证数据地址变更
+    }
+
+```
+- useState异步回调问题：如何获取到更新后的state，使用useEffect，当state变化时触发useEffect，获取最新的state
+```jsx
+    const [state, setState] = useState(0)
+
+    const changeState = () => {
+        setState(state+1)
+        console.log(state) //0
+    }
+
+    useEffect(()=>{
+        console.log(state) //1
+    },[state])
+```
+
+- 操作合并：传入对象会被合并，传入函数，使用preState参数不会被合并
+
+```jsx
+const [name, setName] = useState("张三");
+
+  const handleName = () => {
+    setName(name + '~')
+    setName(name + '~')
+    setName(name + '~')
+  } // 张三~
+  const handleName2 = () => {
+    setName( pre => pre + '~')
+    setName( pre => pre + '~')
+    setName( pre => pre + '~')
+  } // 张三~~~
+```
+
+
 
 #### useEffect
 ```js
@@ -560,13 +614,14 @@ useEffect(()=>{
     return destory
 },dep)
 ```
+- 若useEffect`没有第二个参数`，则内部回调函数在每次render时都会执行
 - useEffect 第一个参数 callback, 返回的 destory ， destory 作为下一次callback执行之前调用，用于清除上一次 callback 产生的副作用。
-- 第二个参数作为依赖项，是一个数组，可以有多个依赖项，依赖项改变，执行上一次callback 返回的 destory ，和执行新的 effect 第一个参数 callback 。
-- 对于 useEffect 执行， React 处理逻辑是采用异步调用 ，对于每一个 effect 的 callback， React 会向 setTimeout回调函数一样，放入任务队列，等到主线程任务完成，DOM 更新，js 执行完成，视图绘制完毕，才执行。所以 effect 回调函数不会阻塞浏览器绘制视图。
+- 第二个参数作为依赖项，是一个数组，可以有多个依赖项，**依赖项改变，执行上一次callback 返回的 destory ，和执行新的 effect 第一个参数 callback** 。
+- 对于 useEffect 执行， React 处理逻辑是采用**异步调用** ，对于每一个 effect 的 callback， React 会向 setTimeout回调函数一样，放入任务队列，等到主线程任务完成，DOM 更新，js 执行完成，视图绘制完毕，才执行。所以 effect 回调函数不会阻塞浏览器绘制视图。
 
 #### useLayoutEffect
 - useLayoutEffect和useEffect不同之处，是采用了同步执行
-- useLayoutEffect 是在 DOM 更新之后，浏览器绘制之前，这样可以方便修改 DOM，获取 DOM 信息，这样浏览器只会绘制一次，如果修改 DOM 布局放在 useEffect ，那 useEffect 执行是在浏览器绘制视图之后，接下来又改 DOM ，就可能会导致浏览器再次回流和重绘。而且由于两次绘制，视图上可能会造成闪现突兀的效果。
+- useLayoutEffect 是在 **DOM 更新之后，浏览器绘制之前**，这样可以方便修改 DOM，获取 DOM 信息，这样浏览器只会绘制一次，如果修改 DOM 布局放在 useEffect ，那 useEffect 执行是在浏览器绘制视图之后，接下来又改 DOM ，就可能会导致浏览器再次回流和重绘。而且由于两次绘制，视图上可能会造成闪现突兀的效果。
 - useLayoutEffect callback 中代码执行会阻塞浏览器绘制。
 
 
@@ -623,6 +678,37 @@ const DemoUseReducer = ()=>{
 }
 ```
 
+#### useContext
+> useContext 是 react-hooks 提供的能够在无状态组件中运行的类似redux的功能 api
+```jsx
+const ①context = useContext(②Context)
+```
+- ① 为 Context 的 value 值。
+- ② 为 Context 对象，可以通过 React.createContext 创建。
+
+- 基础使用
+```jsx
+// app
+export const Context = React.createContext({ name:'张三' , age:18 })
+const App = ()=>{
+    return <div>
+        <Context.Provider value={{ name:'李四' , age:20 }}>
+            <DemoUseContext/>
+        </Context.Provider>
+    </div>
+}
+// demo
+import { Context } from './app'
+const DemoUseContext = ()=>{
+    const context = useContext(Context)
+    return <div>
+        <p>姓名：{ context.name }</p>
+        <p>年龄：{ context.age }</p>
+    </div>
+}
+```
+
+
 ### React Fiber
 * 在15及以前的版本，React更新DOM都是使用递归的方式进行遍历，每次更新都会从应用根部递归执行，且一旦开始，无法中断，这样层级越来越深，结构复杂度高的项目就会出现明显的卡顿。
 * React Fiber 是 React 16 版本中的新架构，它的目的是解决 React 在大量数据变更时的性能问题。
@@ -658,3 +744,137 @@ const DemoUseReducer = ()=>{
   * 解决方案：
     * 服务端渲染: 服务器合成完整的 html 文件再输出到浏览器
     * 页面预渲染
+
+
+
+
+### Class组件和函数组件
+
+#### 输出差别（闭包陷阱）
+* 函数组件：每次渲染都会重新创建函数，所以每次渲染都会有自己的闭包，所以每次渲染都会有自己的props和state
+
+```jsx
+ const Index = () =>  {
+    
+    const [count, setCount] = useState(0)
+
+    const log = () => {
+        setTimeout(() => {
+            alert(count)
+        }, 3000)
+    }
+
+  return (
+    <div>
+        <div>{count}</div>
+        <Button onClick={() => setCount(count + 1)}>add</Button>
+        <Button onClick={log}>log</Button>
+    </div>
+  )
+}
+```
+  - 先点击add，在点击log, 3秒后弹出0
+  - 原因：log方法内的value和点击动作触发时的value相同，后续value的变化不会对log内部的value产生任何的影响。这种现象被称为 闭包陷阱，即函数式组件每次render都产生一个新的log函数，这个log函数会产生一个当前阶段value值的闭包。
+
+
+* class组件：每次渲染都会使用同一个函数，所以每次渲染都会共享一个闭包，所以每次渲染都会共享一个props和state
+
+```jsx
+export default class Index extends Component {
+    state = {
+        value: 0
+    }
+
+    log = () => {
+        setTimeout(() => {
+            alert(this.state.value)
+        }, 3000);
+    }
+  render() {
+    return (
+      <>
+        <div>{this.state.value}</div>
+        <Button onClick={this.log}>alert</Button>
+        <Button onClick={()=>this.setState({value: this.state.value + 1})}>add</Button>
+      </>
+    )
+  }
+}
+```
+- 先点击add，在点击log, 3秒后弹出1
+
+#### 如何解决闭包陷阱
+
+* 函数组件：使用useRef 
+  * useRef每次render都会返回同一个引用类型对象，设置和读取都在这个对象上处理的话，就可以得到最新的value值了。
+```jsx
+const Test = () => {
+    const [value, setValue] = useState(1);
+    const countRef = useRef(value)
+
+    const log = function () {
+        setTimeout(() => {
+            alert(countRef.current)
+        }, 3000)
+    }
+    useEffect(() => {
+        countRef.current = value
+    }, [value])
+
+    return (
+        <div>
+            <p>{value}</p>
+            <button onClick={log}>alert</button>
+            <button onClick={() => setValue(value + 1)}>add</button>
+        </div>
+    )
+}
+```
+
+#### class组件和函数组件在异步任务中state的差异
+
+##### 异步事件中的react事件机制
+- 在**class组件**的异步事件中（setTimeout、Promise.then等），setState的执行在18版本和18之前有区别
+  - 18版本，react也会将异步任务中的setState合并成一个批量更新，然后在下一个事件循环中执行
+  - 在18之前，react会将异步任务中的setState分别执行，所以在异步任务中，setState的执行是同步的，不会合并成一个批量更新
+  - 如下代码:
+    - 在18版本，页面中的name显示为`张三~!`,打印的结果为 `张三~`，这是由于react对异步事件中的setState也进行了批处理，代码中事件触发后页面总共进行**两次**render。由于进行批处理，所以是先打印再render
+    - 在18版本前，页面中的name显示为`张三~!!!`, 打印结果为 `张三~!!!`，这是由于react在18版本前，对异步事件中的setState没有进行批处理，所以每次setState都会触发一次render，所以代码中事件触发后页面总共进行**四次**render。由于没有进行批处理，所以是先render再打印
+
+```jsx
+handleName3 = () => {
+    this.setState({
+      name: this.state.name + "~",
+    });
+    setTimeout(() => {
+      this.setState({
+        name: this.state.name + "!",
+      });
+      this.setState({
+        name: this.state.name + "!",
+      });
+      this.setState({
+        name: this.state.name + "!",
+      });
+      console.log(this.state.name);
+    }, 1000);
+  };
+```
+
+- 在**函数组件**的异步事件中,useState的执行18版本和18之前有区别
+  - 如下代码：
+    - 在18版本，页面中的name显示为`张三!`,打印的结果为 `张三`，这是由于react函数组件的闭包陷阱，代码中事件触发后页面总共进行**两次**render。由于进行批处理，所以是先打印再render
+    - 在18版本前，页面中的name显示为`张三!`, 打印结果为 `张三`，这是由于react函数组件的闭包陷阱。由于react在18版本前，对异步事件中的setState没有进行批处理，所以每次setState都会触发一次render，所以代码中事件触发后页面总共进行**三次**render。由于没有进行批处理，所以是先render再打印.（注意：由于17版本函数组件中，异步事件中多次触发setState，最多会导致2次页面渲染）
+```jsx
+const handleName3 = () => {
+        // 此处的name是闭包的name，不是最新的name，先显示张三~，然后在现实张三！
+        // 这是由于函数组件的闭包特性，setTimeout中的中的name为变更之前的name
+        setName(name + '~')
+        setTimeout(() => {
+            setName(name + '!')
+            setName(name + '!')
+            setName(name + '!')
+            console.log(name);
+        }, 1000);
+      }
+```
