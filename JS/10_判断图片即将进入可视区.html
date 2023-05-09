@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .first {
+        height: 1800px;
+        background-color: #ccc;
+        border: 2px solid #000;
+        font-size: 33px;
+        line-height: 1800px;
+    }
+    .second {
+        height: 500px;
+        background-color: #cc0;
+        border: 2px solid #000;
+        font-size: 33px;
+        line-height: 500px;
+    }
+    .third {
+        height: 500px;
+        background-color: #c0c;
+        border: 2px solid #000;
+        font-size: 33px;
+        line-height: 500px;
+    }
+</style>
+<body>
+    <div class="first">first</div>
+    <div class="second">second</div>
+    <div class="third">third</div>
+</body>
+<script>
+    // 节流函数
+    function throttle(fn, delay) {
+        let timer = null;
+        return function () {
+            if (timer) {
+                return;
+            }
+            timer = setTimeout(() => {
+                fn.apply(this, arguments);
+                timer = null;
+            }, delay);
+        }
+    }
+    // 防抖
+    function debance(fn, delay) {
+        let timer;
+        return function() {
+            clearTimeout(timer);
+            timer = setTimeout(()=> {
+                fn.apply(this, arguments);
+            }, delay)
+        }
+    }
+    // 判断图片即将进入可视区
+    function viewAreaCalc() {
+        let clientHeight = document.documentElement.clientHeight;
+        let scrollTop = document.documentElement.scrollTop;
+        let second = document.querySelector('.second');
+        let third = document.querySelector('.third');
+        let secondTop = second.offsetTop;
+        if (clientHeight + scrollTop + 300 > secondTop) {
+            console.log('即将进入second可视区', clientHeight, scrollTop, secondTop);
+        }
+        let bound = third.getBoundingClientRect();//获取元素的大小及位置
+        let innerHeight = window.innerHeight;
+        if (bound.top - 300 < innerHeight) {
+            console.log('即将进入third可视区', bound.top, innerHeight);
+        }
+    }
+    document.addEventListener('scroll', throttle(viewAreaCalc, 500))
+</script>
+</html>

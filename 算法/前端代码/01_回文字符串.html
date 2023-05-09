@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // 1.回文字符串
+    function isPalindrome(str) {
+        if (typeof str !== 'string') {
+            return false;
+        };
+        let len = str.length;
+        let mid = Math.floor(len / 2);
+        for (let i = 0; i < mid; i++) {
+            if (str[i] !== str[len - 1 - i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    // 2. 简单写法,复杂度高
+    function isPalindrome2(str) {
+        if (typeof str !== 'string') {
+            return false;
+        }
+        return str.split('').reverse().join('') === str;
+    }
+</script>
+</html>

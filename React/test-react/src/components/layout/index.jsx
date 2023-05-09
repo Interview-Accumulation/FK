@@ -62,9 +62,13 @@ const menuList = [
                 title: 'useContext',
                 key: '/usecontext',
                 path: '/usecontext',
+            },
+            {
+                title: 'swiper',
+                key: '/swiper',
+                path: '/swiper',
             }
         ]
-
     }
 ]
 function generateItems (items) {

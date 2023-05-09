@@ -6,12 +6,41 @@
 * 让搜索引擎更容易读懂，有助于爬虫抓取更多的有效信息，爬虫依赖于标签来确定上下文和各个关键字的权重（SEO）。
 * 在没有 CSS 样式下，页面也能呈现出很好地内容结构、代码结构。
 
+### HTML5常见语义化标签
+* header：定义文档的页眉（头部）
+* nav：定义导航链接的容器
+* section：定义文档中的节（段落）
+* footer：定义文档的页脚（脚部）
+* aside：定义页面内容之外的内容（侧边栏）,通常包含导航、广告、文章引用等信息
 ### script标签中defer和async的区别？
 * script ：会阻碍 HTML 解析，只有下载好并执行完脚本才会继续解析 HTML。
 * async script ：解析 HTML 过程中进行脚本的异步下载，下载成功立马执行，有可能会阻断 HTML 的解析。
 * defer script：完全不会阻碍 HTML 的解析，解析完成之后再按照顺序执行脚本。
 ![script执行](../00_images/script_defer_async.png)
 
+### prefetch 和 preload 的区别
+* prefetch：告诉浏览器未来可能会用到的资源，浏览器会在空闲的时候加载。
+* preload：告诉浏览器当前页面一定会用到的资源，浏览器会在解析 HTML 的时候加载。
+> 注意：preload link必须设置as属性来声明资源的类型（font/image/style/script等)，否则浏览器可能无法正确加载资源。
+```html
+<!-- prefetch -->
+<link rel="prefetch" href="static/img/ticket_bg.a5bb7c33.png">
+<!-- preload -->
+<link rel="preload" href="static/img/ticket_bg.a5bb7c33.png">
+```
+* 在实际项目中，可使用webpack插件preload-webpack-plugin
+* 通用最佳实践
+  * 大部分场景下无需特意使用preload
+  * 类似字体文件这种隐藏在脚本、样式中的首屏关键资源，建议使用preload
+  * 异步加载的模块（典型的如单页系统中的非首页）建议使用prefetch
+  * 大概率即将被访问到的资源可以使用prefetch提升性能和体验
+
+* script 中 defer 和 async 的区别
+  * defer 和 async 在网络读取（下载）这块儿是一样的，都是异步的（相较于 HTML 解析）
+  * defer：脚本会在 HTML 解析完成后执行，如果有多个脚本，会按照**加载顺序**执行。
+  * async：脚本会在下载完成后立即执行，如果有多个脚本，会按照**下载完成的顺**序执行。
+
+![script执行](../00_images/defer_async.png)
 ### 从浏览器地址栏输入url到请求返回发生了什么
 
 参考：

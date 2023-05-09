@@ -88,6 +88,8 @@ Array.prototype.isPrototypeOf(arr); // true
 
 
 #### null 和undefined 区别
+* null 表示一个空对象指针，使用 typeof 操作符检测 null 返回 object 。
+* undefined 表示一个变量未定义，使用 typeof 操作符检测 undefined 返回 undefined 。
 
 ### ES6
 [阮一峰ES6文档](https://es6.ruanyifeng.com/#docs/intro)
@@ -165,6 +167,14 @@ function myNew() {
 ```
 7. 箭头函数没有new.target。
 8. 不能当做Generator函数,不能使用yied关键字
+
+
+
+
+### iterator
+[参考](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator)
+* iterator是一种接口，为各种不同的数据结构提供统一的访问机制，任何数据结构只要部署了iterator接口，就可以完成遍历操作。
+* Symbol.iterator 为每一个对象定义了默认的迭代器。该迭代器可以被 for...of 循环使用。
 
 
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // 从对象解构数组,如 let [a,b]={a:1,b:2}
+    // 解决方案：左边的数组[a,b]是可迭代的，右边的对象{a:1,b:2}不可迭代。 若想解构，需要将右侧obj变为可迭代的对象。
+    // 即给obj对象添加一个Symbol.iterator属性，属性值为一个函数，函数返回一个迭代器对象。
+
+
+    // let [a,b]={a:1,b:2} // Uncaught TypeError: {(intermediate value)(intermediate value)} is not iterable
+    
+    
+    Object.prototype[Symbol.iterator] = function() {
+        //返回一个Array类型的可迭代对象
+        return Object.values(this)[Symbol.iterator]();//this指向实例对象,Object.values(this)得到的是数组
+    }
+    let [a,b]={a:1,b:2}
+    console.log(a, b); // 1 2
+</script>
+</html>

@@ -710,13 +710,114 @@ const DemoUseContext = ()=>{
 
 
 ### React Fiber
-* 在15及以前的版本，React更新DOM都是使用递归的方式进行遍历，每次更新都会从应用根部递归执行，且一旦开始，无法中断，这样层级越来越深，结构复杂度高的项目就会出现明显的卡顿。
+> [参考1](https://i.overio.space/fiber/why-fiber/)
+> [参考2](https://i.overio.space/fiber/whats-fiber/)
+> [源码](https://github.com/facebook/react/blob/6e4f7c788603dac7fccd227a4852c110b072fe16/packages/react-reconciler/src/ReactFiber.js#L78)
+
+#### 为什么需要Fiber
+- Fiber 架构主要是为了解决处理非常庞大的渲染工作时，UI 上能感知到的掉帧卡顿现象，而出现
+#### 16版本之前
+* 在16以前的版本，React更新DOM都是使用递归的方式进行遍历，每次更新都会从应用根部递归执行，且一旦开始，无法中断，这样层级越来越深，结构复杂度高的项目就会出现明显的卡顿。
+* 16之前的版本架构可简单分为两层：Reconciler（调和层） 和 Renderer（渲染层）。
+  * 当有更新发生时，reconciler会进行以下工作：
+    * 调用组件render方法，将返回的JSX转换为虚拟DOM对象
+    * 将虚拟DOM对象和上次更新时的虚拟DOM对象进行diff，找出本次更新中变化的部分
+    * 通知Renderer将变化的部分更新到DOM上
+  * Renderer会完成以下工作：
+    * 将变化的部分更新到DOM上
+    * 给变化的部分添加事件监听
+    * 给变化的部分添加ref引用
+  * 在16版本前，reconciler是不能中途被打断的（stack reconciler），需要将递归调用的堆栈挨个执行完，直至栈空，才能响应用户的交互事件。这就导致当组件层级很深，且在不断更新组件状态时，就会出现卡顿掉帧的现象。
+
+* stack reconciler 不能被中途打断的原因：
+  1. 递归调用的堆栈不能被中断
+  2. React 在组件的 render 函数里通过 JSX 描述 DOM 树，是从 App Root 根节点以树状结构逐层展开的，其构建出来的是一棵 Virtual DOM 树
+  3. 当要更新状态重绘组件时，React v15 的 reconciler 会同时遍历两个新旧子元素列表 Virtual DOM，Diff 差异，当产生差异时，生成一个 mutation，通知 Renderer 更新渲染组件。
+  4. 其中，v15 使用的是 JS 引擎自身的函数调用栈，只要有子节点，会一直保持迭代，直至处理完所有节点，堆栈为空，才退出堆栈
+  5. 整个过程的 JS 计算，会一直占据浏览器主线程
+
+* 浏览器出现掉帧的原因
+  1. 一般来说，按浏览器每秒刷新 60 次来算（即所谓的 60 FPS），当页面需要连续渲染，却在下一个 16.6ms 内没有渲染的情况下，就会出现掉帧的现象
+  2. 如果浏览器假如有计算执行任务阻塞了浏览器渲染，且阻塞时间超过 16ms ，就会出现卡顿掉帧被人眼所感知到。
+  3. JS 是单线程的，在默认情况下，JS 运算、页面绘制渲染都是运行在浏览器的主线程当中，它们之间是互斥的关系，即任何时候只能有一个占用主线程。如果 JS 运算长时间持续占用主线程，页面就没法得到及时的更新
+  4. 因为stack reconciler 不能中途被打断，只要 stack reconciler 持续使用主线程的时间，超过 16ms，页面绘制渲染就没法获得控制权，就容易出现渲染卡顿掉帧的现象。
+
+#### 16版本之后
+* 16版本之后，react针对stack reconciler 不能被中途打断以及浏览器超过16ms没有不渲染就会出现掉帧的现象，引入了fiber架构。
+   1. v16 的 React 在代码和 main thread（主线程）之间的角色协调控制能力更强，在有更新任务的时候，会去“询问”（**requestIdleCallback**）获取得到 main thread 的空闲时间周期，在一个 work loop（工作循环）内，逐个处理 work unit，并且判断剩余时间是否充足，进而决定继续处理、挂起、或者完成工作循环。
+   2. 当时间用完，React 按下了“暂停”，归还主线程 worker 控制权给浏览器，并告诉其完成其他工作之后回来到“老地方”接着继续
+   3. 其核心就是：将运算进行切割，切分为多个 work unit（工作单元），分批完成: 在完成一个 work unit 之后，将主线程控制权交回给浏览器，如果浏览器有 UI 渲染工作要做的话，能让其在 16ms 的窗口期内，占用主线程有时间去做，而不像之前主线程被 stack 递归栈一直霸占而不得释放。在浏览器使用主线程完成渲染工作，有空闲时间后，再回到之前未完成的任务点继续完成剩余的 work unit。
+
+![调和过程](../00_images/reconciler.png)
+
+#### requestIdleCallback
+* requestIdleCallback 是浏览器提供的一个 API，用于在主线程空闲的时间段内执行任务，它的基本语法如下：
+```js
+window.requestIdleCallback(callback, { timeout })
+```
+* callback 是回调函数，timeout 是可选参数，表示超时时间，即 callback 要在 timeout 毫秒内执行完，否则就会被打断，不再执行。
+*  React 团队 polyfill 了这个 API，使其对比原生的浏览器兼容性更好且拓展了特性
+
+
+#### Fiber 在设计出来后，就是需要能让 React 完成以下最主要目标
+* 暂停工作，并且能之后回到暂停的地方
+* 安排不同类型工作的优先级
+* 之前已经处理完的工作单元，可以得到重用
+* 如果后续的工作不再需要做，工作可以直接被终止
+
+#### 总结
 * React Fiber 是 React 16 版本中的新架构，它的目的是解决 React 在大量数据变更时的性能问题。
 * fiber是在React中最小粒度的执行单元，可以将fiber理解为是React的虚拟DOM。
-* 在React中，更新fiber的过程叫做调和，每一个fiber都可以作为一个执行单元进行处理，同时每个fiber都有一个优先级lane（16版本是expirationTime）来判断是否还有空间或时间来执行更新，如果没有时间更新，就会把主动权交给浏览器去做一些渲染（如动画、重排、重绘等），用户就不会感觉到卡顿。
+* 在React中，更新fiber的过程叫做调和(reconcile)，每一个fiber都可以作为一个执行单元进行处理，同时每个fiber都有一个优先级lane（16版本是expirationTime）来判断是否还有空间或时间来执行更新，如果没有时间更新，就会把主动权交给浏览器去做一些渲染（如动画、重排、重绘等），用户就不会感觉到卡顿。
 * 当浏览器空闲了（requestIdleCallback），就通过scheduler（调度器）将执行恢复到执行单元上，这样本质上是中断了渲染，不过题改了用户的体验。React实现的fiber模式是一个具有链表和指针的异步模型。
 
- 
+
+- fiber的数据结构
+```js
+function FiberNode(
+  tag: WorkTag,
+  pendingProps: mixed,
+  key: null | string,
+  mode: TypeOfMode,
+) {
+  // 作为静态数据结构的属性
+  this.tag = tag;
+  this.key = key;
+  this.elementType = null;
+  this.type = null;
+  this.stateNode = null;
+
+  // 用于连接其他Fiber节点形成Fiber树
+  this.return = null;
+  this.child = null;
+  this.sibling = null;
+  this.index = 0;
+
+  this.ref = null;
+
+  // 作为动态的工作单元的属性
+  this.pendingProps = pendingProps;
+  this.memoizedProps = null;
+  this.updateQueue = null;
+  this.memoizedState = null;
+  this.dependencies = null;
+
+  this.mode = mode;
+
+  this.effectTag = NoEffect;
+  this.nextEffect = null;
+
+  this.firstEffect = null;
+  this.lastEffect = null;
+
+  // 调度优先级相关
+  this.lanes = NoLanes;
+  this.childLanes = NoLanes;
+
+  // 指向该fiber在另一次更新时对应的fiber
+  this.alternate = null;
+}
+```
 
 
 
@@ -878,3 +979,5 @@ const handleName3 = () => {
         }, 1000);
       }
 ```
+
+

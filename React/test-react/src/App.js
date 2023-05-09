@@ -1,4 +1,4 @@
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, Spin } from 'antd';
 import './App.css';
 import zhCN from 'antd/locale/zh_CN';
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
@@ -11,7 +11,7 @@ function App() {
   const Element = () => useRoutes(routers);
   return (
     <ConfigProvider locale={zhCN}>
-      <Suspense>
+      <Suspense fallback={<Spin/>}>
         <Router>
             <Element />
             {/* <Layout /> */}

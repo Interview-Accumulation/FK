@@ -254,3 +254,89 @@ type Cart<T> = { list: T[] } | T[];
 let c1: Cart<string> = { list: ["1"] };
 let c2: Cart<number> = [1];
 ```
+
+
+### 面试
+
+#### TS 相对于 JS 的优势
+* TS 是 JS 的超集，包含了 JS 的所有元素，可以直接使用 JS 的代码
+* TS 增加了静态类型， 可以在开发人员编写代码的时候就发现错误，而不用等到编译的时候，增加了代码的健壮性
+* 类型可以在一定程度上充当文档，增加了代码的可读性
+* IDE自动填充，自动联想，提高了开发效率
+
+#### type 和 interface 的异同点
+* 相同点
+  * 都可以用来描述对象或函数的类型
+  * 都允许扩展。interface 使用`extends`实现扩展。type使用`&`实现扩展
+* 不同点
+  * type可以声明基本数据类型别名/联合类型/元组等，而interface不行
+  * type可以使用 typeof 获取实例的类型，而 interface 不行
+  * 多个同名 interface 可以自动合并，而 type 不行，因为type声明不能重名。
+使用interface描述数据结构，使用type描述类型关系
+
+#### TS中 ?. 和 ?? 和 ! 和 !. 和 _ 和 ** 符号的含义
+* ?. 可选链，当左侧的操作数为 null 或 undefined 时，不会报错，而是停止运算，返回 undefined
+* ?? 空值合并运算符，当左侧操作数为null 和 undefined 时，返回右侧操作数
+* ! 非空断言操作符，x! 从 x 值域中排除 null 和 undefined
+* !. 非空断言链操作符，x!.y 从 x.y 值域中排除 null 和 undefined
+* _ 数字分隔符，用于分隔数字，提高可读性
+- `**` 幂等运算符，`x**y`返回 x 的 y 次幂
+
+#### TS中对象展开的副作用
+* 展开对象后面的属性会覆盖前面的属性
+* 仅包含对象的可枚举属性，不可枚举的属性将丢失
+
+#### TypeScript 中同名的 interface 或者同名的 interface 和 class 可以合并吗？
+同名的interface会自动合并，同名的interface和class会自动聚合。
+
+#### 简述工具类型 Exclude、Omit、Merge、Required、Partial、Pick、Overwrite的作用
+* Exclude<T,U> 从T中剔除可以赋值给U的类型
+* Omit<T,K> 从T中剔除K属性
+* Merge<T,U> 将两个类型合并成一个类型
+* Required<T> 将T中的所有属性变为必选项
+* Partial<T> 将T中的所有属性变为可选项
+* Pick<T,K> 从T中取出一系列属性K
+* Overwrite<T,U> 用U中的属性覆盖T中的属性
+
+#### 数组常见定义方法
+```ts
+type StringArray = Array<string>;
+type NumberArray = number[];
+
+interface bar {
+  objArr: Array<{
+    name: string;
+    age: number;
+  }>;
+}
+interface foo {
+  objArr: {
+    name: string;
+    age: number;
+  }[];
+}
+```
+
+#### TypeScript 中 const 和 readonly 的区别？枚举和常量枚举的区别？接口和类型别名的区别？
+* const 和 readonly: const可以防止变量的值被修改，readonly可以防止变量的属性被修改。
+* 枚举和常量枚举: 常量枚举只能使用常量枚举表达式，并且不同于常规的枚举，它们在编译阶段会被删除。 常量枚举成员在使用的地方会被内联进来。 之所以可以这么做是因为，常量枚举不允许包含计算成员。
+* 接口和类型别名: 两者都可以用来描述对象或函数的类型。与接口不同，类型别名还可以用于其他类型，如基本类型（原始值）、联合类型、元组。
+
+#### TypeScript 中 any、never、unknown、null & undefined 和 void 有什么区别？
+* any: 任意类型，可以赋值给任意类型(失去子类型检查作用)
+* never: 永远不存在的值的类型
+* unknown: 未知类型
+* null & undefined: null 和 undefined 是所有类型的子类型，可以赋值给任意类型
+* void: 没有任何类型，如函数没有返回值，返回值类型为 void
+
+#### declare，declare global是什么
+* declare: 声明全局变量、全局函数、全局命名空间、全局类、js模块等
+* declare global: 为全局对象window添加属性
+```ts
+declare global {
+  interface Window {
+    myName: string;
+  }
+}
+```
+

@@ -23,22 +23,23 @@
   <script>
     // for...of循环
 
-    // 数组
+    // 1.数组（数组原型上的属性不可遍历）
+    Array.prototype.name = "数组";
     const arr = [1, 2, 3, "5"];
     for (const val of arr) {
       console.log(val);
-    }
-    // 字符串
+    } // 1 2 3 '5'
+    // 2.字符串
     const str = "213213casd";
     for (const v of str) {
       console.log(v);
-    }
-    // TypeArray
+    }// 2 1 3 2 1 3 c a s d
+    // 3.TypeArray
     let typeArr = new Uint8Array([0x00, 0xff]);
     for (const v of typeArr) {
       console.log(v);
-    }
-    // Map
+    } // 0 255
+    // 4.Map
     let map = new Map([
       ["a", 1],
       ["b", 2],
@@ -46,30 +47,30 @@
     ]);
     for (const v of map) {
       console.log(v);
-    }
+    }// ["a", 1] ["b", 2] ["c", 3]
     for (let [key, value] of map) {
       console.log(key, value);
-    }
-    // Set
+    } // a 1   b 2   c 3
+    // 5.Set
     let set = new Set([1, 1, 2, 2, 3, 3]);
 
     for (let value of set) {
       console.log(value);
-    }
-    // arguments
+    } // 1 2 3
+    // 6.arguments
     (function () {
       for (let argument of arguments) {
         console.log(argument);
       }
-    })(1, 2, 3);
-    // DOM集合
+    })(1, 2, 3);// 1 2 3
+    // 7.DOM集合
     //注意：这只能在实现了 NodeList.prototype[Symbol.iterator] 的平台上运行
     let articleParagraphs = document.querySelectorAll("article > p");
 
     for (let paragraph of articleParagraphs) {
       paragraph.classList.add("read");
     }
-    // 对象
+    // 8.不能遍历不具有iterator属性的数据接口，如对象
     let obj = {
       a: "1",
       b: "3",
@@ -88,7 +89,10 @@
 
     for (let o of foo()) {
       console.log(o);
-      break; // closes iterator, triggers return
-    }
+      if (o === 2) {
+        // 遍历到2时，关闭迭代
+        break; // closes iterator, triggers return
+      }
+    } // 1 2
   </script>
 </html>

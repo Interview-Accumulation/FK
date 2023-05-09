@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    function transToLowerCamelCase(str) {
+        if (typeof str !== 'string') {
+            return false;
+        }
+        let reg = /(-|_)+/g;
+        // console.log(str.split(reg));
+        let res = str.split(reg).map((item, index)=> {
+            if (index === 0) {
+                return item.toLowerCase();
+            }
+            return item[0].toUpperCase() + item.slice(1).toLowerCase();
+        }).join('').replace(reg, '');
+        return res;
+    }
+
+    let str = 'get-element-by_id--uPper__cAse';
+    console.log(transToLowerCamelCase(str));
+    // 规范的划线命名，可采用下面
+    function transToLowerCamelCase2(str) {
+        if (typeof str !== 'string') {
+            return false;
+        }
+        let reg = /(-|_)[a-zA-Z]/g;
+        let res = str.replace(reg, (match, p1, offset, string) => {
+            // console.log(match, p1, offset, string);
+            return match[1].toUpperCase();
+        })
+        // console.log(res);
+        return res;
+    }
+    let str2 = 'get-element-by_id-upper_case';
+    console.log(transToLowerCamelCase2(str2));
+
+    // 小驼峰转化为划线命名
+    function transToLineCase(str) {
+        if (typeof str !== 'string') {
+            return false;
+        }
+        let reg = /[A-Z]/g;
+        let res = str.replace(reg, match => {
+            return '-' + match.toLowerCase();
+        })
+        return res;
+    }
+    let str3 = 'getElementById';
+    console.log(transToLineCase(str3));
+</script>
+</html>
