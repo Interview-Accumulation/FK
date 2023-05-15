@@ -304,3 +304,71 @@ element.addEventListener(type, listener, useCapture)
 
 
 ### 数组
+
+#### splice 和 slice 的区别
+* splice, 向数组中添加或删除元素,返回删除元素组成的数组,原数组改变
+```js
+const months = ['Jan', 'March', 'April', 'June'];
+months.splice(1, 0, 'Feb');
+// Inserts at index 1
+console.log(months);
+// Expected output: Array ["Jan", "Feb", "March", "April", "June"]
+
+months.splice(4, 1, 'May');
+// Replaces 1 element at index 4
+console.log(months);
+// Expected output: Array ["Jan", "Feb", "March", "April", "May"]
+```
+* slice, 截取数组中的一段,返回截取的新数组,原数组不变
+```js
+const animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+
+console.log(animals.slice(2));
+// Expected output: Array ["camel", "duck", "elephant"]
+
+console.log(animals.slice(2, 4));
+// Expected output: Array ["camel", "duck"]
+
+console.log(animals.slice(1, 5));
+// Expected output: Array ["bison", "camel", "duck", "elephant"]
+
+console.log(animals.slice(-2));
+// Expected output: Array ["duck", "elephant"]
+
+console.log(animals.slice(2, -1));
+// Expected output: Array ["camel", "duck"]
+
+console.log(animals.slice());
+// Expected output: Array ["ant", "bison", "camel", "duck", "elephant"]
+
+```
+
+#### map 和 forEach 的区别
+相同点：都是遍历数组，对数组中的每一项进行操作
+不同点：
+* map会返回一个新的数组，forEach不会返回新的数组
+
+注意：map中元素若为引用类型，通过遍历的方式修改元素的属性，原数组也会改变
+```js
+let arr = [{name: 'a'}, {name: 'b'}]
+let res = arr.map(item => {
+    item.name = 'c'
+    return item
+})
+console.log(arr) // [{name: 'c'}, {name: 'c'}]
+console.log(res) // [{name: 'c'}, {name: 'c'}]
+```
+
+#### 判断元素是否进入视口
+[参考](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
+* Intersection Observer API
+
+```js
+let options = {
+  root: document.querySelector("#scrollArea"),
+  rootMargin: "0px",
+  threshold: 1.0,
+};
+
+let observer = new IntersectionObserver(callback, options);
+```

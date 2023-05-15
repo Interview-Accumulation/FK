@@ -53,7 +53,7 @@ import { Button } from 'antd'
             console.log('count unmount');
         }
     }, [count])
-
+    console.log('render')
   return (
     <div>
         <div>{count}</div>

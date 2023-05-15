@@ -6,7 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<style>
+    span{
+        color: red;
+        line-height: 80px;
+    }
+    div {
+        width: 300px;
+        height: 500px;
+        background-color: green;
+        display: flex;
+        justify-content: center;
+        /* align-items: center; */
+        flex-direction: column;
+    }
+    .testspan {
+        color: blue;
+        height: 100px;
+        padding: 10px;
+        margin: 20px;
+    }
+</style>
 <body>
+    <!-- <div><span>123123</span></div> -->
+
+    <div>
+        <span>21312312</span>
+        <!-- <span>21312312</span> -->
+    </div>
+    <span>213123<span class="testspan">三达克罗宁</span></span>
     
 </body>
 <script>
@@ -24,5 +52,25 @@
     }
     let [a,b]={a:1,b:2}
     console.log(a, b); // 1 2
+
+    let arr = [{
+        a:1,
+        b:2
+    }]
+    let arrb = arr.map((item,index)=>{
+        console.log(item,index)
+        item.a = 3
+        return item
+    })
+    console.log(arr);
+    console.log(arrb);
+    let arrc = ['1', '2']
+    let arrd = arrc.map((item,index)=>{
+        console.log(item,index)
+        item = '3'
+        return item
+    })
+    console.log(arrc);
+    console.log(arrd);
 </script>
 </html>
