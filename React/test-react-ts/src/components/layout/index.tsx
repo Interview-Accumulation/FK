@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
     MenuFoldOutlined,
     UploadOutlined,
@@ -7,7 +7,7 @@ import {
     MenuUnfoldOutlined
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme, Input } from "antd";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import {IItemProps, IMenuProps} from './type.ts'
 import './index.css'
 
@@ -16,13 +16,13 @@ const { Header, Sider, Content } = Layout;
 
 
 
-function getItem({label, key , children, icon = <UserOutlined />}: IItemProps) {
+function getItem({label, path, key , children, icon = <UserOutlined />}: IItemProps) {
     return {
       key,
       icon,
       children,
       label: (
-        <Link to={key}>
+        <Link to={path} state={{state1: 'Test State'}}>
             {label}
         </Link>
       ),
@@ -36,9 +36,34 @@ const menuList: IMenuProps[] = [
         path: '/',
         children: [
             {
+              title: 'home',
+              key: 'home',
+              path: '/home',
+            },
+            {
                 title: 'swiper',
-                key: '/swiper',
+                key: 'swiper',
                 path: '/swiper',
+            },
+            {
+              title: 'about',
+              key: 'about',
+              path: '/about',
+            },
+            {
+              title: 'threelevel',
+              key: 'threelevel',
+              path: '/threelevel',
+            },
+            {
+              title: 'useparams',
+              key: 'useparams',
+              path: '/useparams/id/name/content',
+            },
+            {
+              title: 'usenavigate',
+              key: 'usenavigate',
+              path: '/usenavigate',
             }
         ]
     }
@@ -48,13 +73,15 @@ function generateItems (items: IMenuProps[]): any[] {
         if (item.children) {
             return getItem({
                 label:item.title, 
+                path: item.key,
                 key:item.path, 
                 children:generateItems(item.children)
             });
         }
         return getItem({
             label: item.title,
-            key: item.path
+            key: item.key,
+            path: item.path,
         });
     });
 }
@@ -64,6 +91,14 @@ export default function Index() {
     const {
       token: { colorBgContainer },
     } = theme.useToken();
+    const location = useLocation();
+    const [menuKey, setMenuKey] = useState('/home');
+
+    useEffect(() => {
+        // console.log('location', location.pathname.split('/'));
+        setMenuKey(location.pathname.split('/')[1]);
+    }, [location]);
+
     return (
         <Layout className="layout_wrap" style={{height: '100vh'}}>
         <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -71,7 +106,7 @@ export default function Index() {
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["1"]}
+            selectedKeys={[menuKey]}
             items={generateItems(menuList[0]?.children || [])}
           />
         </Sider>

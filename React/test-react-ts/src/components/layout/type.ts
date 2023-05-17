@@ -1,5 +1,6 @@
 interface IItemProps {
     label: string;
+    path: string;
     key: string;
     children?: IItemProps[];
     icon?: React.ReactNode;

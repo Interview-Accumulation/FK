@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // 模拟实现call
+    Function.prototype.myCall = function(context = window, ...args) {
+        if (this === Function.prototype) {
+            return undefined // 用于防止 Function.prototype.myCall() 直接调用
+        }
+        context = context || window;
+        const fn = Symbol();
+        context[fn] = this;
+        const res = context[fn](...args);
+        delete fn;
+        return res;
+    }
+    // 模拟实现apply
+    Function.prototype.myApply = function(context = window, args) {
+        if (this === Function.prototype) {
+            return undefined;
+        }
+        const fn = Symbol();
+        context[fn] = this;
+        let res;
+        if (Array.isArray(args)) {
+            res = context[fn](...args)
+        } else {
+            res = context[fn]()
+        }
+        delete fn;
+        return res;
+    }
+    // 模拟实现bind，利用闭包
+    Function.prototype.myBind = function (context = window, ...args1) {
+        if (this === Function.prototype) {
+            throw new TypeError('error')
+        }
+        const _this = this;
+        return function F(...args2) {
+            if (this instanceof F) {
+                return new _this(...args1, ...args2)
+            }
+            return _this.call(context, ...args1, ...args2)
+        }
+    }
+
+</script>
+</html>

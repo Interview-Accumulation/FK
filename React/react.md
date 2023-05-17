@@ -874,7 +874,7 @@ function FiberNode(
   )
 }
 ```
-  - 先点击add，在点击log, 3秒后弹出0
+  - 先点击log，在点击add, 3秒后弹出0
   - 原因：log方法内的value和点击动作触发时的value相同，后续value的变化不会对log内部的value产生任何的影响。这种现象被称为 闭包陷阱，即函数式组件每次render都产生一个新的log函数，这个log函数会产生一个当前阶段value值的闭包。
 
 
@@ -902,7 +902,7 @@ export default class Index extends Component {
   }
 }
 ```
-- 先点击add，在点击log, 3秒后弹出1
+- 先点击log，在点击add, 3秒后弹出1
 
 #### 如何解决闭包陷阱
 
