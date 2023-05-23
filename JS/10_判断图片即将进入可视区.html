@@ -33,6 +33,12 @@
     <div class="first">first</div>
     <div class="second">second</div>
     <div class="third">third</div>
+    <img src="loading.gif" data-src="https://cdn.pixabay.com/photo/2015/09/09/16/05/forest-931706_1280.jpg" alt="">
+    <img src="loading.gif" data-src="https://cdn.pixabay.com/photo/2014/08/01/00/08/pier-407252_1280.jpg" alt="">
+    <img src="loading.gif" data-src="https://cdn.pixabay.com/photo/2014/12/15/17/16/pier-569314_1280.jpg" alt="">
+    <img src="loading.gif" data-src="https://cdn.pixabay.com/photo/2010/12/13/10/09/abstract-2384_1280.jpg" alt="">
+    <img src="loading.gif" data-src="https://cdn.pixabay.com/photo/2015/10/24/11/09/drop-of-water-1004250_1280.jpg" alt="">
+  
 </body>
 <script>
     // 节流函数
@@ -74,6 +80,27 @@
             console.log('即将进入third可视区', bound.top, innerHeight);
         }
     }
+    // 监听scroll事件
     document.addEventListener('scroll', throttle(viewAreaCalc, 500))
+    /* 
+    使用IntersectionObserver:https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver
+    提供了一种异步观察目标元素与其祖先元素或顶级文档视口（viewport）交叉状态的方法。其祖先元素或视口被称为根（root）。
+    */
+   if (IntersectionObserver) {
+    let ElObserver = new IntersectionObserver((entries) => {
+        if (entries[0].intersectionRatio <= 0) {
+            return;
+        }
+        console.log('IntersectionObserver', '进入可视区');
+    })
+    let third = document.querySelector('.third');
+    ElObserver.observe(third)
+   }
+
+   
+
+    // 应用：图片懒加载
+
+
 </script>
 </html>

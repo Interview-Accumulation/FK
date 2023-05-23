@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    /**
+     * 柯里化是一种将使用多个参数的一个函数转换成一系列使用一个参数的函数的技术。
+     * 可简单理解为：用闭包把参数保存起来，当参数的数量足够执行函数了，就开始执行函数
+     *
+     */
+    function currying(fn, ...params) {
+      if (params.length >= fn.length) {
+        return fn(...params);
+      } else {
+        return function (...params2) {
+          return currying(fn, ...params, ...params2);
+        };
+      }
+    }
+    // 应用：参数复用
+    function getUrl(protocol, domain, path) {
+        return `${protocol}://${domain}/${path}`
+    }
+    let page1 = getUrl('http', 'www.xxx', 'page1.html')
+    let page2 = getUrl('http', 'www.xxx', 'page2.html')
+    console.log(page1, page2); // http://www.xxx/page1.html http://www.xxx/page2.html
+
+    // 柯里化简化
+    let baseSite = currying(getUrl)('http', 'www.xxx')
+    let curryPage1 = baseSite('page1.html')
+    let curryPage2 = baseSite('page2.html')
+
+    console.log(curryPage1, curryPage2); // http://www.xxx/page1.html http://www.xxx/page2.html
+  </script>
+</html>

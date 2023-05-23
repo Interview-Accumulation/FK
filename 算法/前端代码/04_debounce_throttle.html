@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // 防抖原理: 不管事件触发频率多高，总是在设置的delay时间后触发，若在n秒内再次触发该事件，则以新的delay时间为准
+    // fn:函数，delay：延迟时间， flag：首次是否立即执行
+    function debounce(fn, delay, flag = false) {
+        let timer = null;
+        return function(...args) {
+            clearTimeout(timer)
+            if (!timer && flag) {
+                fn.apply(this, args)
+            }
+            timer = setTimeout(()=> {
+                fn.apply(this, args)
+            }, delay);
+        }
+    }
+    // 节流, 不管事件触发频率多高，只在单位时间内执行一次
+
+    // 定时器版本
+    function throttle(fn, delay, flag = false) {
+        let timer = null;
+        return function (...args) {
+            if (flag && !timer) {
+                fn.apply(this, args)
+            }
+            if (!timer) {
+                timer = setTimeout(() => {
+                    fn.apply(this, args)
+                    clearTimeout(tiemr)
+                }, delay);
+            }
+        }
+    }
+    // 时间戳版本 ,第一次会触发，最后一次不会触发
+    function throttle_time(fn, delay) {
+        let pre = 0;
+        return function (...args) {
+            if (Date.now() - pre > delay) {
+                pre = Date.now();
+                fn.apply(this, args)
+            }
+        }
+    }
+</script>
+</html>

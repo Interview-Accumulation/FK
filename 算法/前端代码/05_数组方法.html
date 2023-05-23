@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body></body>
+<script>
+    /**
+     *  数组去重
+     */
+
+    // 1.新建一个空对象用于保存属性, 无法区分数字的string和number类型
+    const unique1 = (arr) => {
+        let obj = {};
+        return arr.filter((item) =>
+            obj.hasOwnProperty(item) ? false : (obj[item] = true)
+        );
+    };
+    const arr = [1, 1, "1", 3, 5, 6, 8, 9, 9, 11, 11];
+    console.log([...unique1(arr)]); // [1, 3, 5, 6, 8, 9, 11]
+
+    // 2. indexOf + filter, 可以区分数字的string和number类型
+    const unique2 = (arr) => {
+        return arr.filter((item, index) => arr.indexOf(item) === index);
+    };
+    console.log([...unique2(arr)]); // [1, '1', 3, 5, 6, 8, 9, 11]
+
+    // 3. Set, 可以区分数字的string和number类型
+    const unique3 = (arr) => {
+        return [...new Set(arr)];
+    };
+    console.log(unique3(arr)); //
+
+    // 4. 去重重复的值，只保留在数组中没有重复值的值（即只要改值出现重复，则全部去除）
+    const unique4 = (arr) =>
+        arr.filter((item) => arr.indexOf(item) === arr.lastIndexOf(item));
+
+    console.log([...unique4(arr)]); // ['1', 3, 5, 6, 8]
+
+    /**
+     * 数组扁平
+     */
+    // 1. 基本实现
+    const flat1 = (arr) => {
+        let res = [];
+        for (let i = 0; i < arr.length; i++) {
+            const element = arr[i];
+            if (Array.isArray(element)) {
+                res = [...res, ...flat1(element)];
+            } else {
+                res.push(element);
+            }
+        }
+        return res;
+    };
+    let arr1 = [1, 2, [3, 4, [5, 6, [7, 8]]]];
+    console.log(flat1(arr1)); // [1, 2, 3, 4, 5, 6, 7, 8]
+
+    // 2. 使用reduce实现
+    const flat2 = (arr) =>
+        arr.reduce(
+            (pre, cur) =>
+            Array.isArray(cur) ? [...pre, ...flat2(cur)] : [...pre, cur],
+            []
+        );
+    console.log(flat2(arr1)); // [1, 2, 3, 4, 5, 6, 7, 8]
+
+    // 3. 根据深度进行扁平
+    const flat3 = (arr, deep = 1) => {
+        if (deep > 0) {
+            return arr.reduce(
+                (pre, cur) =>
+                Array.isArray(cur) ?
+                [...pre, ...flat3(cur, deep - 1)] :
+                [...pre, cur],
+                []
+            );
+        }
+        return arr;
+    };
+    console.log(flat3(arr1)); // [1,2,3,4,[5,6,[7,8]]]
+    console.log(flat3(arr1, 2)); // [1,2,3,4,5,6,[7,8]]
+    console.log(flat3(arr1, 3)); // [1,2,3,4,5,6,7,8]
+
+    /**
+     * 数组最值
+     */
+
+    // 1. reduce版本
+    const maxnum = (arr) => arr.reduce((p, c) => (p > c ? p : c), arr[0]);
+    const arr2 = [1, 3, 5, 0, 10, 99, 33, 11];
+
+    console.log(maxnum(arr2)); // 99
+
+    // 2. 使用Math.max
+    const maxnum2 = (arr) => Math.max(...arr);
+
+    console.log(maxnum2(arr2)); // 99
+
+    /**
+     *  recduce 实现map
+     */
+
+    Array.prototype.reduceToMap = function (handler) {
+        return this.reduce((pre, cur, index) => {
+            pre.concat(handler.call(this, cur, index));
+            return pre;
+        }, []);
+    };
+
+    //  arr2.reduceToMap((item, index) => {
+    //     console.log(item, index);
+    //  })
+
+    /**
+     * reduce 实现 filter
+     */
+    Array.prototype.reduceToFilter = function (handler) {
+        return this.reduce((pre, cur, index) => {
+            if (handler(cur, index)) {
+                pre.push(cur);
+            }
+            return pre;
+        }, []);
+    };
+    console.log(arr2.reduceToFilter((item) => item > 10)); // [99, 33, 11]
+
+    /**
+     * 数组乱序
+     */
+    // 从数组最后一位开始，随机交换位置
+    const disorder = (arr) => {
+        const length = arr.length;
+        let cur = arr.length - 1;
+        let res = [...arr]
+        while (cur > -1) {
+            let random = Math.floor(Math.random()*length);
+            [res[random], res[cur]] = [res[cur], res[random]];
+            cur--;
+        }
+        return res;
+    }
+    console.log(disorder(arr2));
+</script>
+
+</html>
