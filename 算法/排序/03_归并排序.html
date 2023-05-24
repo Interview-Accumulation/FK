@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    /**
+     * 时间复杂度：O(nlogn)
+     * 空间复杂度:O(n)
+    */
+    const mergeSort =(arr =[]) => {
+        if (arr.length < 2) {
+            return arr;
+        }
+        let mid = Math.floor(arr.length / 2);
+        const left = arr.slice(0, mid);
+        const right = arr.slice(mid);
+        return merge(mergeSort(left), mergeSort(right));
+    }
+    // left 与 right均是按照顺序排列好的数组
+    const merge = (left = [] , right = []) => {
+        const temp = [];
+        while (left.length && right.length) {
+            if (left[0] < right[0]) {
+                temp.push(left.shift())
+            } else {
+                temp.push(right.shift())
+            }
+        }
+        while (left.length) {
+            temp.push(left.shift())
+        }
+        while (right.length) {
+            temp.push(right.shift())
+        }
+        return temp;
+    }
+    /*
+        [1, 2, 3, 4, 1, 1] =>
+        [1, 2, 3] [4, 1, 1] =>
+        [1] [2, 3] [4] [1, 1] =>
+        [1] [2] [3]  [4] [1] [1] =>
+        [1] [2, 3]  [4] [1, 1] =>
+        [1, 2, 3] [1, 1, 4] =>
+        [1, 1, 1, 2, 3, 4]
+    */
+   console.log(mergeSort([1, 2, 3, 4, 1, 2, 3])); // [1, 1, 2, 2, 3, 3, 4]
+</script>
+</html>

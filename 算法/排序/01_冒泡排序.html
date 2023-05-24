@@ -16,18 +16,35 @@
      * 
      * 时间复杂度O(n^2),空间复杂度O(n)
      */
-    function bubbleSort(arrayNum) {
-        const arr = arrayNum;
+    // function bubbleSort(arrayNum) {
+    //     const arr = arrayNum;
+    //     for (let i = 0; i < arr.length - 1; i++) {
+    //         for (let j = 0; j < arr.length - i -1; j++) {
+    //             if (arr[j] < arr[j+1]) {
+    //                 const temp = arr[j];
+    //                 arr[j] = arr[j+1]
+    //                 arr[j+1] = temp
+    //             }
+    //         }
+    //     }
+    //     return arr;
+    // }
+    
+    /**
+     * @param {array} arr 排序数组
+    */
+    const bubbleSort = (arr = []) => {
+        if (arr.length < 2) {
+            return arr;
+        }
         for (let i = 0; i < arr.length - 1; i++) {
-            for (let j = 0; j < arr.length - i -1; j++) {
-                if (arr[j] < arr[j+1]) {
-                    const temp = arr[j];
-                    arr[j] = arr[j+1]
-                    arr[j+1] = temp
+            for (let j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] > arr[j+1]) {
+                    [arr[j], [arr[j+1]]] = [arr[j+1], [arr[j]]]
                 }
             }
         }
-        return arr;
+        return arr
     }
     let arr = [1, 2, 5, 10, 15, 3, 20, 7, 3];
     console.log(bubbleSort(arr))

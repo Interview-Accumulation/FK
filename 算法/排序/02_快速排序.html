@@ -11,19 +11,37 @@
 </body>
 <script>
 
-    function quickSort(arrayNum) {
-        const arr = arrayNum;
+    // function quickSort(arrayNum) {
+    //     const arr = arrayNum;
+    //     if (arr.length < 2) {
+    //         return arr;
+    //     }
+    //     let plvot = arr.splice(Math.floor(arr.length / 2), 1)[0]
+    //     let left = [], right = [];
+    //     arr.forEach(e => {
+    //         e < plvot && left.push(e);
+    //         e >= plvot && right.push(e);
+    //     });
+    //     // return [...quickSort(left), plvot, ...quickSort(right)]
+    //     return quickSort(left).concat(plvot, quickSort(right))
+    // }
+
+    const quickSort = (arr = []) => {
         if (arr.length < 2) {
             return arr;
         }
-        let plvot = arr.splice(Math.floor(arr.length / 2), 1)[0]
-        let left = [], right = [];
+        const  midEl = arr.splice(Math.floor(arr.length / 2), 1)[0];
+        const left = [];
+        const right = [];
+
         arr.forEach(e => {
-            e < plvot && left.push(e);
-            e >= plvot && right.push(e);
-        });
-        // return [...quickSort(left), plvot, ...quickSort(right)]
-        return quickSort(left).concat(plvot, quickSort(right))
+            if (e > midEl) {
+                right.push(e)
+            } else {
+                left.push(e)
+            }
+        })
+        return [...quickSort(left), midEl, ...quickSort(right)]
     }
     let arr = [1, 2, 5, 10, 15, 3, 20, 7, 3];
     console.log(quickSort(arr))

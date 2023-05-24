@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // 每次循环选取一个最小的数字放到前面的有序序列中。
+    const selectSort = (arr = []) => {
+        if (arr.length < 2) {
+            return arr;
+        }
+        for (let i = 0; i < arr.length - 1; i++) {
+            let min = i
+            for (let j = i + 1; j < arr.length; j++) {
+                if (arr[j] < arr[min]) {
+                    min = j
+                }
+            }
+            [arr[i], arr[min]] = [arr[min], arr[i]]
+        }
+        return arr;
+    }
+    console.log(selectSort([3, 4, 1, 2, 80, 33, 44, 77, 22, 11, 55])); // [1, 2, 3, 4, 11, 22, 33, 44, 55, 77, 80]
+</script>
+</html>
