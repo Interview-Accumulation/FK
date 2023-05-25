@@ -302,7 +302,23 @@ element.addEventListener(type, listener, useCapture)
 [简单示例代码](./08_%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF.html)
 
 
-### 数组
+### 数组Array
+[方法参考](https://www.runoob.com/jsref/jsref-obj-array.html)
+- concat, 连接两个或更多的数组，并返回结果
+- includes, 判断一个数组是否包含一个指定的值
+- entries, 返回数组的可迭代对象, [参考](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/entries)
+- fill,使用一个固定值来填充数组
+- 
+
+
+
+遍历方法：
+- every, 检测数值元素的每个元素是否都符合条件
+- filter
+- forEach
+- map
+- reduce
+- reduceRight
 
 #### splice 和 slice 的区别
 * splice, 向数组中添加或删除元素,返回删除元素组成的数组,原数组改变
@@ -362,6 +378,7 @@ console.log(res) // [{name: 'c'}, {name: 'c'}]
 [参考](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
 * Intersection Observer API
 
+
 ```js
 let options = {
   root: document.querySelector("#scrollArea"),
@@ -371,3 +388,26 @@ let options = {
 
 let observer = new IntersectionObserver(callback, options);
 ```
+
+
+
+
+### 字符串String
+[方法参考](https://www.runoob.com/jsref/jsref-obj-string.html)
+
+- concat,用于链接两个或大于两个的字符串，`string.concat(string1, string2, ..., stringX)`
+- indexOf, 返回某个指定的字符串值在字符串中首次出现的位置, `string.indexOf(searchvalue,start)`,其中`searchvalue`为检索的字符串，必填；`start`为在字符串中开始检索的位置,可选。
+- lastIndexOf,同上，顺序为冲字符串尾部开始查询。
+- includes, 查找字符串中是否包含指定的子字符串. `string.includes(searchvalue, start)`,参数同indexOf
+- slice,提取字符串的片断，并在新的字符串中返回被提取的部分,不改变原字符串，`string.slice(start,end)`
+- split, 把字符串分割为字符串数组, `string.split(separator,limit)`,`separator`字符串或正则表达式;`limit`可选，指定返回的数组的最大长度
+- repeat, 复制字符串指定次数，并将它们连接在一起返回,`string.repeat(count)`
+- trim, 去除字符串两边的空白, `string.trim()`
+- endsWith, 判断当前字符串是否是以指定的子字符串结尾的（区分大小写, 参数不能使用正则
+- startsWith, 查看字符串是否以指定的子字符串开头, 参数不能使用正则
+
+
+- match, 查找找到一个或多个正则表达式的匹配,以数组形式返回。`string.match(regexp)`
+- replace, 在字符串中查找匹配的子串，并替换与正则表达式匹配的子串
+- replaceAll, 在字符串中查找匹配的子串，并替换与正则表达式匹配的**所有**子串
+- search, 查找与正则表达式相匹配的值
