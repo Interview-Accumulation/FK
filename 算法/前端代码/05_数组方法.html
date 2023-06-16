@@ -146,6 +146,24 @@
         return res;
     }
     console.log(disorder(arr2));
+
+    /**
+     * reduce实现
+     * reduce是JavaScript数组的一个高阶函数，用于对数组中的元素进行累计操作。
+     * 它接收一个回调函数作为参数，该回调函数可以有四个参数：累计值（初始值或上一次回调的返回值）、当前元素、当前索引和原数组。
+     * reduce函数会依次遍历数组的每个元素，将回调函数的返回值作为下一次调用的累计值，最终返回一个累计值。
+    */
+   Array.prototype.myReduce = function (callback, initValue) {
+        let accumulator = initValue === undefined ? undefined : initValue; // 初始化累计值
+        for (let i = 0; i < this.length; i++) {
+            if (accumulator === undefined) {
+                accumulator = this[i]
+            } else {
+                accumulator = callback(accumulator, this[i], i, this)
+            }
+        }
+        return accumulator;
+   }
 </script>
 
 </html>

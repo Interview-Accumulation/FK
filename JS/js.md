@@ -411,3 +411,50 @@ let observer = new IntersectionObserver(callback, options);
 - replace, 在字符串中查找匹配的子串，并替换与正则表达式匹配的子串
 - replaceAll, 在字符串中查找匹配的子串，并替换与正则表达式匹配的**所有**子串
 - search, 查找与正则表达式相匹配的值
+
+
+### 函数提升（函数表达式与函数声明）
+- 函数声明会在代码执行前被加载进内存（添加到执行上下文，也就是声明提升），而函数表达式只有在代码执行到它那一行时才会被加载进内存。
+- 函数表达式则需要等到代码运行到它所在行，才会创建函数对象
+- `function foo() {}`是函数声明，`var foo = function() {}`是函数表达式
+
+```js
+    var foo = function () {
+      console.log("foo1");
+    };
+    foo();
+
+    var foo = function () {
+      console.log("foo2");
+    };
+    foo();
+
+    function foo() {
+      console.log("foo3");
+    }
+    foo();
+
+    function foo() {
+      console.log("foo4");
+    }
+    foo();
+    // 执行结果为：foo1 foo1 foo2 foo2
+```
+
+
+### Map 和 WeakMap
+Map: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map
+WeakMap: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap
+- Map, 键值对的集合，可以使用任何类型的值作为键或者值
+- WeakMap, 键只能是对象，值可以是任意的
+
+#### WeakMap
+- WeakMap 是 JavaScript 中的一种内置对象，它提供了一种键-值对的存储方式。与普通的 Map 对象不同，WeakMap 的键只能是对象，并且对于不再被引用的键，其对应的值会被自动回收，不会造成内存泄漏。
+- WeakMap 的主要应用场景是在需要存储一些临时数据或私有数据，并且不希望影响垃圾回收的情况下使用。
+- WeakMap 的特点和原理：
+  - 只接受对象作为键：WeakMap 的键**只能是对象**，不能是基本数据类型（如字符串、数值等）。这是因为 WeakMap 使用对象的引用作为键，当对象不再被引用时，垃圾回收机制可以自动清理与之相关的键值对。
+  - 弱引用特性：WeakMap 中的键是弱引用的，这意味着当键对象不再被引用时，垃圾回收机制可以自动清理与之相关的键值对。在没有其他引用的情况下，键对象会被垃圾回收，并从 WeakMap 中删除对应的键值对。
+  - **不可迭代**：由于 WeakMap 的键是弱引用的，垃圾回收机制可以在任何时候删除键值对，因此 WeakMap 不支持迭代操作，也没有相关的迭代器方法（如 keys()、values()、entries() 和 forEach()）。
+  - 没有公开的方法和属性：WeakMap 没有提供直接访问和操作键值对的方法和属性。只能通过 set()、get() 和 delete() 方法来操作键值对。
+
+

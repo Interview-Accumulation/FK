@@ -1,30 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <p id="demo">单击按钮显示指定值最后一次出现的位置。</p>
     <button onclick="myFunction()">点我</button>
-</body>
-<script>
-    function myFunction(){
-        var str="I am from runoob，welcome to runoob site.";
-        var n=str.lastIndexOf("runoob", 27);
-        console.log(n)
+    <iframe src="http://storage.xuetangx.com/public_assets/xuetangx/PDF/PlayerAPI_v1.0.6.pdf" width="500" height="500">
+    </iframe>
+  </body>
+  <script>
+    function myFunction() {
+      var str = "I am from runoob，welcome to runoob site.";
+      var n = str.lastIndexOf("runoob", 27);
+      console.log(n);
     }
-    var str="I am from runoob，welcome to runoob site.";
-    let reg = /runoob/g
+    var str = "I am from runoob，welcome to runoob site.";
+    let reg = /runoob/g;
     console.log(str.match(reg));
-    console.log(str.endsWith('saf'));
+    console.log(str.endsWith("saf"));
 
     const fruits = ["Banana", "Orange", "Apple", "Mango"];
     console.log(fruits.entries());
 
-    let str1 = '厂家名称：\r\n材料名称：\r\n炉批号：501214章南*\r\n生产日期：\r\n规格型号：'
-    console.log(`${str1.replace(/\r|\n/g, '').toString()}`);
-</script>
+    let str1 =
+      "厂家名称：\r\n材料名称：\r\n炉批号：501214章南*\r\n生产日期：\r\n规格型号：";
+    console.log(`${str1.replace(/\r|\n/g, "").toString()}`);
+
+    var foo = function () {
+      console.log("foo1");
+    };
+    foo();
+
+    var foo = function () {
+      console.log("foo2");
+    };
+    foo();
+
+    function foo() {
+      console.log("foo3");
+    }
+    foo();
+
+    function foo() {
+      console.log("foo4");
+    }
+    foo();
+
+    // const async1 = async () => {
+    //   console.log("async1 start");
+    //   await async2();
+    //   console.log("async1 end");
+    // };
+    // const async2 = () => {
+    //   console.log("async2");
+    // };
+
+    // console.log("script start");
+
+    // setTimeout(() => {
+    //   console.log("setTimeout1");
+    // }, 200);
+
+    // setTimeout(() => {
+    //   console.log("setTimeout2");
+
+    //   new Promise((resolve) => {
+    //     resolve();
+    //   }).then(() => {
+    //     console.log("then1");
+    //   });
+
+    //   new Promise((resolve) => {
+    //     console.log("promise1");
+    //     resolve();
+    //   }).then(() => {
+    //     console.log("then2");
+    //   });
+    // }, 0);
+
+    // async1();
+
+    // new Promise((resolve) => {
+    //   console.log("promise2");
+    //   resolve();
+    // }).then(() => {
+    //   console.log("then3");
+    // });
+
+    // console.log("script end");
+  </script>
 </html>
