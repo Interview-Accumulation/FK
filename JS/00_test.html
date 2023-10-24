@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
   </head>
   <body>
     <p id="demo">单击按钮显示指定值最后一次出现的位置。</p>
@@ -13,42 +14,43 @@
     </iframe>
   </body>
   <script>
-    function myFunction() {
-      var str = "I am from runoob，welcome to runoob site.";
-      var n = str.lastIndexOf("runoob", 27);
-      console.log(n);
-    }
-    var str = "I am from runoob，welcome to runoob site.";
-    let reg = /runoob/g;
-    console.log(str.match(reg));
-    console.log(str.endsWith("saf"));
+    console.log("hello world", window.wx);
+    // function myFunction() {
+    //   var str = "I am from runoob，welcome to runoob site.";
+    //   var n = str.lastIndexOf("runoob", 27);
+    //   console.log(n);
+    // }
+    // var str = "I am from runoob，welcome to runoob site.";
+    // let reg = /runoob/g;
+    // console.log(str.match(reg));
+    // console.log(str.endsWith("saf"));
 
-    const fruits = ["Banana", "Orange", "Apple", "Mango"];
-    console.log(fruits.entries());
+    // const fruits = ["Banana", "Orange", "Apple", "Mango"];
+    // console.log(fruits.entries());
 
-    let str1 =
-      "厂家名称：\r\n材料名称：\r\n炉批号：501214章南*\r\n生产日期：\r\n规格型号：";
-    console.log(`${str1.replace(/\r|\n/g, "").toString()}`);
+    // let str1 =
+    //   "厂家名称：\r\n材料名称：\r\n炉批号：501214章南*\r\n生产日期：\r\n规格型号：";
+    // console.log(`${str1.replace(/\r|\n/g, "").toString()}`);
 
-    var foo = function () {
-      console.log("foo1");
-    };
-    foo();
+    // var foo = function () {
+    //   console.log("foo1");
+    // };
+    // foo();
 
-    var foo = function () {
-      console.log("foo2");
-    };
-    foo();
+    // var foo = function () {
+    //   console.log("foo2");
+    // };
+    // foo();
 
-    function foo() {
-      console.log("foo3");
-    }
-    foo();
+    // function foo() {
+    //   console.log("foo3");
+    // }
+    // foo();
 
-    function foo() {
-      console.log("foo4");
-    }
-    foo();
+    // function foo() {
+    //   console.log("foo4");
+    // }
+    // foo();
 
     // const async1 = async () => {
     //   console.log("async1 start");
@@ -92,5 +94,158 @@
     // });
 
     // console.log("script end");
+
+    // let str = `[{"bbox":["464","101","55","11"],"name":"委托编号","score":"0.9964172","word":"2022068089"},{"bbox":["465","116","64","11"],"name":"报告编号","score":"0.9950924","word":"GCN202208826"},{"bbox":["484","172","48","6"],"name":"委托日期","score":"0.9993826","word":"2022-10-"14"},{"bbox":["305","115","16","11"],"name":"工程连续号","score":"0.97993344","word":"51"},{"bbox":["110","133","125","12"],"name":"委托单位","score":"0.9980675","word":"上海通杨企业管理有限公司"},{"bbox":["108","151","157","12"],"name":"工程名称","score":"0.97937745","word":"轨道交通18号线国权路站上盖项目"},{"bbox":["108","169","303","12"],"name":"工程地址","score":"0.997866","word":"上海市杨浦区基地东至居民小区西至四平路南至国权路北至居民小"},{"bbox":["484","190","48","6"],"name":"报告日期","score":"0.99901724","word":"2022--10--15"},{"bbox":["112","218","48","6"],"name":"样品编号","score":"0.99949783","word":"2022095844"},{"bbox":["445","249","74","9"],"name":"许可证号","score":"0.9989007","word":"XK05-001-00338"},{"bbox":["110","232","21","10"],"name":"样品规格","score":"0.99950147","word":"中22"},{"bbox":["108","187","126","12"],"name":"施工单位","score":"0.9985474","word":"中建八局第二建设有限公司"}]`
+    // let str = `[{
+    //     "bbox": ["465", "94", "56", "11"],
+    //     "name": "委托编号",
+    //     "score": "0.99602604",
+    //     "word": "2021072495"
+    //    }, {
+    //     "bbox": ["466", "108", "64", "11"],
+    //     "name": "报告编号",
+    //     "score": "0.9947101",
+    //     "word": "GCN202110579"
+    //    }, {
+    //     "bbox": ["486", "165", "47", "7"],
+    //     "name": "委托日期",
+    //     "score": "0.99944997",
+    //     "word": "2021-08-18"
+    //    }, {
+    //     "bbox": ["308", "110", "8", "12"],
+    //     "name": "工程连续号",
+    //     "score": "0.823939",
+    //     "word": "2"
+    //    }, {
+    //     "bbox": ["111", "129", "122", "12"],
+    //     "name": "委托单位",
+    //     "score": "0.9981685",
+    //     "word": "上海通杨企业管理有限公司"
+    //    }, {
+    //     "bbox": ["109", "147", "158", "12"],
+    //     "name": "工程名称",
+    //     "score": "0.99088997",
+    //     "word": "轨道交通18号线国权路站上盖项目"
+    //    }, {
+    //     "bbox": ["109", "164", "303", "13"],
+    //     "name": "工程地址",
+    //     "score": "0.9980561",
+    //     "word": "上海市杨浦区基地东至居民小区西至四平路南至国权路北至居民小"
+    //    }, {
+    //     "bbox": ["486", "183", "47", "6"],
+    //     "name": "报告日期",
+    //     "score": "0.99838006",
+    //     "word": "2021-08-19"
+    //    }, {
+    //     "bbox": ["114", "214", "48", "7"],
+    //     "name": "样品编号",
+    //     "score": "0.9995227",
+    //     "word": "2021121426"
+    //    }, {
+    //     "bbox": ["448", "242", "74", "9"],
+    //     "name": "许可证号",
+    //     "score": "0.99926376",
+    //     "word": "XK05-001-00001"
+    //    }, {
+    //     "bbox": ["114", "229", "15", "9"],
+    //     "name": "样品规格",
+    //     "score": "0.999462",
+    //     "word": "中6"
+    //    }, {
+    //     "bbox": ["110", "183", "125", "12"],
+    //     "name": "施工单位",
+    //     "score": "0.9983368",
+    //     "word": "中建八局第二建设有限公司"
+    //    }]`;
+    // let res = JSON.parse(str)
+    // console.log(str);
+
+    // for (let i = 0; i < 5; i++) {
+    //   console.log(i);
+    // }
+
+    // for (let i = 0; i < 3; i++) {
+    //   for (let j = 0; j < 10; j++) {
+    //     if (j > 5) {
+    //       break
+    //     }
+    //     console.log(j)
+    //   }
+    //   console.log("  ")
+    // }
+    // let str = `[{"bbox":["114","290","53","11"],"name":"工程部位","score":"0.9993019","word":"桩基LG4-29"},{"bbox":["452","254","99","10"],"name":"样品规格","score":"0.9998711","word":"100mm×100mm×100mm"},{"bbox":["461","131","54","11"],"name":"委托编号","score":"0.99900675","word":"2021001433"},{"name":"试件编号"},{"name":"实验结论"},{"bbox":["467","230","48","6"],"name":"报告日期","score":"0.9992196","word":"2021-05-20"},{"bbox":["461","149","63","11"],"name":"报告编号","score":"0.9992347","word":"HKY202100313"},{"bbox":["466","212","49","7"],"name":"送检日期","score":"0.9933691","word":"2021-05-14"},{"bbox":["117","607","11","11"],"name":"见证人","score":"0.50144076","word":"上"},{"bbox":["397","309","7","6"],"name":"龄期","score":"0.9961558","word":"28"},{"name":"取样组数"},{"bbox":["75","380","42","12"],"name":"养护条件","score":"0.9939738","word":"标准养护"},{"bbox":["115","272","112","12"],"name":"厂家","score":"0.9988389","word":"上海端建混凝土有限公司"},{"bbox":["502","307","30","10"],"name":"代表量","score":"0.9997352","word":"10.5m³"},{"bbox":["227","254","39","11"],"name":"强度","score":"0.93511724","word":"水下C30"},{"bbox":["116","310","49","7"],"name":"成型日期","score":"0.99986464","word":"2021-04-22"},{"name":"品种种类"},{"name":"是否合格"},{"name":"是否见证"}]`
+    // console.log(JSON.parse(str));
+
+    // let reg = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[_`!~@#$%^*+=,.?;'":)(}{/\\|<>&[-]|\]){10,}$/
+    // console.log(reg.test("A1234567890"));
+    // console.log(reg.test("1234567890a"));
+    // console.log(reg.test("1234567890A"));
+    // console.log(reg.test("1234567890aA"));
+    // console.log(reg.test("A1234567890aA!"));
+    // 特殊字符正则
+    // let reg_symbol = /[_`!~@#$%^*+=,.?;'":)(}{/\\|<>&[-]|\]/
+    // console.log(reg_symbol.test("!%~!@#$%^&*()_+\/';,./<>?[]{}"));
+    // let reg2 = /^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[_`!~@#$%^*+=,.?;'":)(}{/\\|<>&[-]|\])\S*$/;
+    // console.log(reg2.test("1234567890a!"));
+    // console.log(reg2.test("1234567890aA!!%~!@#$%^&*()_+\/';,./<>?[]{}"));
+    // let reg3 = /^\S*(?=\S{10,})(?=S*[A-Z])(?=S*[a-z])(?=S*[_`!~@#$%^*+=,.?;'":)(}{/\|<>&[-]|\])\S*$/
+    // let reg4 = /^\S*(?=\S{8,})(?=\S*[0-9])(?=\S*[A-Z])(?=\S*[a-z])\S*$/;
+    // console.log(reg4.test("A1234567890aA!"));
+    
+    // 密码校验，必须包含大小写字母、数字、特殊字符，且长度不小于10位
+    // let reg5 = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[_`!~@#$%^*+=,.?;'":)(}{/\\|<>&[-]|\])(?=.*\d)[A-Za-z\d_`!~@#$%^*+=,.?;'":)(}{/\\|<>&[-]|\]]{10,}$/
+    // console.log(reg5.test("A1234567890a!asd%&^%$#@!"));
+    // 密码校验，必须包含大小写字母、数字，且长度不小于10位
+//     let reg6 = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{10,}$/
+
+//     let length = 8;
+//     let cpx = '1_2_3';
+//     const RULES = {
+//     1: {
+//         text: '数字',
+//         pattern: '0-9'
+//     },
+//     2: {
+//         text: '大写字母',
+//         pattern: 'A-Z'
+//     },
+//     3: {
+//         text: '小写字母',
+//         pattern: 'a-z'
+//     },
+//     4: {
+//         text: '特殊字符',
+//         pattern: String('_\`!~@#$%^*+=,.?;\'":\)\(}{/\\|<>&[-]|\\')
+//     }
+// };
+// function test(cpx, length) {
+//   const text = cpx.split('_').map(item => RULES[item].text).join('、');
+//   const pattern = cpx.split('_').map(item => `(?=.*[${RULES[item].pattern}])`).join('');
+//   const pattern_last = cpx.split('_').map(item => `${RULES[item].pattern}`).join('');
+//   console.log('text', `请输入${length}位${text}（不允许有空格）`);
+//   const reg = new RegExp(`^${pattern}[${pattern_last}]{${length},}$`);
+//   console.log(reg);
+//   console.log(reg.test('1234567890aA!'));
+//   console.log(reg.test('1234a!!%~!@#$%^&*()_+\/\';,./<>?[]{}'));
+//   console.log(reg.test('1234567890aA'));
+//   console.log(reg.test('aA!asdad%^&*()'));
+// }
+// test(cpx, length);
+// let str = 'Test@123'
+// let str2 = 'Test@123333333'
+// let reg = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[_`!~@#$%^*+=,.?;'":)(}{/\\|<>&[-]|\])(?=.*\d)[A-Za-z\d_`!~@#$%^*+=,.?;'":)(}{/\\|<>&[-\]]{10,}$/
+// let reg2 = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[_`!~@#$%^*+=,.?;'":)(}{/\|<>&[-]|\])[0-9A-Za-z_`!~@#$%^*+=,.?;'":)(}{/\|<>&[-\]]{10,}$/
+// let reg4 = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[_`!~@#$%^*+=,.?;'":)(}{/\|<>&[-\]])[0-9A-Za-z_`!~@#$%^*+=,.?;'":)(}{/\|<>&[-\]]{10,}$/
+// console.log(reg.test(str), reg2.test(str));
+// console.log(reg.test(str2), reg2.test(str2));
+// console.log(reg4.test(str), reg4.test(str2));
+
+
+// 写一个正则：至少8位，包含大小写字母、数字
+// let reg3 = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/
+// console.log(reg3.test('Aa123'));
+
+let str = "```json\n{\n    \"result\": \"Chinese people never cheat Chinese people\"\n}\n```"
+console.log(JSON.parse(str.replaceAll(/(```)|(json)/g, '')));
   </script>
 </html>

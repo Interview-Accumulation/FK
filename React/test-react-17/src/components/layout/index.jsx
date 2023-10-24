@@ -52,6 +52,11 @@ const menuList = [
                 title: 'useState',
                 key: '/usestate',
                 path: '/usestate',
+            },
+            {
+                title: 'konva',
+                key: '/konva',
+                path: '/konva',
             }
         ]
 

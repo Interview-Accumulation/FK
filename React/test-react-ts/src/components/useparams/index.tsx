@@ -7,6 +7,7 @@ export default function Index() {
     const [search, setSearch] = useSearchParams();
     const location = useLocation();
 
+
     const { state: {
         state1
     }} = location;

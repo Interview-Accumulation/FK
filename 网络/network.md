@@ -3,6 +3,7 @@
 - https://juejin.cn/post/6940942549305524238
 - https://juejin.cn/post/6908327746473033741
 - https://juejin.cn/post/6844904021308735502
+- https://juejin.cn/post/7269952188927017015
 
 ## HTTP
 
@@ -174,3 +175,8 @@ Cache-Control: max-age=3600
 
 ### 常见攻击类型
 * [XSS](https://juejin.cn/post/6844903685122703367)
+
+
+### cookie
+
+

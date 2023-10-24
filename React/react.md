@@ -2,6 +2,7 @@
 - [官网](https://react.dev/)
 - https://juejin.cn/post/6941546135827775525
 - https://juejin.cn/post/6940942549305524238
+- https://juejin.cn/post/7258071726227849277
 
 
 ### React设计思想
@@ -26,8 +27,14 @@ JSX与JS的区别：
 #### 为什么在文件中没有使用react，也要在文件顶部import React from “react”
 只要使用了jsx，就需要引用react，因为jsx本质就是React.createElement
 
+#### 函数组件中为什么不能在条件语句中使用useState
+- 因为React通过单链表管理Hooks，在update阶段，每次调用useState，链表都会执行next向后移动一步。
+- 如果在条件语句中使用useState，那么条件语句为false时，没有执行条件判断中的useState，，会导致接下来所有的useState的取值出现偏移，从而导致取值错误
+
+![hooks chain](../00_images/useState_chain.png)
+
 #### 为什么React自定义组件首字母要大写
-- jsx通过babel转义时，调用了React.createElement函数，它接收三个参数，分别是type元素类型，props元素属性，children子元素。
+- jsx通过babel(@babel/preset-react)转义时，调用了React.createElement函数，它接收三个参数，分别是type元素类型，props元素属性，children子元素。
 - 如下代码中，从jsx到真实DOM需要经历`jsx->虚拟DOM->真实DOM`。如果组件首字母为小写，它会被当成字符串进行传递，在创建虚拟DOM的时候，就会把它当成一个html标签，而html没有app这个标签，就会报错。组件首字母为大写，它会当成一个变量进行传递，React知道它是个自定义组件就不会报错了
 
 ```jsx
@@ -38,6 +45,17 @@ React.createElement("app",null,"app content")
 <App>app content</App>
 // 转义后
 React.createElement(App,null,'app content')
+```
+
+- 从上面转译可以看出，若需要在js文件中写jsx，在顶部需要引入React，因为jsx本质就是React.createElement的语法糖，使用jsx等价于React.createElement
+- 在react17后就不需要在组建中显式引入React了，因为react17后不再使用React.createElement，引入了 `react/jsx-runtime`，改变了jsx的编译方式，不再是 React.createElement:
+```js
+// 转译前
+<app>app content</app>
+// react17之后的转译
+import {jsx as _jsx} from 'react/jsx-runtime' // 由编译器自动引入，无需手动引入
+
+_jsx('app',null,'app content')
 ```
 
 #### React组件为什么不能返回多个元素 或者 React组件为什么只能有一个根元素
@@ -110,7 +128,7 @@ renderList(){
   "presets": ["@babel/preset-react"]
 }
 ```
-3. Babel 读取代码并解析，生成 AST，再将 AST 传入插件层进行转换，在转换时就可以将 JSX 的结构转换为 React.createElement 的函数。
+3. Babel 读取代码并解析，生成 AST(抽象语法树)，再将 AST 传入插件层进行转换，在转换时就可以将 JSX 的结构转换为 React.createElement 的函数。
    - `React.createElement(type, props, children)` 源码
 ```js
 export function createElement(type, config, children) {
@@ -297,10 +315,10 @@ handleClick = () => {
 - 真实DOM存在重排和重绘，虚拟DOM不存在；
 - 虚拟 DOM 的总损耗是“虚拟 DOM 增删改+真实 DOM **差异**增删改+排版与重绘（可能比直接操作真实DOM要少）”，真实 DOM 的总损耗是“真实 DOM 完全增删改+排版与重绘”
 
-!!! note 注意：  
-  - 传统的原生 api 或 jQuery 去操作 DOM 时，浏览器会从构建 DOM 树开始从头到尾执行一遍流程。
-  - 当你在一次操作时，需要更新 10 个 DOM 节点，浏览器没这么智能，收到第一个更新 DOM 请求后，并不知道后续还有 9 次更新操作，因此会马上执行流程，最终执行 10 次流程。
-  - 而通过 VNode，同样更新 10 个 DOM 节点，虚拟 DOM 不会立即操作 DOM，而是将这 10 次更新的 diff 内容保存到本地的一个 js 对象中，最终将这个 js 对象一次性 attach 到 DOM 树上，避免大量的无谓计算。
+!!! note 注意
+    - 传统的原生 api 或 jQuery 去操作 DOM 时，浏览器会从构建 DOM 树开始从头到尾执行一遍流程。
+    - 当你在一次操作时，需要更新 10 个 DOM 节点，浏览器没这么智能，收到第一个更新 DOM 请求后，并不知道后续还有 9 次更新操作，因此会马上执行流程，最终执行 10 次流程。
+    - 而通过 VNode，同样更新 10 个 DOM 节点，虚拟 DOM 不会立即操作 DOM，而是将这 10 次更新的 diff 内容保存到本地的一个 js 对象中，最终将这个 js 对象一次性 attach 到 DOM 树上，避免大量的无谓计算。
 
 #### VDOM 和 DOM 优缺点
 - 真实 DOM 的优势：
@@ -317,6 +335,39 @@ handleClick = () => {
 
 - 虚拟 DOM 的缺点：
   - 在一些性能要求极高的应用中虚拟 DOM 无法进行针对性的极致优化，首次渲染大量 DOM 时，由于多了一层虚拟 DOM 的计算，速度比正常稍慢
+
+
+#### 为什么操作DOM比操作JS对象的代价高
+1. 对比
+  - 访问和修改DOM元素，需要通过浏览器提供的API来实现，与直接在内存中的操作JS对象相比，通过浏览器API操作涉及到更多的层级和复杂性，从而导致操作代价更高
+  - DOM操作引起页面的重排和重绘，会增加浏览器的计算量，导致操作代价更高
+
+2. 为了减少DOM操作的代驾，有如下优化措施：
+   - 将多次DOM操作合并为一次操作，减少页面重绘和重排的次数
+   - 使用事件委托，将事件处理函数绑定在父元素上，减少事件处理函数的数量
+   - 缓存DOM查询结果，避免重复查询
+   - 使用文档片段（DocumentFragment），将多个DOM元素的操作放在文档片段中，然后一次性插入到页面中，减少页面重绘和重排的次数
+
+总结：DOM操作涉及到浏览器的底层API、重回重排等因素，操作代价高，而JS对象的操作只涉及到内存，操作代价低。因此在编写网页时，应尽量减少DOM的频繁操作，优化DOM操作的方式和时机，以提高性能和用户体验。
+
+
+#### diff算法
+概念：diff算法通过同层的树节点进行比较而非对树进行逐层搜索遍历的方式，对新旧的虚拟DOM树进行一个深度优先遍历，比较两个节点的差异，如果节点有差异，则记录到一个对象中，最后统一进行更新操作，这样就避免了对真实DOM进行频繁的操作，从而提高了性能。
+- 传统diff算法通过循环递归对节点进行依次对比，时间复杂度为O(n^3)，性能较差
+- react中diff算法通过设置唯一key值，对同层节点进行比较，时间复杂度为O(n)，性能较好
+
+##### diff策略
+- tree层级比较
+  - 如果两个节点类型不同，则直接删除旧节点，创建新节点
+  - 如果两个节点类型相同，则进行属性比较，如果属性不同，则更新属性
+  - 如果节点类型相同，且节点为文本节点，则直接更新文本内容
+  - 如果节点类型相同，且节点为元素节点，则继续比较子节点
+- components层级比较
+  - 如果两个组件类型不同，则直接删除旧组件，创建新组件
+  - 如果两个组件类型相同，则进行属性比较，如果属性不同，则更新属性
+  - 如果组件类型相同，则继续比较子组件
+- elements层级比较：
+  - 同一层级的节点比较，通过唯一key值进行比较，根据key对于同一层级的节点操作只有 3 种, 分别为 INSERT_MARKUP(插入)、MOVE_EXISTING(移动)、REMOVE_NODE(删除)
 
 ### react事件机制
 #### 合成事件
@@ -458,7 +509,7 @@ const App: React.FC = () => {
 
 export default App;
 ```
-  - 把状态的更新放在promise或者setTimeout或者js原生时间里面，不会进行批处理
+  - 把状态的更新放在promise或者setTimeout或者js原生事件里面，不会进行批处理
 ```tsx
 import React, { useState } from 'react';
 
@@ -712,6 +763,7 @@ const DemoUseContext = ()=>{
 ### React Fiber
 > [参考1](https://i.overio.space/fiber/why-fiber/)
 > [参考2](https://i.overio.space/fiber/whats-fiber/)
+> [参考3](https://juejin.cn/post/7258881840823844920)
 > [源码](https://github.com/facebook/react/blob/6e4f7c788603dac7fccd227a4852c110b072fe16/packages/react-reconciler/src/ReactFiber.js#L78)
 
 #### 为什么需要Fiber
@@ -981,3 +1033,6 @@ const handleName3 = () => {
 ```
 
 
+### 派生状态
+- 定义：在react中，如果一个组件中state中的某个数据来自外部，那么这个数据就是派生状态
+- 常见派生状态：从props中派生，即将props中的数据作为state的初始值

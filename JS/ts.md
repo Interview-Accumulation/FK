@@ -340,3 +340,14 @@ declare global {
 }
 ```
 
+#### any 和 unknown 的区别
+* any: 任意类型，可以赋值给任意类型(失去子类型检查作用),相当于写js
+* unknown: 未知类型，不能赋值给任意类型，需要先判断类型，再赋值给其他类型
+
+```ts
+const a:any = 1;
+const b:unknown = 1;
+let c: number;
+c = a;
+// c = b; // Type 'unknown' is not assignable to type 'number'.ts(2322)
+```

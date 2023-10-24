@@ -144,6 +144,11 @@ BFC的特性：
 ### flex布局
 [阮一峰flex布局文档](https://www.ruanyifeng.com/blog/2015/07/flex-grammar.html)
 
+#### flex: 1
+flex: 1 是 flex-grow: 1; flex-shrink: 1; flex-basis: 0%; 的简写，即 flex-grow: 1; flex-shrink: 1; flex-basis: 0%; 。
+flex: auto 是 flex-grow: 1; flex-shrink: 1; flex-basis: auto; 的简写，即 flex-grow: 1; flex-shrink: 1; flex-basis: auto; 。
+flex: none 是 flex-grow: 0; flex-shrink: 0; flex-basis: auto; 的简写，即 flex-grow: 0; flex-shrink: 0; flex-basis: auto; 。
+
 ### grid布局
 [阮一峰grid布局文档](https://www.ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html)
 

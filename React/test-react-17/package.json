@@ -7,6 +7,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.4.5",
+    "konva": "^9.2.0",
     "react": "17",
     "react-dom": "17",
     "react-router-dom": "^6.10.0",

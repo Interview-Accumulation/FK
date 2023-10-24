@@ -5,6 +5,7 @@ const StateCom = lazy(() => import('../components/stateCom'));
 const UseCallbackCom = lazy(() => import('../components/useCallbackCom'));
 const ClassCom = lazy(() => import('../components/classCom'));
 const UseStateCom = lazy(() => import('../components/useStateCom'));
+const KonvaCom = lazy(() => import('../components/konva'));
 
 const routers = [
     {
@@ -26,6 +27,10 @@ const routers = [
             {
                 path: 'usestate',
                 element: <UseStateCom />,
+            },
+            {
+                path: 'konva',
+                element: <KonvaCom />,
             }
         ]
     }
