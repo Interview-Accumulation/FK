@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <button onclick="changeHref()">click</button> -->
+
+    <canvas id="canvas1">
+    </canvas>
+    <img src="../00_images/defer_async.png" alt="" id="img">
+</body>
+<script>
+
+
+    function compress(img) {
+      let canvas = document.createElement("canvas");
+      let ctx = canvas.getContext("2d");
+      let width = img.width;
+      let height = img.height;
+      canvas.width = width;
+      canvas.height = height;
+      console.log(width, height);
+      ctx.drawImage(img, 0, 0, width, height);
+      let dataURL = canvas.toDataURL("image/jpeg", 0.5);
+      return dataURL;
+    }
+    function imageSize(base64url) {
+        //把头部去掉
+        let str = base64url.replace('data:image/jpeg;base64,', '');
+        // 找到等号，把等号也去掉
+        let equalIndex = str.indexOf('=');
+        if (str.indexOf('=') > 0) {
+          str = str.substring(0, equalIndex);
+        }
+        // 原来的字符流大小，单位为字节
+        let strLength = str.length;
+        // 计算后得到的文件流大小，单位为字节
+        let fileLength = parseInt(strLength - (strLength / 8) * 2);
+        // 由字节转换为kb
+        let size = "";
+        size = (fileLength / 1024).toFixed(2);
+        let sizeStr = size + ""; //转成字符串
+        let index = sizeStr.indexOf("."); //获取小数点处的索引
+        let dou = sizeStr.substr(index + 1, 2) //获取小数点后两位的值
+        if (dou == "00") { //判断后两位是否为00，如果是则删除00                
+          return sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2)
+        }
+        return size;
+    }
+
+    function changeHref() {
+        window.location.href = "http://www.baidu.com";
+    }
+
+    let cavs = document.getElementById('canvas1')
+    let ctx = cavs.getContext('2d')
+    let img = document.createElement('img')
+    img.src = '../00_images/defer_async.png'
+    img.onload = function() {
+        ctx.drawImage(img, 0, 0, cavs.width, cavs.height)
+
+        ctx.beginPath()
+        ctx.moveTo(0, 0)
+        ctx.lineTo(100, 100)
+        ctx.stroke()
+    }
+
+    
+
+
+
+</script>
+</html>

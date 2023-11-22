@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <map name="primary">
+      <area
+        shape="rect"
+        coords="10,10,100,100"
+        href="http://www.baidu.com"
+        target="_blank"
+      />
+      <area
+        shape="rect"
+        coords="110,110,200,200"
+        href="https://developer.mozilla.org/docs/Web/CSS"
+        target="_blank"
+      />
+    </map>
+    <img src="../00_images//defer_async.png" width="300" height="300" usemap="#primary"/>
+  </body>
+  <script>
+    // 想要在图片不同地方增加不同的链接，可以使用map标签
+    // map标签的name属性和img标签的usemap属性相对应
+    // area标签的shape属性可以设置为rect(矩形)、circle(圆形)、poly(多边形)
+    // area标签的coords属性可以设置为矩形的左上角和右下角的坐标，圆形的圆心坐标和半径，多边形的各个顶点坐标
+    // area标签的href属性可以设置链接地址
+    // area标签的target属性可以设置链接打开方式
+    // 参考链接：https://developer.mozilla.org/en-US/docs/Web/HTML/Element/map
+  </script>
+</html>

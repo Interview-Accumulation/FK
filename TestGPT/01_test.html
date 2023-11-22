@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* 初始状态下菜单图标透明度为0，隐藏 */
+    #menu-icon {
+      opacity: 0;
+      transition: opacity 0.5s ease; /* 添加渐变效果 */
+    }
+
+    /* 滚动时菜单图标透明度逐渐变为1，显示 */
+    #menu-icon.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- 页面内容 -->
+  <div style="height: 1000px;">Scroll down to see the effect</div>
+
+  <!-- 菜单图标 -->
+  <div id="menu-icon">菜单图标</div>
+
+  <script>
+    // 获取菜单图标元素
+    var menuIcon = document.getElementById('menu-icon');
+
+    // 定义变量用于存储上一帧的滚动位置
+    var lastScrollPosition = 0;
+
+    // 定义变量用于指定显示菜单图标的滚动位置
+    var showMenuPosition = 50;
+
+    // 监听滚动事件
+    function handleScroll() {
+      // 获取当前滚动位置
+      var scrollPosition = window.scrollY;
+
+      // 判断是否滚动方向向下且滚动位置超过指定位置
+      if (scrollPosition > showMenuPosition) {
+        // 向下滚动且滚动位置超过指定位置，显示菜单图标
+        menuIcon.classList.add('show');
+      } else {
+        // 向上滚动或滚动位置未超过指定位置，隐藏菜单图标
+        menuIcon.classList.remove('show');
+      }
+
+      // 更新上一帧的滚动位置
+      lastScrollPosition = scrollPosition;
+
+      // 请求下一帧动画
+      requestAnimationFrame(handleScroll);
+    }
+
+    // 初始调用一次以处理初始滚动位置
+    handleScroll();
+  </script>
+</body>
+</html>
