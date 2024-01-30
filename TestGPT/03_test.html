@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>原生拖拽示例</title>
+  <style>
+    .draggable {
+      width: 100px;
+      height: 100px;
+      background-color: #4CAF50;
+      color: #fff;
+      text-align: center;
+      line-height: 100px;
+      cursor: move;
+    }
+  </style>
+</head>
+<body>
+
+<div id="draggableElement" class="draggable" draggable="true">
+  Drag me
+</div>
+
+<script>
+  const draggableElement = document.getElementById('draggableElement');
+
+  draggableElement.addEventListener('dragstart', (event) => {
+    event.dataTransfer.setData('text/plain', 'Hello Drag');
+  });
+</script>
+
+</body>
+</html>

@@ -20,7 +20,7 @@
       <p>5</p>
     </article>
   </body>
-  <script>
+  <!-- <script>
     // for...of循环
 
     // 1.数组（数组原型上的属性不可遍历）
@@ -94,5 +94,36 @@
         break; // closes iterator, triggers return
       }
     } // 1 2
+  </script> -->
+  <script>
+    // for...in循环
+    // 1.数组（不适合遍历数组，因为遍历数组时遍历顺序不稳定）
+    // 1.1、会遍历数组所有的可枚举属性，包括原型上的属性, 且索引为字符串型数字，不能直接进行几何运算，若只想遍历数组自身的属性，可以通过hasOwnProperty()来判断。
+    Array.prototype.name = "数组";
+    const arr = [1, 2, 3, "5"];
+    for (const key in arr) {
+      console.log(key);
+    } // 0 1 2 3 name
+    for (const key in arr) {
+      if (arr.hasOwnProperty(key)) {
+        console.log(key);
+      }
+    } // 0 1 2 3
+
+    // 对象
+    let obj = {
+      a: "1",
+      b: "3",
+      d: "aaaa",
+    };
+    for (const key in obj) {
+      console.log(key);
+    } // a b d
+    console.log(Object.entries(obj)); // [ [ 'a', '1' ], [ 'b', '3' ], [ 'd', 'aaaa' ] ]
+    for (const [key, value] of Object.entries(obj)) {
+      console.log(key, value);
+    } // a 1 b 3 d aaaa
+
+
   </script>
 </html>

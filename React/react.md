@@ -670,6 +670,7 @@ useEffect(()=>{
 - 第二个参数作为依赖项，是一个数组，可以有多个依赖项，**依赖项改变，执行上一次callback 返回的 destory ，和执行新的 effect 第一个参数 callback** 。
 - 对于 useEffect 执行， React 处理逻辑是采用**异步调用** ，对于每一个 effect 的 callback， React 会向 setTimeout回调函数一样，放入任务队列，等到主线程任务完成，DOM 更新，js 执行完成，视图绘制完毕，才执行。所以 effect 回调函数不会阻塞浏览器绘制视图。
 
+参考：https://juejin.cn/post/7264208575973605431
 #### useLayoutEffect
 - useLayoutEffect和useEffect不同之处，是采用了同步执行
 - useLayoutEffect 是在 **DOM 更新之后，浏览器绘制之前**，这样可以方便修改 DOM，获取 DOM 信息，这样浏览器只会绘制一次，如果修改 DOM 布局放在 useEffect ，那 useEffect 执行是在浏览器绘制视图之后，接下来又改 DOM ，就可能会导致浏览器再次回流和重绘。而且由于两次绘制，视图上可能会造成闪现突兀的效果。
@@ -693,6 +694,7 @@ useMemo优势：
 
 
 #### useRef
+* useRef 返回一个可变的 ref 对象，其 .current 属性被初始化为传入的参数（initialValue）。返回的 ref 对象在组件的整个生命周期内保持不变。
 
 #### useReducer
 > useReducer 是 react-hooks 提供的能够在无状态组件中运行的类似redux的功能 api
@@ -764,6 +766,7 @@ const DemoUseContext = ()=>{
 > [参考1](https://i.overio.space/fiber/why-fiber/)
 > [参考2](https://i.overio.space/fiber/whats-fiber/)
 > [参考3](https://juejin.cn/post/7258881840823844920)
+> [参考4](https://juejin.cn/post/7300875360371343399)
 > [源码](https://github.com/facebook/react/blob/6e4f7c788603dac7fccd227a4852c110b072fe16/packages/react-reconciler/src/ReactFiber.js#L78)
 
 #### 为什么需要Fiber
@@ -1036,3 +1039,7 @@ const handleName3 = () => {
 ### 派生状态
 - 定义：在react中，如果一个组件中state中的某个数据来自外部，那么这个数据就是派生状态
 - 常见派生状态：从props中派生，即将props中的数据作为state的初始值
+
+
+### 状态管理
+[参考](https://mp.weixin.qq.com/s/ViUuXfVYZTPciuw2ICxP4Q)

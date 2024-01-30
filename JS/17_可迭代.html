@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // 参考：https://juejin.cn/post/7303789264340779049?searchId=2024011817514948FDEBB743110FBB23F4
+    // 常见可迭代对象：数组、字符串、Set、Map、arguments、NodeList、TypedArray
+    // 任何实现了迭代起协议（有 Symbol.iterator 方法）的对象都可视作可迭代对象
+    // 1、 ...运算符，可解构可迭代对象
+    const arr = [1, 2, 3];
+    const [a, b] = arr;
+    console.log(a, b); // 1 2
+    // console.log(arr[Symbol.iterator]().next());
+    // Object.prototype[Symbol.iterator] = function () {
+    //     return Object.values(this)[Symbol.iterator]();
+    // }
+    const [c, d] = {
+        c: '4',
+        d: '5'
+    } //若无定义 Object 的可迭代属性，则会报错： Uncaught TypeError: {(intermediate value)(intermediate value)} is not iterable
+    console.log(c, d); // 4  5
+
+    // 2、 for of 循环，es6 新增遍历可迭代对象元素的方法
+    // for (const element of iterable) {
+    //     // 执行循环体，element 表示当前迭代的元素值
+    // }
+</script>
+</html>

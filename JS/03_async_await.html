@@ -1,117 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    
-</body>
-<script>
+  </head>
+  <body></body>
+  <!-- <script>
     // 1
     async function async1() {
-  console.log("async1 start");
-  await async2();
-  console.log("async1 end");
-}
-async function async2() {
-  console.log("async2");
-}
-async1();
-console.log('start')
+      console.log("async1 start");
+      await async2();
+      console.log("async1 end");
+    }
+    async function async2() {
+      console.log("async2");
+    }
+    async1();
+    console.log("start");
 
-// 2
-async function async1() {
-  console.log("async1 start");
-  new Promise(resolve => {
-    console.log('promise')
-  })
-  console.log("async1 end");
-}
-async1();
-console.log("start")
+    // 2
+    async function async1() {
+      console.log("async1 start");
+      new Promise((resolve) => {
+        console.log("promise");
+      });
+      console.log("async1 end");
+    }
+    async1();
+    console.log("start");
 
-// 3
-async function async1() {
-  console.log("async1 start");
-  await async2();
-  console.log("async1 end");
-}
-async function async2() {
-  setTimeout(() => {
-    console.log('timer')
-  }, 0)
-  console.log("async2");
-}
-async1();
-console.log("start")
+    // 3
+    async function async1() {
+      console.log("async1 start");
+      await async2();
+      console.log("async1 end");
+    }
+    async function async2() {
+      setTimeout(() => {
+        console.log("timer");
+      }, 0);
+      console.log("async2");
+    }
+    async1();
+    console.log("start");
 
-// 4
-async function async1() {
-  console.log("async1 start");
-  await async2();
-  console.log("async1 end");
-  setTimeout(() => {
-    console.log('timer1')
-  }, 0)
-}
-async function async2() {
-  setTimeout(() => {
-    console.log('timer2')
-  }, 0)
-  console.log("async2");
-}
-async1();
-setTimeout(() => {
-  console.log('timer3')
-}, 0)
-console.log("start")
+    // 4
+    async function async1() {
+      console.log("async1 start");
+      await async2();
+      console.log("async1 end");
+      setTimeout(() => {
+        console.log("timer1");
+      }, 0);
+    }
+    async function async2() {
+      setTimeout(() => {
+        console.log("timer2");
+      }, 0);
+      console.log("async2");
+    }
+    async1();
+    setTimeout(() => {
+      console.log("timer3");
+    }, 0);
+    console.log("start");
 
-// 5
-/** 
- * 在async1中await后面的Promise是没有返回值的，也就是它的状态始终是pending状态，因此相当于一直在await，await，await却始终没有响应,
- * 所以在await之后的内容是不会执行的，也包括async1后面的 .then
-*/
-async function async1 () {
-  console.log('async1 start');
-  await new Promise(resolve => {
-    console.log('promise1')
-  })
-  console.log('async1 success');
-  return 'async1 end'
-}
-console.log('srcipt start')
-async1().then(res => console.log(res))
-console.log('srcipt end')
+    // 5
+    /**
+     * 在async1中await后面的Promise是没有返回值的，也就是它的状态始终是pending状态，因此相当于一直在await，await，await却始终没有响应,
+     * 所以在await之后的内容是不会执行的，也包括async1后面的 .then
+     */
+    async function async1() {
+      console.log("async1 start");
+      await new Promise((resolve) => {
+        console.log("promise1");
+      });
+      console.log("async1 success");
+      return "async1 end";
+    }
+    console.log("srcipt start");
+    async1().then((res) => console.log(res));
+    console.log("srcipt end");
 
-// 6 头条面试
-async function async1() {
-  console.log("async1 start");
-  await async2();
-  console.log("async1 end");
-}
+    // 6 头条面试
+    async function async1() {
+      console.log("async1 start");
+      await async2();
+      console.log("async1 end");
+    }
 
-async function async2() {
-  console.log("async2");
-}
+    async function async2() {
+      console.log("async2");
+    }
 
-console.log("script start");
+    console.log("script start");
 
-setTimeout(function() {
-  console.log("setTimeout");
-}, 0);
+    setTimeout(function () {
+      console.log("setTimeout");
+    }, 0);
 
-async1();
+    async1();
 
-new Promise(function(resolve) {
-  console.log("promise1");
-  resolve();
-}).then(function() {
-  console.log("promise2");
-});
-console.log('script end')
+    new Promise(function (resolve) {
+      console.log("promise1");
+      resolve();
+    }).then(function () {
+      console.log("promise2");
+    });
+    console.log("script end");
+  </script> -->
+  <script>
+    // 控制并发数，用于文件上传等场景，限制同时进行的异步操作数量
+    const asyncPool = async (limit, arr, iteratorFunc) => {
+      const result = [];
+      const executing = [];
 
-</script>
+      for (const item of arr) {
+        const p = Promise.resolve().then(() => iteratorFunc(item, arr));
+        console.log('p', p);
+        result.push(p);
+
+        if (limit <= arr.length) {
+          const e = p.then(() => {
+            const index = executing.indexOf(e);
+            console.log('executing', e, index);
+            return executing.splice(index, 1)
+          });
+          executing.push(e);
+          if (executing.length >= limit) {
+            await Promise.race(executing);
+          }
+        }
+      }
+
+      return Promise.all(result);
+    }
+
+    const uplodad = (url) => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          console.log(`上传成功：${url}`);
+          resolve(url);
+        }, 1000 * 3);
+      });
+    }
+
+    const urls = [
+      'www.baidu.com',
+      'www.google.com',
+      'www.qq.com',
+      'www.taobao.com',
+      'www.jd.com',
+      'www.sina.com',
+      'www.zhihu.com',
+      'www.csdn.com',
+      'www.github.com',
+      'www.imooc.com',
+    ];
+
+    const start = async () => {
+      await asyncPool(3, urls, uplodad);
+      console.log('所有图片上传完成');
+    }
+
+    start();
+  </script>
 </html>

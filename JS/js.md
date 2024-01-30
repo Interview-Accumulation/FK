@@ -8,7 +8,7 @@
 
 
 ### 数据类型
-分类： Undefined、Null、Number、String、Soolean、BigInt、Symbol、Object
+分类： Undefined、Null、Number、String、Boolean、BigInt、Symbol、Object
 * Symbol表示独一无二的值，场用于定义对象的唯一属性名。
 * BigInt可以表示任意大小的整数。
 
@@ -112,6 +112,20 @@ Array.prototype.isPrototypeOf(arr); // true
 * promise、async/await
 
 #### const、let、var的区别
+const、let和var是JavaScript中用于声明变量的关键字，它们之间有一些区别。
+
+var：在ES5及之前的版本中使用的关键字。它声明的变量具有函数作用域或全局作用域，而不是块级作用域。这意味着在函数内部声明的变量在整个函数范围内都是可见的，而在块级作用域（如if语句或for循环）内部声明的变量在块级作用域外是可见的。此外，var声明的变量可以被重复声明，而后面的声明会覆盖前面的声明。
+
+let：在ES6中引入的关键字。它声明的变量具有块级作用域，这意味着在块级作用域内部声明的变量只在该块级作用域内可见。与var不同，let声明的变量不能被重复声明，而是会引发错误。
+
+const：也是在ES6中引入的关键字。它声明的变量也具有块级作用域，与let类似。但是，const声明的变量是常量，一旦被赋值后就不能再被修改。尝试修改const声明的变量会引发错误。
+
+总结：
+
+使用var声明的变量具有函数作用域或全局作用域，可以被重复声明。
+使用let声明的变量具有块级作用域，不可以被重复声明。
+使用const声明的变量也具有块级作用域，且为常量，不可以被修改。
+请注意，使用const声明的对象或数组是可以修改其属性或元素的，因为const只保证变量引用的地址不变，而不保证其内容不变。
 
 #### 箭头函数和普通函数的区别
 [参考](https://juejin.cn/post/7069943937577779214)
@@ -269,7 +283,7 @@ element.addEventListener(type, listener, useCapture)
 ##### 宏任务和微任务
 - 宏任务（macrotask），在ECMAScript中也被称作task
   - 可以将每次执行栈执行的代码当做是一个宏任务(包括每次从事件队列中获取一个事件回调并放到执行栈中执行)， 每一个宏任务会从头到尾执行完毕，不会执行其他
-  - 常见的宏任务: 主代码块、setTimeout、setInterval、setImmediate ()-Node、requestAnimationFrame ()-浏览器
+  - 常见的宏任务: 主代码块、setTimeout、setInterval、setImmediate()-Node、requestAnimationFrame()-浏览器
 
 
 - 微任务（microtask），在ECMAScript中也被称为jobs，是在ES6新引入了Promise标准后产生的概念。
@@ -282,6 +296,7 @@ element.addEventListener(type, listener, useCapture)
     graph LR
     宏任务1 --> 微任务--> GUI渲染--> 宏任务2 -->  ...;
     ```
+
 **宏任务微任务执行流程：**
 ![macro-micro](../00_images/macro-microtask.png)
 

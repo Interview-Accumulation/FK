@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    #div {
+      width: 300px;
+      height: 300px;
+      padding: 10px;
+      border: 1px solid gray;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+    }
+    #drag {
+      width: 200px;
+      height: 50px;
+      padding: 10px;
+      border: 1px solid gray;
+      display: none;
+    }
+
+    #childNode {
+      width: 100px;
+      height: 80px;
+      background-color: #ccc;
+      display: none;
+      cursor: pointer;
+    }
+  </style>
+  <body>
+    <div
+        id="div"
+        ondragover="dragover(event)"
+        ondragenter="dragenter(event)"
+        ondragleave="dragleave()"
+    ></div>
+    <button onclick="openDialog()">点击打开拖拽弹窗</button>
+    <div id="childNode" onclick="remove(event)">
+        视频一
+    </div>
+
+    <div
+      id="drag"
+      draggable="true"
+      ondragstart="dragstart(event)"
+      ondragend="dragend(event)"
+    >
+        <button onclick="closeDialog()">关闭</button>
+        我是拖拽元素，把我拖拽到上面去
+    </div>
+  </body>
+  <script>
+    let count = 0;
+    function openDialog() {
+      document.getElementById("drag").style.display = "block";
+    }
+    
+
+    let targetDom;
+    function dragstart(e) {
+        console.log('dragstart', e);
+        targetDom = null;
+    }
+
+    function dragenter(e) {
+      console.log('dragenter', e);
+      e.preventDefault();
+      targetDom = e.target;
+    }
+
+    function dragover(e) {
+        console.log('dragover', e);
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+    }
+    function dragleave() {
+        // e.preventDefault();
+        targetDom = null;
+    }
+
+    function dragend(e) {
+        console.log('dragend', e);
+      e.preventDefault();
+      if (targetDom && targetDom.childNodes.length < 6) {
+        let childNode = document.getElementById("childNode");
+        let cloneNode = childNode.cloneNode(true);
+        cloneNode.style.display = "block";
+        // 改变内容
+        cloneNode.innerHTML = `视频${++count}`;
+        console.log('cloneNode', cloneNode);
+        targetDom.appendChild(cloneNode);
+      }
+    }
+    function remove(e) {
+        let parent = e.target.parentNode;
+      if (parent) {
+        parent.removeChild(e.target);
+      }
+    }
+    function closeDialog() {
+        document.getElementById("drag").style.display = "none";
+    }
+  </script>
+</html>

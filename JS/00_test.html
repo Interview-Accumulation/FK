@@ -14,7 +14,7 @@
     </iframe>
   </body>
   <script>
-    console.log("hello world", window.wx);
+    // console.log("hello world", window.wx);
     // function myFunction() {
     //   var str = "I am from runoob，welcome to runoob site.";
     //   var n = str.lastIndexOf("runoob", 27);
@@ -245,7 +245,44 @@
 // let reg3 = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/
 // console.log(reg3.test('Aa123'));
 
-let str = "```json\n{\n    \"result\": \"Chinese people never cheat Chinese people\"\n}\n```"
-console.log(JSON.parse(str.replaceAll(/(```)|(json)/g, '')));
+// let str = "```json\n{\n    \"result\": \"Chinese people never cheat Chinese people\"\n}\n```"
+// console.log(JSON.parse(str.replaceAll(/(```)|(json)/g, '')));
+  // function fn() {
+  //   var a = 2;
+  //   console.log(a, 'a');
+  // }
+  // fn();
+  // if (true) {
+  //   var a = 1
+  //   let b = 2
+  // }
+  // console.log(a, 'a');
+  // console.log(b, 'b');
+
+  // const obj = {
+  //   a: 1,
+  //   b: 2,
+  //   c: 3,
+  // };
+  // let arr = {...obj}
+  // console.log(arr);
+  
+  setTimeout(() => {
+    try {
+    throw new Error('err')
+    } catch (err) {
+      console.log(err);
+    }
+  }, 200);
+
+
+try {
+  await Promise.resolve().then(() => {
+    throw new Error('Err')
+  })
+    // throw new Error('Err')
+  } catch (err) {
+    console.log(err);
+  }
   </script>
 </html>
