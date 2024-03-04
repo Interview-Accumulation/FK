@@ -102,7 +102,7 @@ Array.prototype.isPrototypeOf(arr); // true
 * Object.values(obj)获取obj对象中所有属性值
 * Array.prototype.flat(),[扁平化数组](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/flat)
 * 可选链操作符（?.）:允许读取位于连接对象链深处的属性的值，而不必明确验证链中的每个引用是否有效。?. 运算符的功能类似于 . 链式运算符，不同之处在于，在引用为空 (nullish ) (null 或者 undefined) 的情况下不会引起错误，该表达式短路返回值是 undefined。与函数调用一起使用时，如果给定的函数不存在，则返回 undefined。
-* 空值合并运算符（??）:当左侧的操作数为 null 或者 undefined 时，返回其右侧操作数，否则返回左侧操作数。
+* 空值合并运算符（??）:当左侧的操作数为 null 或者 undefined 时，返回其右侧操作数，否则返回左侧操作数。与逻辑或运算符（||）不同，逻辑或运算符会在左侧操作数为假值时返回右侧操作数，而不管右侧操作数是什么。
 * for of循环，可遍历数组、Set、Map、arguments对象、类似数组的对象([TypeArray](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypedArray))、字符串等[可迭代对象](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Iteration_protocols)。[参考文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/for...of)
 * [Set](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set)、[Map](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map)
 * class、extends、super
@@ -283,7 +283,7 @@ element.addEventListener(type, listener, useCapture)
 ##### 宏任务和微任务
 - 宏任务（macrotask），在ECMAScript中也被称作task
   - 可以将每次执行栈执行的代码当做是一个宏任务(包括每次从事件队列中获取一个事件回调并放到执行栈中执行)， 每一个宏任务会从头到尾执行完毕，不会执行其他
-  - 常见的宏任务: 主代码块、setTimeout、setInterval、setImmediate()-Node、requestAnimationFrame()-浏览器
+  - 常见的宏任务: 主代码块、setTimeout、setInterval、setImmediate()-Node、requestAnimationFrame()-浏览器、IO、UI交互事件、postMessage、MessageChannel
 
 
 - 微任务（microtask），在ECMAScript中也被称为jobs，是在ES6新引入了Promise标准后产生的概念。
@@ -472,4 +472,7 @@ WeakMap: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Globa
   - **不可迭代**：由于 WeakMap 的键是弱引用的，垃圾回收机制可以在任何时候删除键值对，因此 WeakMap 不支持迭代操作，也没有相关的迭代器方法（如 keys()、values()、entries() 和 forEach()）。
   - 没有公开的方法和属性：WeakMap 没有提供直接访问和操作键值对的方法和属性。只能通过 set()、get() 和 delete() 方法来操作键值对。
 
+
+### 闭包
+[参考](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Closures)
 

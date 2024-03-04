@@ -274,6 +274,44 @@ let c2: Cart<number> = [1];
   * type可以使用 typeof 获取实例的类型，而 interface 不行
   * 多个同名 interface 可以自动合并，而 type 不行，因为type声明不能重名。
 使用interface描述数据结构，使用type描述类型关系
+```ts
+interface IPerson {
+    name: string
+    age: number
+}
+interface IPerson {
+    address: string
+}
+
+interface IPerson1 extends IPerson {
+  car: string;
+}
+
+const person: IPerson1 = {
+    address: "beijing",
+    name: "jack",
+    age: 18
+}
+```
+
+```ts
+type TPerson = {
+    name: string
+    age: number
+}
+// type TPerson = {
+//     address: string
+// } // 标识符“TPerson”已经声明。ts(2300)
+type TPerson1 = TPerson & {
+    address: string
+}
+
+const person: TPerson1 = {
+    address: "beijing",
+    name: "jack",
+    age: 18
+}
+```
 
 #### TS中 ?. 和 ?? 和 ! 和 !. 和 _ 和 ** 符号的含义
 * ?. 可选链，当左侧的操作数为 null 或 undefined 时，不会报错，而是停止运算，返回 undefined
@@ -290,14 +328,51 @@ let c2: Cart<number> = [1];
 #### TypeScript 中同名的 interface 或者同名的 interface 和 class 可以合并吗？
 同名的interface会自动合并，同名的interface和class会自动聚合。
 
-#### 简述工具类型 Exclude、Omit、Merge、Required、Partial、Pick、Overwrite的作用
-* Exclude<T,U> 从T中剔除可以赋值给U的类型
+#### 简述工具类型 Exclude、Omit、Pick、Required、Partial、Readonly、Overwrite的作用
+* Exclude<T,U> 从T中剔除可以赋值给U的类型,即从T中剔除U，取差集
+* Extract<T,U> 从T中取出可以赋值给U的类型,即从T中取出U，取交集
+
+```ts
+type T0 = Exclude<"a" | "b", "a" | "c">; // "b"
+type T1 = Extract<"a" | "b", "a" | "c">; // "a"
+```
 * Omit<T,K> 从T中剔除K属性
-* Merge<T,U> 将两个类型合并成一个类型
+* Pick<T,K> 从T中取出一系列属性K
 * Required<T> 将T中的所有属性变为必选项
 * Partial<T> 将T中的所有属性变为可选项
-* Pick<T,K> 从T中取出一系列属性K
+* Readonly<T> 将T中的所有属性变为只读
 * Overwrite<T,U> 用U中的属性覆盖T中的属性
+
+#### 一个导出的工具函数，并没有其参数和返回值的类型导出，在使用这个函数时，如何给参数和返回值添加类型
+* 使用 `Parameters` 获取函数的参数类型
+* 使用 `ReturnType` 获取函数的返回值类型
+
+
+```ts
+// utils.ts
+interface IPrams {
+    name: string;
+    age: number;
+    address: string;
+}
+export const fn = (prams: IPrams): Promise<number> => {
+    return Promise.resolve(prams.age);
+}
+
+// index.ts
+import { fn } from './utils';
+type IPrams = Parameters<typeof fn>[0];
+type IReturn = ReturnType<typeof fn>;
+const prams: IPrams = {
+    name: "jack",
+    age: 18,
+    address: "beijing"
+}
+fn(prams).then((res: IReturn) => {
+    console.log(res);
+})
+```
+
 
 #### 数组常见定义方法
 ```ts

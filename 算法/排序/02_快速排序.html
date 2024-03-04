@@ -11,6 +11,14 @@
 </body>
 <script>
 
+    /**
+     * 普通写法，浪费大量存储空间
+     * 快速排序：选择一个基准值，将数组分为两部分，左边的都比基准值小，右边的都比基准值大
+     * 递归调用，直到数组长度小于2
+     * 
+     * 时间复杂度O(nlogn),空间复杂度O(nlogn)
+     */
+
     // function quickSort(arrayNum) {
     //     const arr = arrayNum;
     //     if (arr.length < 2) {
@@ -44,6 +52,52 @@
         return [...quickSort(left), midEl, ...quickSort(right)]
     }
     let arr = [1, 2, 5, 10, 15, 3, 20, 7, 3];
-    console.log(quickSort(arr))
+    // console.log(quickSort(arr))
+
+    /**
+     * 优化：记录一个索引l从数组最左侧开始，记录一个索引r从数组右侧开始
+
+        在l<r的条件下，找到右侧小于target的值array[r]，并将其赋值到array[l]
+
+        在l<r的条件下，找到左侧大于target的值array[l]，并将其赋值到array[r]
+
+        这样让l=r时，左侧的值全部小于target，右侧的值全部小于target，将target放到该位置
+
+        不需要额外存储空间
+     */
+
+    //  function quickSortOptimize(arr, start, end) {
+    //     if (end - start < 1) {
+    //         return;
+    //     }
+    //  }
+
+     function quickSortOptimize(array, start, end) {
+      if (end - start < 1) {
+        return;
+      }
+      const target = array[start];
+      let l = start;
+      let r = end;
+      while (l < r) {
+        while (l < r && array[r] >= target) {
+          r--;
+        }
+        array[l] = array[r];
+        while (l < r && array[l] < target) {
+          l++;
+        }
+        array[r] = array[l];
+        // console.log([...array])
+      }
+    //   console.log(l);
+      array[l] = target;
+      quickSortOptimize(array, start, l - 1); // 递归左侧
+      quickSortOptimize(array, l + 1, end);
+      return array;
+    }
+    let arr2 = [4, 2, 5, 10, 15, 3, 20, 7, 3];
+    console.log(quickSortOptimize(arr2, 0, arr2.length - 1))
+
 </script>
 </html>
