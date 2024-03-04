@@ -770,7 +770,8 @@ const DemoUseContext = ()=>{
 > [源码](https://github.com/facebook/react/blob/6e4f7c788603dac7fccd227a4852c110b072fe16/packages/react-reconciler/src/ReactFiber.js#L78)
 
 #### 为什么需要Fiber
-- Fiber 架构主要是为了解决处理非常庞大的渲染工作时，UI 上能感知到的掉帧卡顿现象，而出现
+- Fiber 架构主要是为了解决处理非常庞大的渲染工作时，UI 上能感知到的掉帧卡顿现象，而出现的一种新的架构。
+- 为什么 react 需要时间分片而 vue 不需要：https://juejin.cn/post/7327990757011570703
 #### 16版本之前
 * 在16以前的版本，React更新DOM都是使用递归的方式进行遍历，每次更新都会从应用根部递归执行，且一旦开始，无法中断，这样层级越来越深，结构复杂度高的项目就会出现明显的卡顿。
 * 16之前的版本架构可简单分为两层：Reconciler（调和层） 和 Renderer（渲染层）。
@@ -828,7 +829,7 @@ window.requestIdleCallback(callback, { timeout })
 
 
 - fiber的数据结构
-```js
+```ts
 function FiberNode(
   tag: WorkTag,
   pendingProps: mixed,

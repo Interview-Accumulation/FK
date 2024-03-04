@@ -171,3 +171,25 @@ el.className += ' active';
 
 ### 内存泄露排查
 [参考](https://juejin.cn/post/7309040097936474175)
+
+### 跨域
+- 原因：浏览器的同源策略（浏览器安全功能，阻止页面加载或执行来自不同源的资源，能有效防止 XSS、CSRF 等攻击）限制了不同源之间的交互。
+- 解决方案：
+  - JSONP
+  - 设置 CORS(跨域资源共享)
+  - 服务器代理
+  - Nginx反向代理
+  - iframe
+
+### 浏览器存储
+- cookie
+- localStorage
+- sessionStorage
+- indexedDB：浏览器本地数据库，可用于存储大量结构化数据。该 API 使用异步操作，因此不会阻塞应用程序。且使用索引实现对数据的高性能检索。
+- cacheStorage：浏览器缓存,用于对请求的资源进行缓存
+
+
+### 什么是 WebAssembly
+[参考](https://developer.mozilla.org/zh-CN/docs/WebAssembly/Concepts)
+> WebAssembly 是一种新型的低级字节码格式，它是一种可移植、体积小、加载快并且兼容 Web 的编译目标。WebAssembly 旨在为 Web 平台上的高性能应用程序提供一个高效的编译目标。WebAssembly 代码可以直接在浏览器中运行，而不需要解释器或虚拟机。WebAssembly 代码可以通过 JavaScript 调用，也可以通过 JavaScript 调用 WebAssembly 代码。
+> 

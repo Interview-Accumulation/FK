@@ -48,5 +48,27 @@
     }
     let arr = [1, 2, 5, 10, 15, 3, 20, 7, 3];
     console.log(bubbleSort(arr))
+
+    /**
+     * 优化：当一次循环没有发生冒泡时，说明排序已经完成，不需要再进排序
+     */
+     const bubbleSortOptimize = (arr = []) => {
+        if (arr.length < 2) {
+            return arr;
+        }
+        for (let i = 0; i < arr.length - 1; i++) {
+            let flag = true; // 优化点
+            for (let j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] > arr[j+1]) {
+                    flag = false
+                    [arr[j], [arr[j+1]]] = [arr[j+1], [arr[j]]]
+                }
+            }
+            if (flag) {
+                break;
+            }
+        }
+        return arr
+    }
 </script>
 </html>
