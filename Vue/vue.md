@@ -113,3 +113,18 @@ setTimeout(() => {
 
 
 ```
+
+### Vue3官方为什么推荐使用 ref 而不是 reactive
+- [参考](https://juejin.cn/post/7270519061208154112)
+
+1. reactive只能监听对象，ref可以监听基本数据类型，也能监听对象
+2. reactive在重新进行对象赋值时，会丢失响应式，ref不会
+```js
+const state = reactive({ count: 0 });
+const count = ref(0);
+state = { count: 1 }; // 这样会丢失响应式
+count.value = 1; // 这样不会丢失响应式
+```
+原因：
+- reactive是基于Proxy实现的，而Proxy只能监听对象，不能监听基本数据类型, reactive返回的对象是原始对象的引用
+- re定义的数据（包括对象），返回的是一个包装过的简单值，而不是原始值的引用

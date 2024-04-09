@@ -1,7 +1,7 @@
 ## Algorithm
 reference1：https://github.com/trekhleb/javascript-algorithms
 reference2：https://www.conardli.top/
-前端为什么要学前端：https://juejin.cn/post/6844903919722692621
+前端为什么要学算法：https://juejin.cn/post/6844903919722692621
 代码随想录：https://programmercarl.com/
 
 ### 概念
