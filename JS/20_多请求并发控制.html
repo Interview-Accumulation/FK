@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <img src="../00_images/queue.gif">
+    <audio controls src="https://music.163.com/song/media/outer/url?id=29807450"></audio>
+    <audio controls src="http://cti-int-voice.oss-cn-beijing.aliyuncs.com/26042024/record/8800010/8800010-20240426154156-15711070831-10034--record-medias_1-1714117316.49.mp3?Expires=1715417770&OSSAccessKeyId=LTAI5tEhJJPFkRH3BrQ1Vc6f&Signature=ebkGLcaRfl%2FG9P7VHQLta2nNTU0%3D&response-content-disposition=attachment%3B%20filename%3D8800010-20240426154156-15711070831-10034--record-medias_1-1714117316.49.mp3"></audio>
+    <a href="http://cti-int-voice.oss-cn-beijing.aliyuncs.com/26042024/record/8800010/8800010-20240426154156-15711070831-10034--record-medias_1-1714117316.49.mp3?Expires=1715417770&OSSAccessKeyId=LTAI5tEhJJPFkRH3BrQ1Vc6f&Signature=ebkGLcaRfl%2FG9P7VHQLta2nNTU0%3D&response-content-disposition=attachment%3B%20filename%3D8800010-20240426154156-15711070831-10034--record-medias_1-1714117316.49.mp3">下载</a>
+    <a href="https://music.163.com/song/media/outer/url?id=29807450">下载</a>
+</body>
+<script>
+/**
+ * 多请求（几十上百）控制并发
+ * 用途：图片、文件批量下载
+ * 若直接循环去请求，服务器带宽不够的话可能会直接宕机
+ * 浏览器发起的请求最大并发数一般是 6 ～ 8 个，这是因为浏览器会限制同一域名下的并发请求数量，以避免对服务器造成过大的压力
+ * 
+ * 解决方案：使用 promise 模拟任务队列，实现请求池的效果
+ * 队列： FIFO
+*/
+
+const reqsArr = new Array(20).fill('1').map((item, index) => {
+    return () => new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(index)
+        }, 1000 * (20 - index));
+    })
+})
+
+const handleQueue = (reqs = [], reqNum = 6) => {
+    let current = 0
+    const dequeue = () => {
+        while (current < reqNum && reqs.length) {
+            current++
+            const curReq = reqs.shift()
+            curReq().then((result) => {
+                console.log('result', result)
+            }).catch((err) => {
+                
+            }).finally(() => {
+                current--
+                console.log('current', current)
+                dequeue()
+            })
+        }
+    }
+    dequeue();
+}
+
+// handleQueue(reqsArr)
+
+</script>
+</html>

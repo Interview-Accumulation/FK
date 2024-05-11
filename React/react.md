@@ -3,6 +3,7 @@
 - https://juejin.cn/post/6941546135827775525
 - https://juejin.cn/post/6940942549305524238
 - https://juejin.cn/post/7258071726227849277
+- https://juejin.cn/post/7117051812540055588
 
 
 ### React设计思想
@@ -672,9 +673,15 @@ useEffect(()=>{
 
 参考：https://juejin.cn/post/7264208575973605431
 #### useLayoutEffect
-- useLayoutEffect和useEffect不同之处，是采用了同步执行
+- useLayoutEffect和useEffect不同之处，是采用了**同步执行**
 - useLayoutEffect 是在 **DOM 更新之后，浏览器绘制之前**，这样可以方便修改 DOM，获取 DOM 信息，这样浏览器只会绘制一次，如果修改 DOM 布局放在 useEffect ，那 useEffect 执行是在浏览器绘制视图之后，接下来又改 DOM ，就可能会导致浏览器再次回流和重绘。而且由于两次绘制，视图上可能会造成闪现突兀的效果。
 - useLayoutEffect callback 中代码执行会阻塞浏览器绘制。
+
+#### useEffect和useLayoutEffect执行时机
+- 在 fiber 更新阶段，即 render 和 commit 中的 commit 阶段，分为 3 个小阶段：before mutation、mutation 和 layout。mutation 就是遍历render 阶段产生的 effectList 来更新 dom。
+- 它之前就是 before mutation，该阶段异步调用 useEffect的回调函数。
+- 它之后就是 layout，该阶段已经可以拿到布局信息，同步调用 useLayoutEffect的回调函数，且该阶段可以拿到新的 dom 节点，并会更新 ref
+- 回调函数具体执行顺序，由于异步和同步的区别，useLayoutEffect回调先于useEffect回调执行。
 
 
 
@@ -829,6 +836,10 @@ window.requestIdleCallback(callback, { timeout })
 
 
 - fiber的数据结构
+  - 和之前 react 的 vdom 数据结构相比，都是树形结构，但是 fiber 节点多了两个属性：sibling 和 return，这两个属性是用来连接兄弟节点和父节点的。用于 reconcile 阶段被打断后，下次继续执行时，能够找到之前执行过的节点以及其兄弟节点和父节点
+  - react 把渲染流程分为了两部分： render 和 commit。
+    - render阶段会找到 vdom 中变化的部分，创建dom，打上增删改的标记（effectTag），该阶段也被叫做 reconcile。reconcile 可以被打断，由 schedule 调度。
+    - 在 render 阶段全部计算完成后，commit 阶段会将 render 阶段打上标记的 dom 进行更新。在更新时，并不会遍历一次 fiber 来查找有 effectTag 的节点从而更新 dom，而是会在 render 阶段，将 effectTag 的节点收集到 effectList 的队列中，然后在 commit 阶段遍历该队列，更新 dom。
 ```ts
 function FiberNode(
   tag: WorkTag,

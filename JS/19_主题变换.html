@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主题-跟随系统</title>
+</head>
+<body class="main">
+    <select name="theme" id="theme-select">
+        <option value="">选择主题</option>
+        <option value="light">浅色</option>
+        <option value="dark">深色</option>
+        <option value="os">跟随主题</option>
+    </select>
+</body>
+<script>
+    /** Window.matchMedia(params), params可选为：https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries
+     * mdn 文档:https://developer.mozilla.org/zh-CN/docs/Web/API/Window/matchMedia
+     * react:https://blog.csdn.net/chuan0106/article/details/130868730
+     * vue： https://juejin.cn/post/7177668180943306789
+     * 实现主题色切换， 使用matchMedia实现跟随系统主题色的功能
+     */
+    function switchTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }
+    // 匹配暗色
+    const match = matchMedia('(prefers-color-scheme: dark)')
+    const followOS = () => {
+        console.log(match.matches) // 系统不是暗色返回 false，是暗色返回 true
+        if (match.matches) {
+            switchTheme('dark')
+        } else {
+            switchTheme('light')
+        }
+    }
+    window.onload = function() {
+        var savedTheme = localStorage.getItem('theme') || 'light';
+        switchTheme(savedTheme);
+    }
+     const selectElement = document.getElementById("theme-select");
+     selectElement.addEventListener("change", (event) => {
+        console.log(event, event.target.value)
+        if (event.target.value === 'os') {
+            followOS()
+            match.addEventListener('change', followOS)
+        } else {
+            switchTheme(event.target.value)
+        }
+    });
+    
+
+</script>
+<style>
+select {
+  font-size: 0.9rem;
+  padding: 2px 5px;
+}
+
+:root {
+  --primary-color: #ffffff;
+  --secondary-color: #000000;
+  --bg1: #c7ffdd;
+  --bg2: #fbd988;
+  --text-color: #333;
+}
+
+body[data-theme="dark"] {
+  --primary-color: #000000;
+  --secondary-color: #ffffff;
+  --bg1: #102128;
+  --bg2: #2d5567;
+  --text-color: #fff;
+}
+
+.main {
+    height: 100vh;
+    background: linear-gradient(to bottom, var(--bg1), var(--bg2));
+    color: var(--text-color)
+}
+
+</style>
+</html>
