@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    #test {
+      width: 100px;
+      height: 100px;
+      background-color: aqua;
+    }
+  </style>
+  <body>
+    <div id="test"></div>
+  </body>
+  <script>
+    const element = document.getElementById("test");
+    let start, previousTimeStamp;
+    let done = false;
+    const time = 2
+
+    function step(timestamp) {
+      if (start === undefined) {
+        start = timestamp;
+      }
+      const elapsed = timestamp - start;
+
+      if (previousTimeStamp !== timestamp) {
+        // 这里使用 Math.min() 确保元素在恰好位于 200px 时停止运动
+        const count = Math.min(0.1 * elapsed, time * 100);
+        element.style.transform = `translateX(${count}px)`;
+        if (count === time * 100) done = true;
+      }
+
+      if (elapsed < time * 1000 ) {
+        // 2 秒之后停止动画
+        previousTimeStamp = timestamp;
+        if (!done) {
+          window.requestAnimationFrame(step);
+        }
+      }
+    }
+
+    window.requestAnimationFrame(step);
+  </script>
+</html>

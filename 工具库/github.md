@@ -7,6 +7,7 @@
 
 
 ### vue相关
+- vue carousel: https://github.com/SSENSE/vue-carousel
 
 
 ### js原生
@@ -18,4 +19,7 @@
 
 ### css相关
 - taildwindcss - css工具库：https://github.com/tailwindlabs/tailwindcss
+  
+### 动画
+- GSAP: https://github.com/greensock/GSAP
 - 
