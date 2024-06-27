@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  /**
+   * 题目：给定一个包含 n 个整数的数组nums，判断 nums 中是否存在四个元素a，b，c，d ，使得 a + b + c + d = 0（target） ？
+   *      找出所有满足条件且不重复的四元组。
+   *      注意：答案中不可以包含重复的四元组。
+   * 
+   * 如给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
+
+      满足要求的四元组集合为：
+      [
+        [-1,  0, 0, 1],
+        [-2, -1, 1, 2],
+        [-2,  0, 0, 2]
+      ]
+   */
+function fourSum(arr, target = 0) {
+  if (arr.length < 4) {
+    return []
+  }
+  arr.sort((a, b) => a - b)
+  console.log(arr)
+  const res = []
+  for (let i = 0; i < arr.length - 3; i++) {
+    if (i && arr[i] === arr[i-1]) {
+      continue
+    }
+    if (arr[i] + arr[i+1] + arr[i+2] + arr[i+3] > target) {
+      break
+    }
+    for (let j = i+1; j < arr.length; j++){
+      if (j > i+1 && arr[j] === arr[j-1]) {
+        continue
+      }
+      let left = j+1, right = arr.length -1
+      while (left < right) {
+        let sum = arr[i] + arr[j] + arr[left] + arr[right]
+        if (sum > target) {
+          right--
+        }else if (sum < target) {
+          left++
+        } else {
+          console.log(i, j, left, right)
+          res.push([arr[i], arr[j], arr[left++], arr[right--]])
+          while (arr[left] === arr[left - 1]) {
+            left++
+          }
+          while (arr[right] === arr[right+1]) {
+            right--
+          }
+        }
+      }
+     
+    }
+  }
+  return res;
+}
+
+console.log(fourSum([1, 0, -1, 0, -2, 2]))
+</script>
+</html>
