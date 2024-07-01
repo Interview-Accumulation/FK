@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  /**
+   * 题目：扑克牌中随机抽5张牌，判断是不是一个顺子，即这5张牌是不是连续的。
+          2-10为数字本身，A为1，J为11...大小王可以看成任何数字，可以把它当作0处理。
+
+    思路:   1.数组排序
+            2.遍历数组
+            3.若为0，记录0的个数加1
+            4.若不为0，记录和下一个元素的间隔
+            5.最后比较0的个数和间隔数，间隔数>0的个数则不能构成顺子
+            6.注意中间如果有两个元素相等则不能构成顺子
+  */
+
+ function isContinuous(arr) {
+  if (Array.isArray(arr) && arr.length > 0) {
+    arr.sort()
+    let kingNum = 0, spaceNum = 0
+    for (let i = 0; i < arr.length - 1; i++) {
+      if (arr[i] === 0) {
+        kingNum++
+      } else {
+        let space = arr[i+1] - arr[i]
+        if (space === 0) {
+          return false
+        } else {
+          spaceNum += sapce - 1
+        }
+      }
+    }
+    return spaceNum - kingNum <= 0
+  }
+  return false
+ }
+</script>
+</html>

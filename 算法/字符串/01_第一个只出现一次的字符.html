@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  /**
+   * 题目:在一个字符串(0<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,
+   *      并返回它的位置, 如果没有则返回-1（需要区分大小写）。
+  */
+
+  /*
+  解法1：用一个map存储每个字符出现的字数
+
+        第一次循环存储次数，第二次循环找到第一个出现一次的字符。
+
+        时间复杂度O(n)、空间复杂度O(n)
+  */
+
+ function firstNoRepeatChart(str) {
+  if (!str) {
+    return -1
+  }
+  let map = {}
+  for (let i = 0; i < str.length; i++) {
+    if (map[str[i]]) {
+      map[str[i]] +=1
+    } else {
+      map[str[i]] = 1
+    }
+  }
+  for (let i = 0; i < str.length; i++) {
+    if (map[str[i]] === 1) {
+      return i
+    }
+  }
+  return -1
+ }
+
+ console.log(firstNoRepeatChart('123456135562'))
+
+ /*
+  解法2：使用js的array和string提供的indexOf和lastIndexOf方法
+
+        遍历字符串，比较每个字符第一次和最后一次出现的位置是否相同。
+
+        indexOf的时间复杂度为O(n)，所以整体的时间复杂度为O(n2)，空间复杂度为0。
+
+        String.prototype.indexOf():https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/indexOf
+        Array.prototype.indexOf(): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
+
+ */
+
+function firstNoRepeatChart_2(str) {
+  for (let i = 0; i < str.length; i++) {
+    const el = str[i];
+    if (str.indexOf(el) === str.lastIndexOf(el)) {
+      return i
+    }
+  }
+  return -1
+}
+
+console.log(firstNoRepeatChart_2('123456135562'))
+</script>
+</html>
