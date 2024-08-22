@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  /*
+    防抖:可以使用在一些点击请求的事件上，避免因为用户的多次点击向后端发送多次请求
+  */
+  function debounce(fn, delay) {
+    let timer = null
+    return function() {
+      let __this = this, args = arguments
+      if (timer) {
+        clearTimeout(timer)
+        timer = null
+      }
+      timer = setTimeout(() => {
+        fn.apply(__this, args)
+      }, delay);
+    }
+  }
+
+  /**
+   * 节流:节流可以使用在 scroll 函数的事件监听上，通过事件节流来降低事件调用的频率
+  */
+ function throttle(fn, delay) {
+  let preTime = Date.now()
+  return function () {
+      let _this = this, args = arguments, curTime = Date.now()
+      if (curTime - preTime >= delay) {
+        preTime = Date.now()
+        fn.apply(_this, args)
+      }    
+  }
+ }
+</script>
+</html>

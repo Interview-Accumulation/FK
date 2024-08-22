@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  Function.prototype.myCall = function (thisArgs, ...args) {
+    if (typeof this !== 'function') {
+      throw TypeError('Uncaught type error')
+    }
+    thisArgs = thisArgs ? Object(thisArgs) : window;
+    const fn = Symbol()
+    thisArgs[fn] = this
+    const res = thisArgs.fn(...args)
+    delete thisArgs[fn]
+    return res
+  }
+
+  Function.prototype.myApply = function (thisArgs, args) {
+    if (typeof this !== 'function') {
+      throw TypeError('Uncaught type error')
+    }
+    thisArgs = thisArgs ? Object(thisArgs) : window;
+    const fn = Symbol()
+    thisArgs[fn] = this
+    let res;
+    if (Array.isArray(args)) {
+      res = thisArgs[fn](...args)
+    } else {
+      res = thisArgs[fn]()
+    }
+    delete thisArgs[fn]
+    return res
+  }
+
+  Function.prototype.myBind = function(thisArgs, ...args) {
+    if (typeof this !== 'function') {
+      throw TypeError('Uncaught type error')
+    }
+    thisArgs = thisArgs ? Object(thisArgs) : window;
+    let fn = this
+    return function boundFn(...restArgs) {
+      return fn.apply(this instanceof boundFn ? this : context, restArgs.concat(...args))
+    }
+  }
+
+
+</script>
+</html>

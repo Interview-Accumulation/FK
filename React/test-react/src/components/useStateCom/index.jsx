@@ -37,6 +37,12 @@ import {flushSync} from 'react-dom'
         
         setName(name + '~')
         setTimeout(() => {
+          // flushSync(() => {
+          //   setName(name => name + '!')
+          //   setName(name => name + '!')
+          //   setName(name => name + '!')
+          //   console.log(name);
+          // })
             setName(name + '!')
             setName(name + '!')
             setName(name + '!')
@@ -46,9 +52,13 @@ import {flushSync} from 'react-dom'
       const handleAge = () => {
         setTimeout(() => {
             // 18版本对异步事件、原生事件中的setState进行了批处理，会进行合并，所以只会触发一次render
-            setAge(pre => pre + 1);
-            setAge(pre => pre + 1);
-            setAge(pre => pre + 1);
+            // setAge(pre => pre + 1);
+            // setAge(pre => pre + 1);
+            // setAge(pre => pre + 1);
+            
+            setAge(age + 1);
+            setAge(age + 1);
+            setAge(age + 1);
         }, 0);
       }
       const handleAge2 = () => {
@@ -57,16 +67,24 @@ import {flushSync} from 'react-dom'
             // 可使用flushSync来退出批量更新，但其内部仍为批量更新
             // 以下代码age+4，render3次
             flushSync(() => {
-                setAge(pre => pre + 1);
-                setAge(pre => pre + 1);
+                // setAge(pre => pre + 1);
+                // setAge(pre => pre + 1);
+                setAge(age + 1);
+            })
+            flushSync(() => {
+                // setAge(pre => pre + 1);
+                setAge(age + 1);
             })
             flushSync(() => {
                 setAge(pre => pre + 1);
-            })
-            flushSync(() => {
-                setAge(pre => pre + 1);
+                setAge(age + 1);
             })
         }, 0);
+      }
+      const handleAge3 = () => {
+        setAge(age + 1);
+        setAge(age + 1);
+        setAge(age + 1);
       }
     useEffect(() => {
         countRef.current = count
@@ -93,6 +111,7 @@ import {flushSync} from 'react-dom'
           <Button onClick={handleName3}>{name}</Button>
           <Button onClick={handleAge}>{age}</Button>
           <Button onClick={handleAge2}>{age}</Button>
+          <Button onClick={handleAge3}>{age}</Button>
     </div>
   )
 }

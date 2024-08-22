@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  function curry(fn, ...args) {
+    let length = fn.length
+    args = args || []
+    return function() {
+      let subArgs = [...args]
+      for (let i = 0; i < arguments.length; i++) {
+        subArgs.push(arguments[i])
+      }
+      if (subArgs.length >= length) {
+        return fn.apply(this, subArgs)
+      } else {
+        return curry.bind(this, fn, ...subArgs)
+      }
+    }
+  }
+
+  function add(a, b, c) {
+    return a + b + c
+  }
+  function mult(a, b, c, d) {
+   return a*b*c*d 
+  }
+  console.log(add(1,2,3))
+  console.log(curry(add)(1)(2)(3))
+
+  console.log(mult(1,2,3,4))
+  console.log(curry(mult,1)(2)(3)(4))
+
+  // es6实现
+  function curry_6(fn, ...args) {
+    return fn.length <= args.length ? fn(...args) : curry_6.bind(null, fn, ...args)
+  }
+  console.log(curry_6(mult,1)(2)(3)(4))
+</script>
+</html>

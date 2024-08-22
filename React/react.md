@@ -4,6 +4,7 @@
 - https://juejin.cn/post/6940942549305524238
 - https://juejin.cn/post/7258071726227849277
 - https://juejin.cn/post/7117051812540055588
+- https://blog.slashspaces.com/
 
 
 ### React设计思想
@@ -377,7 +378,7 @@ handleClick = () => {
 设计动机（作用）：
 - 在底层磨平不同浏览器的差异，React实现了统一的事件机制，我们不再需要处理浏览器事件机制方面的兼容问题，在上层面向开发者暴露稳定、统一的、与原生事件相同的事件接口
 - React把握了事件机制的主动权，实现了对所有事件的中心化管控
-- React引入事件池避免垃圾回收，在事件池中获取或释放事件对象，避免频繁的创建和销毁
+- React引入事件池避免垃圾回收，在事件池中获取或释放事件对象，避免频繁的创建和销毁。([事件池问题](#react16))
 
 **React事件机制和原生DOM事件流有什么区别:**
 - 合成事件不是原生DOM事件，但它包含了原生DOM事件的引用，可以通过e.nativeEvent访问
@@ -547,7 +548,7 @@ export default App;
 
 - react18，将所有事件都进行批处理，即多次setState会被合并为1次执行，提高了性能，在数据层，将多个状态更新合并成一次处理（在视图层，将多次渲染合并成一次渲染）
 
-3. flushSync
+3. flushSync，[官方文档](https://zh-hans.react.dev/reference/react-dom/flushSync)
 
 !!! note 批处理是一个破坏性改动，如果你想退出批量更新，你可以使用 flushSync
     注意: flushSync 函数内部的多个 setState 仍然为批量更新，这样可以精准控制哪些不需要的批量更新。
@@ -780,7 +781,7 @@ const DemoUseContext = ()=>{
 - Fiber 架构主要是为了解决处理非常庞大的渲染工作时，UI 上能感知到的掉帧卡顿现象，而出现的一种新的架构。
 - 为什么 react 需要时间分片而 vue 不需要：https://juejin.cn/post/7327990757011570703
 #### 16版本之前
-* 在16以前的版本，React更新DOM都是使用递归的方式进行遍历，每次更新都会从应用根部递归执行，且一旦开始，无法中断，这样层级越来越深，结构复杂度高的项目就会出现明显的卡顿。
+* 在16以前的版本，React更新DOM都是使用**递归**的方式进行遍历，每次更新都会从应用根部递归执行，且一旦开始，**无法中断**，这样层级越来越深，结构复杂度高的项目就会出现明显的卡顿。
 * 16之前的版本架构可简单分为两层：Reconciler（调和层） 和 Renderer（渲染层）。
   * 当有更新发生时，reconciler会进行以下工作：
     * 调用组件render方法，将返回的JSX转换为虚拟DOM对象
@@ -1055,3 +1056,6 @@ const handleName3 = () => {
 
 ### 状态管理
 [参考](https://mp.weixin.qq.com/s/ViUuXfVYZTPciuw2ICxP4Q)
+
+### 插槽 createPortal
+[官方文档](https://zh-hans.react.dev/reference/react-dom/createPortal)

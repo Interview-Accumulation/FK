@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  /**
+   * 请实现一个函数，将一个字符串中的每个空格替换成“%20”。例如，当字符串为We Are Happy。
+   * 则经过替换之后的字符串为We%20Are%20Happy。
+  */
+
+ // 1.分割后连接
+ function replaceSpace_1(str) {
+  return str.split(' ').join('%20')
+ }
+ // 2. 使用正则
+ function replaceSpace_2(str) {
+  return str.replace(/\s/g, '%20')
+ }
+ // 3.若允许出现多个连续空格，将多个连续空格用一个%20替换
+ function replaceSpace_3(str) {
+  return str.replace(/\s+/g, '%20')
+ }
+</script>
+</html>

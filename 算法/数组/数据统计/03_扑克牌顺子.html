@@ -23,7 +23,7 @@
 
  function isContinuous(arr) {
   if (Array.isArray(arr) && arr.length > 0) {
-    arr.sort()
+    arr.sort((a,b) => a - b)
     let kingNum = 0, spaceNum = 0
     for (let i = 0; i < arr.length - 1; i++) {
       if (arr[i] === 0) {

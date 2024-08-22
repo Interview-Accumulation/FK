@@ -1,5 +1,6 @@
 # 浏览器
 [参考1](https://juejin.cn/post/6844904021308735502)
+[参考2](https://juejin.cn/post/6916157109906341902/)
 
 
 ### 垃圾回收
@@ -109,6 +110,7 @@ el.className += ' active';
 #### 简述渲染进程Renderer
 > 页面的渲染，JS的执行，事件的循环，都在渲染进程内执行，需要重点关注。
 > 渲染进程是多线程的.
+![浏览器渲染进程的线程](../00_images//browser/browser-render-process.png)
 
 ##### GUI渲染线程
 - 负责渲染浏览器界面，解析HTML，CSS，构建DOM树和RenderObject树，布局和绘制等
