@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { build, defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -11,7 +11,7 @@ export default defineConfig({
     // 同步tsconfig.json的path设置alias
     tsconfigPaths(),
     visualizer({
-      open: false
+      open: true
     })
   ],
   server: {
@@ -24,5 +24,27 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
+  },
+  build: {
+    target: 'esnext',
+    minify: 'terser',
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            // 让每个插件都打包成独立的文件
+            return id.toString().split('node_modules/')[1].split('/')[0].toString();
+          }
+          return null;
+        },
+      },
+    },
+    terserOptions: {
+      compress: {
+        keep_infinity: true,
+        drop_console: true,
+        drop_debugger: true
+      }
+    },
   }
 })

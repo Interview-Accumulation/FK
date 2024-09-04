@@ -28,11 +28,10 @@
     "strict": true, // 启用所有严格类型检查选项
     "strictNullChecks": true, // 对空值进行严格检查
     "noImplicitAny": true, // 禁止隐式any类型
-    "noUnusedLocals": true, // 消除未使用变量产生的警告
-    "noUnusedParameters": true, // 消除未使用参数产生的警告
+    "noUnusedLocals": false, // 消除未使用变量产生的警告
+    "noUnusedParameters": false, // 消除未使用参数产生的警告
     "noFallthroughCasesInSwitch": true, // 避免 switch 语句掉入陷阱
     "useUnknownInCatchVariables": false, // 为 true 时，在 catch 块中声明的变量类型会被视为 unknown 而非默认的 any。
-
     "baseUrl": ".",
     /* alias */
     "paths": {

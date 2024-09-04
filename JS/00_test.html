@@ -267,22 +267,30 @@
   // let arr = {...obj}
   // console.log(arr);
   
-  setTimeout(() => {
-    try {
-    throw new Error('err')
-    } catch (err) {
-      console.log(err);
-    }
-  }, 200);
+//   setTimeout(() => {
+//     try {
+//     throw new Error('err')
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   }, 200);
 
 
-try {
-  await Promise.resolve().then(() => {
-    throw new Error('Err')
-  })
-    // throw new Error('Err')
-  } catch (err) {
-    console.log(err);
-  }
+// try {
+//   await Promise.resolve().then(() => {
+//     throw new Error('Err')
+//   })
+//     // throw new Error('Err')
+//   } catch (err) {
+//     console.log(err);
+//   }
+
+ window.addEventListener('storage', function (e) {
+   console.log('storageChange', e)
+ })
+ setTimeout(() => {
+  console.log('setTimeout')
+  localStorage.setItem('123', 12331321312312312312323)
+ }, 3000)
   </script>
 </html>

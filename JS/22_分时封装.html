@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button class="btn">click</button>
+</body>
+<script>
+    /*
+        执行一个长时间任务，比如一个循环或者一个递归，若涉及到dom修改，会阻塞渲染
+    */
+   const tasks = Array.from({length: 300000},(_,i) => () => {
+    const div = document.createElement('div')
+    div.textContent = i
+    document.body.appendChild(div)
+   })
+   const btn = document.querySelector('.btn')
+    btn.addEventListener('click', () => {
+        // idlePerformTasks(tasks)
+        const schedule = (cb) => {
+            setTimeout(() => {
+                const now = performance.now()
+                cb(() => performance.now() - now < 16)
+            }, 1000)
+        }
+        performTasks(tasks, schedule)
+    })
+
+
+    function performTasks(tasks, schedule) {
+        if (tasks.length === 0) {
+            return
+        }
+        let i = 0
+        function _run() {
+            schedule((goOn) => {
+                while(i < tasks.length && goOn()) {
+                    tasks[i++]()
+                }
+                _run()
+            })
+            // requestIdleCallback((idle) => {
+            //     while(i < tasks.length && idle.timeRemaining() > 1) {
+            //         tasks[i++]()
+            //     }
+            //     _run()
+            // })
+        }
+        _run()
+    }
+
+    function idlePerformTasks(task) {
+        if (tasks.length === 0) {
+            return
+        }
+        let i = 0
+        function _run() {
+            requestIdleCallback((idle) => {
+                while(i < tasks.length && idle.timeRemaining() > 1) {
+                    tasks[i++]()
+                }
+                _run()
+            })
+        }
+        _run()
+    }
+</script>
+</html>

@@ -9,6 +9,63 @@
   
 </body>
 <script>
+  const arr = [1, 2, 3, {name: 'zhangsan'}]
+  const obj = {name: 'zhangsan', age: 2, chiledren: {name: 'zhangsan'}}
+  /* 浅拷贝方式只能复制一层对象或数组的属性，如果原始对象或数组中包含引用类型的属性，
+      则复制的结果仍然是引用，修改其中一个对象或数组会影响到其他对象或数组
+  */
+ // 数组
+  const arr1 = arr.slice()
+  const arr2 = arr.concat()
+  const arr3 = [...arr]
+  const arr4 = Array.from(arr)
+  arr.push(4)
+  arr4[3].name = 'lisi'
+  // console.log(arr1, arr2, arr3, arr4, arr)
+
+  // 对象
+  const obj1 = Object.assign({}, obj)
+  const obj2 = {...obj}
+  obj1.age = 3
+  obj2.age = 4
+  obj2.chiledren.name = 'lisi'
+  console.log(obj, obj1, obj2)
+
+
+
+  /* 深拷贝: 深拷贝是指将一个对象从内存中完整地拷贝一份出来，从堆内存中开辟一个新的区域存放新对象，
+      且修改新对象不会影响原对象
+  */
+  /* 1. JSON.parse(JSON.stringify(obj)) 该方法只能序列化对象中的可枚举的属性，
+  问题： 1、 不能识别 BigInt：BigInt 是 JavaScript 中的一种数据类型，表示任意精度的整数。但是在使用 JSON.stringify() 时，BigInt 类型的值会被转换为字符串，导致丢失精度。在进行拷贝时，被转换为字符串的 BigInt 值会变成普通的字符串类型。
+        2、 不能拷贝函数、Symbol、undefined 类型的值：JSON.stringify() 会忽略函数、Symbol 和 undefined 类型的属性值，因此在进行拷贝时这些值会被丢失。
+        3、 不能处理循环引用：如果原始对象中存在循环引用（即某个属性的值引用了对象自身），则在进行拷贝时会导致无限递归，最终抛出异常。
+  */
+  const obj3 = JSON.parse(JSON.stringify(obj))
+  obj3.chiledren.name = 'wangwu'
+  console.log(obj, obj3)
+
+  /* 2. structuredClone ：https://developer.mozilla.org/en-US/docs/Web/API/structuredClone
+        使用结构化克隆算法将给定的值进行深拷贝。这个算法会递归地遍历输入对象。它会对对象进行递归处理，对于对象的每个属性，如果属性的值是一个对象，则会递归处理，直到所有属性都被处理完毕。
+    缺点：1、在同一个页面中执行 structuredClone() 操作，会对内存使用造成较大影响，因为它会复制整个对象图，包括对象的原型链。
+          2、该方法只能在浏览器（目前只有谷歌浏览器）环境中使用，无法在 Node.js 等非浏览器环境下使用，因为它是浏览器环墨境中的 API。，只能在web worker中使用
+  */
+
+ /* 3. 手写实现深拷贝
+ */
+function deepClone(obj) {
+  if (obj === null) return null
+  if (typeof obj !== 'object') return obj
+  if (obj instanceof Date) return new Date(obj)
+  if (obj instanceof RegExp) return new RegExp(obj)
+  const newObj = new obj.constructor
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      newObj[key] = deepClone(obj[key])
+    }
+  }
+  return newObj
   
+}
 </script>
 </html>

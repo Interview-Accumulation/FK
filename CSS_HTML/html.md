@@ -38,7 +38,7 @@
 * script 中 defer 和 async 的区别
   * defer 和 async 在网络读取（下载）这块儿是一样的，都是异步的（相较于 HTML 解析）
   * defer：脚本会在 HTML 解析完成后执行，如果有多个脚本，会按照**加载顺序**执行。
-  * async：脚本会在下载完成后立即执行，如果有多个脚本，会按照**下载完成的顺**序执行。
+  * async：脚本会在下载完成后立即执行，如果有多个脚本，会按照**下载完成的顺序**执行。
 
 ![script执行](../00_images/defer_async.png)
 ### 从浏览器地址栏输入url到请求返回发生了什么
@@ -82,7 +82,7 @@
 #### 页面生命周期：DOMContentLoaded，load，beforeunload，unload
 HTML 页面的生命周期包含三个重要事件：
 
-DOMContentLoaded —— 浏览器已完全加载 HTML，并构建了 DOM 树，但像 <img> 和样式表之类的外部资源可能尚未加载完成。
+DOMContentLoaded —— 浏览器已完全加载 HTML，并构建了 DOM 树，但像 `<img>` 和样式表之类的外部资源可能尚未加载完成。
 load —— 浏览器不仅加载完成了 HTML，还加载完成了所有外部资源：图片，样式等。
 beforeunload/unload —— 当用户正在离开页面时。
 每个事件都是有用的：

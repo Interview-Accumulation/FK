@@ -61,6 +61,8 @@ module.exports = {
     'no-param-reassign': 'off',
     'space-before-function-paren': 'off',
     'class-methods-use-this': 'off',
+    'no-unused-local-variables': 'off',
+    'no-unused-parameter': 'off',
 
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/interactive-supports-focus': 'off',

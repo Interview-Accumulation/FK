@@ -9,12 +9,170 @@
   
 </body>
 <script>
+  // 微任务api：https://developer.mozilla.org/zh-CN/docs/Web/API/queueMicrotask
   const PENDING = 'pending'
   const FULFILLED = 'fulfilled'
   const REJECTED = 'rejected'
 
-  function MYPromise(executor) {
-    
+ class MyPromise {
+  constructor(excutor) {
+    this.value = undefined
+    this.reason = undefined
+    this.status = PENDING
+    const onResolvedCallbacks = []
+    const onRejectedCallbacks = []
+
+    const resolve = (value) => {
+      if (this.status === PENDING) {
+        this.value = value
+        this.status = FULFILLED
+        this.onResolvedCallbacks.forEach(fn => fn());
+      }
+    }
+
+    const reject = (reason) => {
+      if (status === PENDING) {
+        this.reason = reason
+        this.status = REJECTED
+        this.onRejectedCallbacks.forEach(fn => fn())
+      }
+    }
+    try {
+      excutor(resolve, reject)
+    } catch (error) {
+      reject(error)
+    }
   }
+
+  then(onFulfilled, onRejected) {
+    onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v
+    onRejected = typeof onRejected === "function" ? onRejected : err => {throw err}
+    return new MyPromise((resolve, reject) => {
+      const fulfilledCallback = () => {
+        try {
+          const res = onFulfilled(this.value)
+          resolve(res)
+        } catch (error) {
+          reject(error)
+        }
+      }
+      const rejectedCallback = () => {
+        try {
+          const res = onRejected(this.reason)
+          reject(res)
+        } catch (error) {
+          reject(error)
+        }
+      }
+
+      if (this.status === FULFILLED) {
+        queueMicrotask(fulfilledCallback);
+      } else if (this.status === REJECTED) {
+        queueMicrotask(rejectedCallback);
+      } else if (this.status === PENDING) {
+        this.onResolvedCallbacks.push(fulfilledCallback)
+        this.onRejectedCallbacks.push(rejectedCallback)
+      }
+    })
+  }
+
+  static all(promises) {
+    if (!Array.isArray(promises)) {
+      throw new TypeError('params must be an array')
+    }
+    return new MyPromise((resolve, reject) => {
+      const result = []
+      let count = 0
+      for (let i = 0; i < promises.length; i++) {
+        promises[i].then(res => {
+          result[i] = res
+          count++
+          if (count === promises.length) {
+            resolve(result)
+          }
+        }, err => {
+          reject(err)
+        })
+      }
+    })
+  }
+
+  static race(promises) {
+    if (!Array.isArray(promises)) {
+      throw new TypeError('params must be an array')
+    }
+    return new MyPromise((resolve, reject) => {
+      for (let i = 0; i < promises.length; i++) {
+        promises[i].then(res => {
+          resolve(res)
+        }, err => {
+          reject(err)
+        })
+      }
+    })
+  }
+
+  catch(errCallback) {
+    this.then(null, errCallback)
+  }
+ }
+
+ MyPromise.prototype.then = function(onFulfilled, onRejected) {
+  onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v
+  onRejected = typeof onRejected === "function" ? onRejected : err => {throw err}
+  return new MyPromise((resolve, reject) => {
+    const fulfilledCallback = () => {
+      try {
+        const res = onFulfilled(this.value)
+        resolve(res)
+      } catch (error) {
+        reject(error)
+      }
+    }
+    const rejectedCallback = () => {
+      try {
+        const res = onRejected(this.reason)
+        reject(res)
+      } catch (error) {
+        reject(error)
+      }
+    }
+
+    if (this.status === FULFILLED) {
+      queueMicrotask(fulfilledCallback);
+    } else if (this.status === REJECTED) {
+      queueMicrotask(rejectedCallback);
+    } else if (this.status === PENDING) {
+      this.onResolvedCallbacks.push(fulfilledCallback)
+      this.onRejectedCallbacks.push(rejectedCallback)
+    }
+  })
+ }
+ MyPromise.prototype.catch = function(errCallback) {
+  this.then(null, errCallback)
+ }
+function isPromiseLike(obj) {
+  return typeof obj === 'object' && typeof obj.then === 'function'
+}
+
+ MyPromise.resolve = function(value) {
+  if (value instanceof MyPromise) {
+    return value
+  }
+  if (isPromiseLike(value)) {
+    return new MyPromise((resolve, reject) => {
+      value.then(resolve, reject)
+    })
+  }
+  return new MyPromise((resolve, reject) => {
+    resolve(value)
+  })
+ }
+
+ MyPromise.reject = function(reason) {
+  return new MyPromise((resolve, reject) => {
+    reject(reason)
+  })
+ }
 </script>
 </html>
