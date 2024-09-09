@@ -9,6 +9,37 @@
   
 </body>
 <script>
+  // promise基本用法
+  // promise是一个构造函数，接受一个函数作为参数，该函数有两个参数，分别是resolve和reject
+  // resolve和reject都是函数，resolve用于将promise状态改为fulfilled，reject用于将promise状态改为rejected
+  // promise有三种状态：pending、fulfilled、rejected
+  // promise状态一旦改变，就不会再变
+  // promise有一个then方法，接受两个参数，分别是成功的回调和失败的回调
+  // then方法返回一个新的promise实例
+  // promise的链式调用：then方法返回一个新的promise实例，可以继续调用then方法
+  // promise的错误处理：可以在then方法的第二个参数中处理错误
+  // promise的静态方法：Promise.resolve、Promise.reject、Promise.all、
+  // Promise.race、Promise.prototype.catch
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('success')
+    }, 1000)
+  }).then(res => {
+    console.log(res)
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('success2')
+      }, 1000)
+    })
+  }).then(res => {
+    console.log(res)
+  }).catch(err => {
+    console.log(err)
+  }) 
+
+
+
+
   // 微任务api：https://developer.mozilla.org/zh-CN/docs/Web/API/queueMicrotask
   const PENDING = 'pending'
   const FULFILLED = 'fulfilled'

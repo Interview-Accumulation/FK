@@ -190,6 +190,10 @@ JavaScript中Number.MAX_SAFE_INTEGER表示最⼤安全数字，计算结果是90
 - 扩展操作符（…）使用它时，数组或对象中的每一个值都会被拷贝到一个新的数组或对象中。它不复制继承的属性或类的属性，但是它会复制ES6的 symbols 属性
 
 
+#### 隐式类型转换
+[参考](https://juejin.cn/post/6844903565350141960)
+
+
 ### ES6
 [阮一峰ES6文档](https://es6.ruanyifeng.com/#docs/intro)
 [文章参考](https://juejin.cn/post/6844903959283367950)

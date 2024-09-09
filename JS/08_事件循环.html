@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-  <body></body>
+  <body>
+    <button id="begin">开始</button>
+    <button id="interaction">添加交互</button>
+  </body>
   <!-- <script>
     function test() {
       console.log(1);
@@ -40,7 +43,7 @@
 
     console.log(8);
   </script> -->
-  <script>
+  <!-- <script>
     console.log("script start");
 
     setTimeout(() => {
@@ -74,5 +77,35 @@
     });
 
     console.log("script end");
+  </script> -->
+  <script>
+    // 死循环指定事件
+    function delay(time) {
+      let start = Date.now();
+      while (Date.now() - start < time) {}
+    }
+
+    function addDelay() {
+      console.log('添加延时队列')
+      setTimeout(() => {
+        console.log('延时队列执行')
+      }, 100)
+      delay(1000)
+    }
+
+    function addInteraction() {
+      console.log('添加交互队列')
+      const btn = document.getElementById('interaction')
+      btn.onclick = function () {
+        console.log('交互队列执行')
+      }
+      delay(2000)
+    }
+    const begin = document.getElementById('begin')
+    begin.onclick = function () {
+      addDelay()
+      addInteraction()
+      console.log('开始执行')
+    }
   </script>
 </html>
