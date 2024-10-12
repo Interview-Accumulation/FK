@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    /*
+        题目: 给一个链表，判断其中是否有环，若有则给出环的入口节点，否则输出null
+        思路：双指针
+            1. 判断链表是否有环： P1 P2 从头部出发，P1走两步，P2走一步，如果可以相遇，则环存在
+            2. 从环内的某个节点开始计数，再次回到该节点得到链表环的长度length
+            3. P1 P2 从头部出发，P1先走length步，P1 P2 一起走，当P1 P2相遇时，即为环的入口节点
+    */
+   function EntryNodeOfLoop(head) {
+    if (!head || !head.next) return null
+    let p1 = head.next, p2 = head.next.next
+    // 判断是否有环
+    while (p1 != p2) {
+        if (!p2 || !p2.next) return null
+        p1 = p1.next
+        p2 = p2.next.next
+    }
+    // 计算环的长度
+    let length = 1,temp = p1
+    p1 = p1.next
+    while (p1 != temp) {
+        length++
+        p1 = p1.next
+    }
+    // 找到环的入口节点
+    p1 = head
+    p2 = head
+    while (length > 0) {
+        p2 = p2.next
+        length--
+    }
+    while (p1 != p2) {
+        p1 = p1.next
+        p2 = p2.next
+    }
+    return p1
+
+   }
+  
+</script>
+</html>

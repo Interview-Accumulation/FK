@@ -1,4 +1,4 @@
-# React
+
 - [官网](https://react.dev/)
 - https://juejin.cn/post/6941546135827775525
 - https://juejin.cn/post/6940942549305524238
@@ -351,6 +351,10 @@ handleClick = () => {
    - 使用文档片段（DocumentFragment），将多个DOM元素的操作放在文档片段中，然后一次性插入到页面中，减少页面重绘和重排的次数
 
 总结：DOM操作涉及到浏览器的底层API、重回重排等因素，操作代价高，而JS对象的操作只涉及到内存，操作代价低。因此在编写网页时，应尽量减少DOM的频繁操作，优化DOM操作的方式和时机，以提高性能和用户体验。
+
+#### 为什么需要虚拟dom？
+- 框架设计：react/vue在框架层面，其颗粒度只能精确到组件（即这两个框架本质上是转化为render函数，数据变化时，重新render会全量生成组件内的真实dom，组件内可能有多个真实dom，无法定位到具体dom，代价过于昂贵），数据变化时，全量生成真实dom代价过高，因此选择采用虚拟dom，通过对比来精确定位到真实dom哪里需要更新
+- 解耦运行环境：框架为了不止在浏览器运行（多端运行），采用虚拟dom，用js对象来描述页面，框架内部根据不同环境进行不同的渲染（浏览器环境渲染为真实dom，移动端则渲染为真实dom），作为移植到多端环境的基础
 
 
 #### diff算法
@@ -769,6 +773,19 @@ const DemoUseContext = ()=>{
 }
 ```
 
+#### 为什么不能再条件语句中写hooks
+- 挂载阶段，在react组件（此阶段组件均是fiber对象）中创建hooks链表
+- 更新阶段，不会重复创建hooks链表，直接执行挂载阶段创建的链表。此时做事某些条件成立，可能会导致应该执行的链表和挂载阶段的链表长度不一致，从而抛出错误。
+
+#### useState 和 useRef 区别
+- useRef 主要用于访问和操作 DOM 或存储不触发重新渲染的可变值，它返回一个带有 current 属性的可变对象
+- useState 用于管理功能组件内的状态,允许我们创建可以更新的变量，并在其值发生变化时触发重新渲染
+- 管理状态： useState 旨在管理组件内的状态。当状态更新时，它会触发重新渲染，确保 UI 反映最新值。
+- 访问和操作 DOM： useRef 主要用于与 DOM 交互，例如访问输入值或关注元素。它允许我们存储对 DOM 节点的引用并检索它们的属性，而无需触发重新渲染。
+- 跨渲染保留值： useRef 在组件渲染之间维护相同的值，而 useState 在每次渲染期间初始化状态。
+- 重新渲染行为：更新 useState 返回的值会导致组件重新渲染，同时更新使用 useRef 的 current 属性 不会触发重新渲染。
+
+
 
 ### React Fiber
 > [参考1](https://i.overio.space/fiber/why-fiber/)
@@ -814,7 +831,7 @@ const DemoUseContext = ()=>{
 
 ![调和过程](../00_images/reconciler.png)
 
-#### requestIdleCallback
+####  
 * requestIdleCallback 是浏览器提供的一个 API，用于在主线程空闲的时间段内执行任务，它的基本语法如下：
 ```js
 window.requestIdleCallback(callback, { timeout })
@@ -1059,3 +1076,22 @@ const handleName3 = () => {
 
 ### 插槽 createPortal
 [官方文档](https://zh-hans.react.dev/reference/react-dom/createPortal)
+
+### Redux原理
+Redux是一个状态管理库，使用场景：
+- 跨层级组件数据共享与通信
+- 一些需要持久化的全局数据，比如用户登录信息
+![redux](../00_images/redux.png)
+工作原理：
+- 使用单例模式实现
+- Store 一个全局状态管理对象
+- Reducer 一个纯函数，根据旧state和props更新新state
+- Action 改变状态的唯一方式是dispatch action
+
+
+### react渲染流程
+- React用JSX描述页面，JSX经过babel编译为render function，执行后产生VDOM，VDOM不是直接渲染的，会先转换为fiber，再进行渲染。vdom转换为fiber的过程叫reconcile，转换过程会创建DOM，全部转换完成后会一次性commit到DOM，这个过程不是一次性的，而是可打断的，这就是fiber架构的渲染流程
+- vdom（React Element对象）中只记录了子节点，没有记录兄弟节点，因此渲染不可打断
+- fiber（fiberNode对象）是一个链表，它记录了父节点、兄弟节点、子节点，因此是可以打断的
+![react render](../00_images/react-render-progress.png)
+

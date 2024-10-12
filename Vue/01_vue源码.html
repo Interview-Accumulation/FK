@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="name"></div>
+    <div id="age"></div>
+    <input type="text" id="input" oninput="obj.name = this.value">
+</body>
+<script>
+    /** 
+     * vue2 数据响应式的核心原理:
+     * 1. 通过Object.defineProperty()来劫持各个属性的setter,getter
+     * 2. 当数据发生变化时，发布消息给依赖收集器，通知变化
+     * 3. 创建数据对象和观察者对象，通过发布-订阅模式，将两者联系起来
+     * 4. 将观察者对象添加到依赖收集器中
+     * 5. 当数据发生变化时，发布消息给依赖收集器，通知变化
+     * 6. 依赖收集器收到消息后，通知观察者对象，触发相应的动作
+     * 
+     */
+    /**
+     * @param {Object} data
+    */
+    function observer(data) {
+        for (const key in data) {
+            if (Object.hasOwnProperty.call(data, key)) {
+                let internalValue = data[key];
+                let funcs = [];
+                Object.defineProperty(data, key, {
+                    get() {
+                        // 依赖收集,记录在哪个函数使用
+                        if (window.target && !funcs.includes(window.target)) {
+                            funcs.push(window.target);
+                        }
+                        return internalValue;
+                    },
+                    set(newval) {
+                        internalValue = newval;
+                        // 派发更新，执行函数
+                        funcs.forEach(func => {
+                            func();
+                        });
+                    }
+                })
+                
+            }
+        }
+    }
+
+    // 依赖收集
+    function watcher(myFunc) {
+        window.target = myFunc;
+        myFunc();
+        window.target = null;
+    }
+
+    let obj = {
+        name: 'wn',
+        age: 18
+    }
+    observer(obj);
+    watcher(() => {
+        console.log(obj.name)
+        const name = document.getElementById('name');
+        name.innerText = obj.name;
+    })
+    watcher(() => {
+        console.log(obj.age)
+        const age = document.getElementById('age');
+        age.innerText = obj.age;
+    })
+
+    setTimeout(() => {
+        obj.name = '蜗牛'
+        obj.age = 19
+    }, 3000);
+
+</script>
+</html>

@@ -193,6 +193,23 @@ JavaScript中Number.MAX_SAFE_INTEGER表示最⼤安全数字，计算结果是90
 #### 隐式类型转换
 [参考](https://juejin.cn/post/6844903565350141960)
 
+#### 双等（==）转换机制
+
+1. 是否有NaN，有则一律返回false
+
+2. 两端均为原始值，转为数字来比较
+
+3. 有一端为对象时，对象转为原始值，即调用对象上的valueOf 或者 toString方法，然后在比较
+
+```js
+[1] == 1 // true
+[1].toString() // '1'
+[1,2].toString() // '1,2'
+[1,2] == 1 // false
+[1,2] == '1,2' // true
+
+```
+
 
 ### ES6
 [阮一峰ES6文档](https://es6.ruanyifeng.com/#docs/intro)
@@ -400,6 +417,29 @@ ele2.addEventListener('click', listener.get(ele2), false);
 **总结**：
 Map 数据结构。它类似于对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。
 WeakMap 结构与 Map 结构类似，也是用于生成键值对的集合。但是 WeakMap 只接受对象作为键名（ null 除外），不接受其他类型的值作为键名。而且 WeakMap 的键名所指向的对象，不计入垃圾回收机制。
+
+#### Map和Set的效率
+- Set 和 Array
+  - Set是键控集合，Array则是索引集合，其数据是按照索引进行排序
+  - Set比Array有更快的运行时间，查找、删除、插入元素均比Array快
+  - 数组中的搜索方法（includes、indexOf等），时间复杂度为O(n)，Set的查找、删除、插入（has、delete、add）时间复杂度为O(1)
+
+- Map 和普通对象
+  - 区别：
+    - 普通对象键必须是String或者Symbol，而Map允许使用函数、对象及简单类型作为键
+    - 普通对象为了遍历keys、values、entries，需要转化为数组，如使用`Object.keys()`、`Object.values()`和`Object.entries()`，或者使用`for...in`循环，因为常规对象不能直接遍历，另外`for ... in`循环还有一些限制：它仅仅遍历可枚举属性、非Symbol属性，并且遍历的顺序是任意的
+    - Map可以直接遍历，并且由于它是键控集合，遍历的顺序和插入键值的顺序是一致的。你可以使用for ... of循环或forEach方法来遍历Map的entries
+```js
+for (let [key, value] of map) {
+  console.log(key);
+  console.log(value);
+};
+map.forEach((key, value) => {
+  console.log(key);
+  console.log(value);
+});
+```
+
 
 ### iterator
 [参考](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator)

@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>三栏布局</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
         .outer {
             width: 300px;
             height: 400px;
@@ -36,6 +40,53 @@
             background-color: green;
             /* min-width: 200px; */
         }
+
+        .container1 {
+            display: grid;
+            grid-template-columns: 200px 1fr 200px;
+            margin-top: 20px;
+        }
+        .left1 {
+            background-color: red;
+            height: 100px;
+        }
+        .right1 {
+            background-color: blue;
+            height: 100px;
+        }
+        .center1 {
+            background-color: green;
+            height: 100px;
+        }
+
+        .container2 {
+            margin-top: 20px;
+            padding: 0 200px;
+        }
+        .container2 > div {
+            float: left;
+            height: 100px;
+        }
+
+        .left2, .right2 {
+            width: 200px;
+            height: 100px;
+            background-color: red;
+        }
+        .center2 {
+            height: 100px;
+            background-color: green;
+            width: 100%;
+        }
+        .left2 {
+            position: relative;
+            margin-left: -200px;
+        }
+        .right2 {
+            position: relative;
+            margin-right: -200px;
+        }
+
     </style>
 </head>
 <body>
@@ -46,8 +97,19 @@
         <div class="left"></div>
         <div class="center"></div>
         <div class="right"></div>
-
     </div>
+    <div class="container1">
+        <div class="left1"></div>
+        <div class="center1"></div>
+        <div class="right1"></div>
+    </div>
+    <div class="container2">
+        <div class="left2"></div>
+        <div class="center2"></div>
+        <div class="right2"></div>
+    </div>
+
+
     
 </body>
 </html>

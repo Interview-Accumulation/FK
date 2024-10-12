@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // 属性描述符
+    // 数据描述符
+    // 1. value
+    // 2. writable
+    // 3. enumerable
+    // 4. configurable
+    // 存取描述符
+    // 1. get
+    // 2. set
+    // 3. enumerable
+    // 4. configurable
+    let obj = {
+        name: 'wn'
+    }
+    console.log(Object.getOwnPropertyDescriptor(obj, 'name'))
+    let obj1 = {}
+    Object.defineProperty(obj1, 'name', {
+        value: 'wn',
+        writable: false, // 是否可以被重写
+        enumerable: false, // 是否可以被枚举
+        configurable: false, // 是否可以修改描述符本身
+        set() {
+            throw new Error('不可修改')
+        },
+    })
+    console.log(obj1.name)
+    obj1.name = '蜗牛'
+    console.log(obj1.name)
+    for (let key in obj1) {
+        console.log(key)
+    }
+    delete obj1.name
+    console.log(obj1.name)
+    // configurable: false
+    // writable: false
+    // enumerable
+</script>
+</html>

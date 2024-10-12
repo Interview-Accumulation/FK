@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    var findAnagrams = function (s, p) {
+        const map = new Map()
+        let res = []
+        for (let item of p) {
+
+            map.set(item, (map.get(item) || 0) + 1)
+        }
+        console.log(map)
+        let r = 0
+        for (; r < p.length; r++) {
+            if (map.has(s[r])) {
+                // ！！！！！！！！！此处是 - 1， 不是 -- ，接下来也是 - 1， 不要写错了
+                map.set(s[r], map.get(s[r]) - 1)
+            }
+        }
+        console.log(map)
+        // ！！！！！！！此处是 等于号，当 r 到达 s 的末尾时，还需要进行判断 ！！
+        for (let l = 0; r <= s.length; r++, l++) {
+            console.log(l,r,map)
+            if ([...map.values()].every(v => v === 0)) {
+                res.push(l)
+            }
+            if (map.has(s[l])) {
+                map.set(s[l], map.get(s[l]) + 1)
+            }
+            if (map.has(s[r])) {
+                map.set(s[r], map.get(s[r]) - 1)
+            }
+        }
+        return res
+    };
+    console.log(findAnagrams('ecbaebabacd', 'abc'))
+</script>
+
+</html>
