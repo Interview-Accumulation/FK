@@ -20,11 +20,11 @@
 
 3. 虚拟DOM
 ### JSX
-> JSX是react的语法糖，它允许在html中写JS，它不能被浏览器直接识别，需要通过webpack、babel之类的编译工具转换为JS执行
+> JSX是react的语法糖，它允许在JS中写html，它不能被浏览器直接识别，需要通过webpack、babel之类的编译工具转换为JS执行
 
 JSX与JS的区别：
 - js可以被打包工具直接编译，不需要额外转换，jsx需要通过babel编译，它是React.createElement的语法糖，使用jsx等价于React.createElement
-- jsx是js的语法扩展，允许在html中写JS；JS是原生写法，需要通过script标签引入
+- jsx是js的语法扩展，允许在js中写html；JS是原生写法，需要通过script标签引入
 
 #### 为什么在文件中没有使用react，也要在文件顶部import React from “react”
 只要使用了jsx，就需要引用react，因为jsx本质就是React.createElement
@@ -50,7 +50,7 @@ React.createElement(App,null,'app content')
 ```
 
 - 从上面转译可以看出，若需要在js文件中写jsx，在顶部需要引入React，因为jsx本质就是React.createElement的语法糖，使用jsx等价于React.createElement
-- 在react17后就不需要在组建中显式引入React了，因为react17后不再使用React.createElement，引入了 `react/jsx-runtime`，改变了jsx的编译方式，不再是 React.createElement:
+- 在react17后就不需要在组建中显式引入React了，因为**react17**后不再使用React.createElement，引入了 `react/jsx-runtime`，改变了jsx的编译方式，不再是 React.createElement:
 ```js
 // 转译前
 <app>app content</app>
@@ -327,8 +327,7 @@ handleClick = () => {
   - 易用
 
 - 真实 DOM 的缺点：
-  - 效率低，解析速度慢，内存占用量过高
-  - 性能差：频繁操作真实 DOM，易于导致重绘与回流
+  - 频繁操作真实 DOM，易于导致重绘与回流
 
 - 虚拟 DOM 的优势：
   - 简单方便：如果使用手动操作真实 DOM 来完成页面，繁琐又容易出错，在大规模应用下维护起来也很困难
@@ -354,7 +353,7 @@ handleClick = () => {
 
 #### 为什么需要虚拟dom？
 - 框架设计：react/vue在框架层面，其颗粒度只能精确到组件（即这两个框架本质上是转化为render函数，数据变化时，重新render会全量生成组件内的真实dom，组件内可能有多个真实dom，无法定位到具体dom，代价过于昂贵），数据变化时，全量生成真实dom代价过高，因此选择采用虚拟dom，通过对比来精确定位到真实dom哪里需要更新
-- 解耦运行环境：框架为了不止在浏览器运行（多端运行），采用虚拟dom，用js对象来描述页面，框架内部根据不同环境进行不同的渲染（浏览器环境渲染为真实dom，移动端则渲染为真实dom），作为移植到多端环境的基础
+- 解耦运行环境：框架为了不止在浏览器运行（多端运行），采用虚拟dom，用js对象来描述页面，框架内部根据不同环境进行不同的渲染（浏览器环境渲染为真实dom，移动端则渲染为原生组件），作为移植到多端环境的基础
 
 
 #### diff算法

@@ -9,6 +9,7 @@ const UseStateCom = lazy(() => import('../components/useStateCom'));
 const UseMemoCom = lazy(() => import('../components/useMemoCom'));
 const UseContextCom = lazy(() => import('../components/useContextCom'));
 const SwiperCom = lazy(() => import('../components/swiper'));
+const UploadPic = lazy(() => import('../components/uploadPic'));
 
 // import Home from '../components/layout';
 // import StateCom from '../components/stateCom';
@@ -61,6 +62,10 @@ const routers = [
             {
                 path: 'swiper',
                 element: lazyLoad(<SwiperCom />),
+            },
+            {
+                path: 'upload',
+                element: lazyLoad(<UploadPic />),
             }
         ]
     }

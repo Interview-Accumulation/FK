@@ -67,6 +67,11 @@ const menuList = [
                 title: 'swiper',
                 key: '/swiper',
                 path: '/swiper',
+            },
+            {
+                title: 'upload',
+                key: '/upload',
+                path: '/upload',
             }
         ]
     }

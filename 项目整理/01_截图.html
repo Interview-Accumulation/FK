@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+  <div>
+    <div id="capture" style="background: #f0f0f0; padding: 20px; width: 200px; height: 200px;">
+      <h4>截图区域</h4>
+      <p>这是一个截图区域</p>
+    </div>
+    <button onclick="capture()">截图</button>
+  </div>
+</body>
+<script>
+    function capture() {
+        html2canvas(document.querySelector("#capture")).then(canvas => {
+            const img = canvas.toDataURL('image/png')
+            const a = document.createElement('a')
+            a.href = img
+            a.download = '截图.png'
+            a.click()
+            
+        })
+    }
+</script>
+</html>

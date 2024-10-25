@@ -19,11 +19,12 @@
     }
     const start = async function (num = 6) {
         for (let i = 0; i < num; i++) {
+            console.log(`${i}s`);
             let res = await sleep(1000, i)
             console.log(res);
         }
     }
-    // start() // 
+    start() // 1s => 0 => 1s => 1 => 1s => 2 => 1s => 3 => 1s => 4 => 1s => 5
 
     const start2 = function (num = 6) {
         for (let i = 0; i < num; i++) {
@@ -32,6 +33,6 @@
             }, 1000);
         }
     }
-    start2()// 1秒后依次输出（同时） 0 1 2 3 4 5
+    // start2()// 1秒后依次输出（同时） 0 1 2 3 4 5
 </script>
 </html>

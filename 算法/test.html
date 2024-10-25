@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    var findLongestWord = function (s, dictionary) {
+        let res = [],
+            max = 0
+        for (const dic of dictionary) {
+            let sPoint = 0,
+                dPoint = 0
+            while (dPoint < dic.length && sPoint < s.length) {
+                if (s[sPoint] === dic[dPoint]) {
+                    dPoint++
+                }
+                sPoint++
+                if (dPoint === dic.length) {
+                    if (max < dic.length) {
+                        res = [dic]
+                        max = dic.length
+                    } else if (max === dic.length) {
+                        res.push(dic)
+                        max = dic.length
+                    }
+                }
+            }
+        }
+        res.sort()
+        return res[0] || ''
+    };
+    console.log(findLongestWord('abpcplea', ['ale', 'apple', 'monkey', 'plea']))
+</script>
+
+</html>

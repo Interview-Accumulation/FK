@@ -1,6 +1,8 @@
 import React from "react";
 import MySwiper from "./Swiper";
 import "./index.less";
+import puppeteer from 'puppeteer-core/lib/esm/puppeteer/puppeteer-core-browser.js';
+import { Button } from "antd";
 
 const Children = (props) => {
     return (
@@ -32,17 +34,33 @@ const childrenList = [
 
 
 const SwiperCom = () => {
+
+    const handleScreenShot = async () => {
+        const browser = await puppeteer.launch({
+            headless: false,
+            executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+        });
+        const page = await browser.newPage();
+        await page.goto('http://localhost:3000/swiper');
+        await page.screenshot({path: 'example.png'});
+        await browser.close();
+    }
+        
     return (
-        <div style={{height: '200px', width: '700px'}}>
-            <MySwiper>
-                {
-                    childrenList.map((item, index) => (
-                            <Children key={index} content={item} />
+        <div>
+            <div style={{height: '200px', width: '700px'}}>
+                <MySwiper>
+                    {
+                        childrenList.map((item, index) => (
+                                <Children key={index} content={item} />
+                            )
                         )
-                    )
-                }
-            </MySwiper>
+                    }
+                </MySwiper>
+            </div>
+            <Button onClick={handleScreenShot}>截图</Button>
         </div>
+        
     )
 }
 export default SwiperCom;
