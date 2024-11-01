@@ -64,6 +64,11 @@ const menuList: IMenuProps[] = [
               title: 'usenavigate',
               key: 'usenavigate',
               path: '/usenavigate',
+            },
+            {
+              title: 'echarts',
+              key: 'echarts',
+              path: '/echarts',
             }
         ]
     }

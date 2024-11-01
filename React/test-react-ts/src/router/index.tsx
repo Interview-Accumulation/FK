@@ -11,6 +11,7 @@ const ErrorPage = lazy(() => import('../components/404'));
 const ThreeLevel = lazy(() => import('../components/threelevel'));
 const UseParams = lazy(() => import('../components/useparams'));
 const UseNavigate = lazy(() => import('../components/usenavigate'));
+const EchartsCom = lazy(() => import('../components/echarts'));
 
 const lazyLoad = (children: React.ReactNode): ReactElement => {
     return (
@@ -77,6 +78,10 @@ const routers: RouteObject[] = [
             {
                 path: 'usenavigate',
                 element: lazyLoad(<UseNavigate />),
+            },
+            {
+                path: 'echarts',
+                element: lazyLoad(<EchartsCom />),
             },
             // 重定向
             {

@@ -26,6 +26,18 @@
   * 在vue2中使用的是双端diff算法：是一种同时比较新旧两组节点的两个端点的算法（比头、比尾、头尾比、尾头比）。一般情况下，先找出变更后的头部，再对剩下的进行双端diff。
   * 在vue3中使用的是快速diff算法：它借鉴了文本diff算法的预处理思路，先处理新旧两组节点中相同的前置节点和后置节点。当前置节点和后置节点全部处理完毕后，如果无法通过简单的挂载新节点或者卸载已经不存在的节点来更新，则需要根据节点间的索引关系，构造出一个最长递增子序列。最长递增子序列所指向的节点即为不需要移动的节点。
 
+### vue2/3 响应式原理
+#### 原理
+- Vue2在初始化数据时，会使用Object.defineProperty重新定义data中的所有属性，当页面使用对应属性时，首先会进行依赖收集(收集当前组件的watcher)如果属性发生变化会通知相关依赖进行更新操作(发布订阅)
+
+- Vue3改用Proxy替代Object.defineProperty。因为Proxy可以直接监听对象和数组的变化，并且有多达13种拦截方法。并且作为新标准将受到浏览器厂商重点持续的性能优化
+
+#### Proxy只会代理对象的第一层，那么Vue3又是怎样处理这个问题的呢？
+判断当前Reflect.get的返回值是否为Object，如果是则再通过reactive方法做代理， 这样就实现了深度观测
+
+#### 监测数组的时候可能触发多次get/set，那么如何防止触发多次呢？
+可以判断key是否为当前被代理对象target自身属性，也可以判断旧值与新值是否相等，只有满足以上两个条件之一时，才有可能执行trigger
+
 ### Vue3 双向绑定实现
 
 ```js
@@ -58,7 +70,7 @@ function effect(fn) {
   effectFn();
 }
 
-// 在get时拦截函数调用track函数追踪变化
+// 在get时拦截函数调用track函数追踪变化，添加对应的副作用函数
 function track(target, key) {
   if (!activeEffect) return; //
   let depsMap = bucket.get(target);
@@ -75,7 +87,7 @@ function track(target, key) {
   activeEffect.deps.push(deps);
 }
 
-// 在set拦截函数内调用trigger来触发变化
+// 在set拦截函数内调用trigger来触发变化，即获取当前 target 的副作用函数，然后执行副作用函数
 function trigger(target, key) {
   const depsMap = bucket.get(target);
   if (!depsMap) return;
@@ -159,10 +171,7 @@ count.value = 1; // 这样不会丢失响应式
 - 兄弟组件：全局事件总线`EventBus`、`Vuex`
 - 跨层级组件：全局事件总线`EventBus`、`Vuex`、`provide/inject`
 
-### computed 和 watch 的区别？
-  - computed计算属性，依赖其它属性计算值，内部任一依赖项的变化都会重新执行该函数，计算属性有缓存，多次重复使用计算属性时会从缓存中获取返回值，计算属性必须要有return关键词
-  - watch侦听到某一数据的变化从而触发函数。当数据为对象类型时，对象中的属性值变化时需要使用深度侦听deep属性，也可在页面第一次加载时使用立即侦听immdiate属性
-  - 计算属性一般用在模板渲染中，某个值是依赖其它响应对象甚至是计算属性而来；而侦听属性适用于观测某个值的变化去完成一段复杂的业务逻辑
+
 
 ### v-if 和 v-for 为什么不建议放在一起使用？
 - Vue 2 中，v-for的优先级比v-if高，这意味着v-if将分别重复运行于每一个v-for循环中。如果要遍历的数组很大，而真正要展示的数据很少时，将造成很大的性能浪费
@@ -172,7 +181,7 @@ count.value = 1; // 这样不会丢失响应式
   - 为了过滤列表中的项目，比如：v-for = "user in users" v-if = "user.active"。这种情况，可以定义一个计算属性，让其返回过滤后的列表即可。
   - 为了避免渲染本该被隐藏的列表，比如v-for = "user in users"  v-if = "showUsersFlag"。这种情况，可以将v-if移至容器元素上或在外面包一层template即可
 
-  ### 插槽
+### 插槽
   slot插槽，一般在组件内部使用，封装组件时，在组件内部不确定该位置是以何种形式的元素展示时，可以通过slot占据这个位置，该位置的元素需要父组件以内容形式传递过来。slot分为：
 
   - 默认插槽：子组件用`<slot>`标签来确定渲染的位置，标签里面可以放DOM结构作为后备内容，当父组件在使用的时候，可以直接在子组件的标签内写入内容，该部分内容将插入子组件的`<slot>`标签位置。如果父组件使用的时候没有往插槽传入内容，后备内容就会显示在页面。
@@ -201,7 +210,7 @@ count.value = 1; // 这样不会丢失响应式
 - 源码组织方式变化：使用 TS 重写
 - 支持 Composition API：基于函数的API，更加灵活组织组件逻辑（vue2用的是options api）
 - 响应式系统提升：Vue3中响应式数据原理改成proxy，可监听动态新增删除属性，以及数组变化
-- 编译优化：vue2通过标记静态根节点优化diff，Vue3 标记和提升所有静态根节点，diff的时候只需要对比动态节点内容
+- 编译优化：vue2通过标记静态根节点优化diff，Vue3 标记和提升所有静态根节点（不会发生变化的节点），diff的时候只需要对比动态节点内容
 - 打包体积优化：移除了一些不常用的api（inline-template、filter）
 - 生命周期的变化：使用setup代替了之前的beforeCreate和created
 Vue3 的 template 模板支持多个根标签
@@ -225,6 +234,42 @@ Vue3 的 template 模板支持多个根标签
 - Vue3.x借鉴了 ivi算法和 inferno算法
 - 在创建VNode时就确定其类型，以及在mount/patch的过程中采用位运算来判断一个VNode的类型，在这个基础之上再配合核心的Diff算法，使得性能上较Vue2.x有了提升。(实际的实现可以结合Vue3.x源码看。)
 - 该算法中还运用了动态规划的思想求解最长递归子序列
+
+### keep-alive的常用属性有哪些及实现原理
+- keep-alive可以实现组件缓存，当组件切换时不会对当前组件进行卸载
+- 常用的两个属性include/exclude，允许组件有条件的进行缓存
+- 两个生命周期activated/deactivated，用来得知当前组件是否处于活跃状态
+- keep-alive的中还运用了LRU(Least Recently Used)算法
+
+### nextTick 的作用是什么？实现原理是什么？
+- 在下次 DOM 更新循环结束之后执行延迟回调。nextTick主要使用了宏任务和微任务。根据执行环境分别尝试采用
+  - Promise
+  - MutationObserver
+  - setImmediate
+  - 如果以上都不行则采用setTimeout
+定义了一个异步方法，多次调用nextTick会将方法存入队列中，通过这个异步方法清空当前队列
+
+### computed 实现原理
+- 当组件实例触发生命周期函数 beforeCreate 后，它会做一系列事情，其中就包括对 computed 的处理
+- 它会遍历 computed 配置中的所有属性，为每一个属性创建一个 Watcher 对象，并传入一个函数，该函数的本质其实就是 computed 配置中的 getter，这样一来，getter 运行过程中就会收集依赖
+- 但是和渲染函数不同，为计算属性创建的 Watcher 不会立即执行，因为要考虑到该计算属性是否会被渲染函数使用，如果没有使用，就不会得到执行。因此，在创建 Watcher 的时候，它使用了 lazy 配置，lazy 配置可以让 Watcher 不会立即执行
+- 收到 lazy 的影响，Watcher 内部会保存两个关键属性来实现缓存，一个是 value，一个是 dirty
+- value 属性用于保存 Watcher 运行的结果，受 lazy 的影响，该值在最开始是 undefined
+- dirty 属性用于指示当前的 value 是否已经过时了，即是否为脏值，受 lazy 的影响，该值在最开始是 true
+- Watcher 创建好后，vue 会使用代理模式，将计算属性挂载到组件实例中
+- Watcher 创建好后，vue 会使用代理模式，将计算属性挂载到组件实例中
+- 当读取计算属性时，vue 检查其对应的 Watcher 是否是脏值，如果是，则运行函数，计算依赖，并得到对应的值，保存在 Watcher 的 value 中，然后设置 dirty 为 false，然后返回
+- 如果 dirty 为 false，则直接返回 watcher 的 value
+- 巧妙的是，在依赖收集时，被依赖的数据不仅会收集到计算属性的 Watcher，还会收集到组件的 Watcher
+- 当计算属性的依赖变化时，会先触发计算属性的 Watcher 执行，此时，它只需设置 dirty 为 true 即可，不做任何处理
+- 由于依赖同时会收集到组件的 Watcher，因此组件会重新渲染，而重新渲染时又读取到了计算属性，由于计算属性目前已为 dirty，因此会重新运行 getter 进行运算
+- 而对于计算属性的 setter，则极其简单，当设置计算属性时，直接运行 setter 即可
+
+
+### computed 和 watch 的区别？
+  - computed计算属性，依赖其它属性计算值，内部任一依赖项的变化都会重新执行该函数，计算属性有缓存，多次重复使用计算属性时会从缓存中获取返回值，计算属性必须要有return关键词
+  - watch侦听到某一数据的变化从而触发函数。当数据为对象类型时，对象中的属性值变化时需要使用深度侦听deep属性，也可在页面第一次加载时使用立即侦听immdiate属性
+  - 计算属性一般用在模板渲染中，某个值是依赖其它响应对象甚至是计算属性而来；而侦听属性适用于观测某个值的变化去完成一段复杂的业务逻辑
 
 
 ### Vue SSR 的实现原理
@@ -280,7 +325,7 @@ SEO优化
 
 ### Vue 中的 Key 的作用是什么
 - key 的作用主要是为了高效的更新虚拟 DOM 。
-- 更新虚拟dom就涉及到diff算法，ue 和 react 的虚拟 DOM 的 Diff 算法大致相同，其核心有以下两点：
+- 更新虚拟dom就涉及到diff算法，vue 和 react 的虚拟 DOM 的 Diff 算法大致相同，其核心有以下两点：
   - 两个相同的组件产生类似的 DOM 结构，不同的组件产生不同的 DOM 结构
   - 同一层级的一组节点，他们可以通过唯一的 id 进行区分。
 - 当页面的数据发生变化时，Diff 算法只会比较同一层级的节点：
@@ -313,3 +358,61 @@ SEO优化
 7. beforeDestroy(组件销毁前)
 8. destroyed
 ![vue2](../00_images/Vue/vue2生命周期.png)
+
+
+### Vue complier 的实现原理
+- 在使用 vue 的时候，我们有两种方式来创建我们的 HTML 页面，第一种情况，也是大多情况下，我们会使用模板 template 的方式，因为这更易读易懂也是官方推荐的方法；第二种情况是使用 render 函数来生成 HTML，它比 template 更接近最终结果
+- complier 的主要作用是解析模板，生成渲染模板的 render， 而 render 的作用主要是为了生成 VNode
+- complier 主要分为 3 大块：
+  - parse：接受 template 原始模板，按着模板的节点和数据生成对应的 ast
+  - optimize：遍历 ast 的每一个节点，标记静态节点，这样就知道哪部分不会变化，于是在页面需要更新时，通过 diff 减少去对比这部分DOM，提升性能
+
+
+### Vue 中的修饰符以及作用
+vue中修饰符分为以下五种：
+  - 表单修饰符
+  - 事件修饰符
+  - 鼠标按键修饰符
+  - 键值修饰符
+  - v-bind修饰符
+作用：
+- 表单修饰符：  表单中使用最多的指令就是 v-model，其修饰符有 lazy、trim、number
+  - lazy：填完信息，光标离开标签的时候，才会将值赋予给value，也就是在change事件之后再进行信息同步
+  - trim：自动过滤用户输入的首尾空格字符，而中间的空格不会过滤
+  - number：自动将用户的输入值转为数值类型，但如果这个值无法被parseFloat解析，则会返回原来的值
+
+- 事件修饰符：事件修饰符是对事件捕获以及目标进行了处理，如stop、prevent、self、once、capture、passive、native
+  - stop：阻止了事件冒泡，相当于调用了event.stopPropagation方法
+  - prevent：阻止了事件的默认行为，相当于调用了event.preventDefault方法
+  - self：只当在 event.target 是当前元素自身时触发处理函数
+  - once：绑定了事件以后只能触发一次，第二次就不会触发
+  - capture：时间触发阶段是捕获阶段，而不是冒泡阶段
+  - passive：在移动端，当我们在监听元素滚动事件的时候，会一直触发onscroll事件会让我们的网页变卡，因此我们使用这个修饰符的时候，相当于给onscroll事件整了一个.lazy修饰符
+  - native：让组件变成像html内置标签那样监听根元素的原生事件，否则组件上使用 v-on 只会监听自定义事件。使用.native修饰符来操作普通HTML标签是会令事件失效的
+
+- 鼠标按钮修饰符：鼠标按钮修饰符针对的就是左键、右键、中键点击，如left、right、middle
+
+- 键盘修饰符：用来修饰键盘事件（onkeyup，onkeydown）的，如普通键（enter、tab、delete、space、esc、up...），系统修饰键（ctrl、alt、meta、shift...）
+
+- v-bind修饰符：主要是为属性进行操作，如async、prop、camel
+  - async：能对props进行一个双向绑定
+```
+//父组件
+<comp :myMessage.sync="bar"></comp> 
+//子组件
+this.$emit('update:myMessage',params);
+
+// 等同于
+//父亲组件
+<comp :myMessage="bar" @update:myMessage="func"></comp>
+func(e){
+ this.bar = e;
+}
+//子组件js
+func2(){
+  this.$emit('update:myMessage',params);
+}
+
+```
+  - prop：设置自定义标签属性，避免暴露数据，防止污染HTML结构
+  - camel：将命名变为驼峰命名法，如将view-Box属性名转换为 viewBox

@@ -79,4 +79,28 @@
     }, 3000);
 
 </script>
+<script>
+    /**
+     * Vue3 数据响应式的核心原理:
+     * 1. 通过Proxy 来代理整个对象，监听对象的变化
+     * 2. 当数据发生变化时，发布消息给依赖收集器，通知变化
+     * 
+     * 
+    */
+    let data = {
+        name: 'wn',
+        age: 18
+    }
+    let proxy = new Proxy(data, {
+        get(target, key) {
+            console.log('get', key);
+            return target[key];
+        },
+        set(target, key, value) {
+            console.log('set', key, value);
+            target[key] = value;
+        }
+    })
+
+</script>
 </html>
