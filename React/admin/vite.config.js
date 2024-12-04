@@ -2,6 +2,10 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { visualizer } from 'rollup-plugin-visualizer';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import path from 'path';
+
+
 // https://vitejs.dev/config/
 export default defineConfig({
     base: './',
@@ -9,6 +13,10 @@ export default defineConfig({
         react(),
         // 同步tsconfig.json的path设置alias
         tsconfigPaths(),
+        createSvgIconsPlugin({
+            iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
+            symbolId: 'icon-[dir]-[name]'
+        }),
         visualizer({
             open: true
         })
