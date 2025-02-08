@@ -38,6 +38,8 @@ export default function Router() {
     ]
   }
   const routes = [LoginRoute, asyncRoutes, ErrorRoutes, PAGE_NOT_FOUND];
+  
   const router = createBrowserRouter(routes as RouteObject[]);
+  console.log('router', router, routes)
   return <RouterProvider router={router} />;
 }

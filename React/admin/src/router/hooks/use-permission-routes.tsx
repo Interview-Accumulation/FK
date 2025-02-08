@@ -11,6 +11,7 @@ import { flattenTrees } from '@/utils/tree';
 import { Permission } from '#/entity';
 import { BasicStatus, PermissionType } from '#/enum';
 import { AppRouteObject } from '#/router';
+import { getRoutesFromModules } from '../utils';
 
 // 使用 import.meta.glob 获取所有路由组件
 const entryPath = '/src/pages';
@@ -130,6 +131,7 @@ function transformPermissionToMenuRoutes(
   });
 }
 
+// 根据后端路由表生成路由
 export function usePermissionRoutes() {
   const permissions = useUserPermission();
 
@@ -141,3 +143,9 @@ export function usePermissionRoutes() {
   }, [permissions]);
 }
 
+// 根据静态文件生成路由
+// export function usePermissionRoutes() {
+//   return useMemo(() => {
+//     return getRoutesFromModules();
+//   }, []);
+// }

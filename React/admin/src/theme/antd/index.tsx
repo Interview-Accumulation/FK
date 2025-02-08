@@ -25,7 +25,8 @@ function AntdConfig({children}: {children: React.ReactNode}) {
       locale={language}
       theme={{
         token: {colorPrimary, ...customThemeTokenConfig, ...themeModeToken[themeMode].token},
-        components: {...customComponentConfig, ...themeModeToken[themeMode].components},
+        components: {...customComponentConfig, ...themeModeToken[themeMode].components,
+        },
        algorithm 
       }}
     >

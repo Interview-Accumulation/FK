@@ -56,6 +56,12 @@ export default {
 - husky：能够监听 git hooks 的 nodejs 包，让 nodejs 开发者处理 git hooks 任务变得更加容易
 - lint-staged：可以将 git 的“已暂存(staged)”的文件作为参数传入你要执行的 shell script 之中
 
+### 路由
+在`src/router/routes/modules`目录下的`.tsx`文件会被视为一个路由模块，可通过`src/router/routes/utils.ts`中的 `getRoutesFromModules()`函数自动注册到路由表中。
+
+### 权限
+菜单权限由后端返回动态路由表，通过`usePermissionRoutes` hook生生成前端路由表，后端路由表参考：`src/_mock/assets.js`
+
 
 ### 问题记录：
 在使用tailwind时，若需要使用postcss，执行以下命令：

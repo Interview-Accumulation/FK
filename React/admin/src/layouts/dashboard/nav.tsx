@@ -56,6 +56,7 @@ export default function Nav(props: Props) {
 
   useEffect(() => {
     if (themeLayout === ThemeLayout.Vertical) {
+      console.log('matches', matches);
       const openKeys = matches
         .filter((match) => match.pathname !== '/')
         .map((match) => match.pathname);
