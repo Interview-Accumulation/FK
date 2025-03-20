@@ -6,7 +6,6 @@ import { MotionLazy } from './components/animate/motion-lazy'
 import AntdConfig from '@/theme/antd';
 
 function App() {
-
   return (
     <AntdConfig>
       <AntdApp>

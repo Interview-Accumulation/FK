@@ -1,0 +1,36 @@
+{
+	"common": {
+		"okText": "确认",
+		"closeText": "关闭",
+		"cancelText": "取消",
+		"loadingText": "加载中...",
+		"saveText": "保存",
+		"delText": "删除",
+		"resetText": "重置",
+		"searchText": "搜索",
+		"queryText": "查询",
+
+		"inputText": "请输入",
+		"chooseText": "请选择",
+
+		"redo": "刷新",
+		"back": "返回",
+
+		"light": "亮色主题",
+		"dark": "黑暗主题",
+		"fullscreen": "全屏",
+		"exitFullscreen": "退出全屏",
+		"setting": "设置",
+		"mode": "模式",
+		"theme": "主题颜色",
+		"layout": "布局设置",
+		"stretch": "伸缩",
+		"font": "字体",
+		"size": "字号",
+		"family": "字族",
+		"page": "页面设置",
+		"breadcrumb": "面包屑",
+		"multiTabs": "多标签",
+		"darkSider": "暗色侧边栏"
+	}
+}
